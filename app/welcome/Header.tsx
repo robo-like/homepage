@@ -4,7 +4,7 @@ export function Header() {
   return (
     <main className="flex border-b border-dashed border-gray-300 px-2">
         {/* LOGO */}
-        <header className="flex flex-row items-center px-3 py-3">
+        <header className="flex flex-row items-center px-3 py-3 ">
           <a href="/" className="flex flex-row items-center cursor-pointer">
             <div className="w-[35px] mr-2">
               <img
@@ -26,16 +26,16 @@ export function Header() {
         </header>
         {/* Navigation */}
         <nav className="flex-1 flex justify-end items-center space-x-4 px-3 py-2">
-          <a href="/download" className="leading-6 text-gray-700 dark:text-gray-200 text-center">
+          <a href="/downloads" className="leading-6 text-gray-700 dark:text-gray-200 text-center font-bold">
             Download
           </a>
-          <a href="/instagram-auto-liker-how-it-works" className="leading-6 text-gray-700 dark:text-gray-200 text-center">
+          <a href="/instagram-auto-liker-how-it-works" className="leading-6 text-gray-700 dark:text-gray-200 text-center font-bold">
             How it Works
           </a>
-          <a href="/social-media-automation-pricing" className="leading-6 text-gray-700 dark:text-gray-200 text-center">
+          <a href="/social-media-automation-pricing" className="leading-6 text-gray-700 dark:text-gray-200 text-center font-bold">
             Pricing
           </a>
-          <a href="/blog" className="leading-6 text-gray-700 dark:text-gray-200 text-center">
+          <a href="/blog" className="leading-6 text-gray-700 dark:text-gray-200 text-center font-bold">
             Blog
           </a>
         </nav>
