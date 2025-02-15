@@ -1,4 +1,3 @@
-import { Header } from './Header';
 import logoDark from './heart.png';
 import { AnimatedText } from './AnimatedText';
 import { useState } from 'react';
@@ -15,13 +14,12 @@ export function Welcome() {
 
   return (
     <>
-      <Header />
       <section className="flex justify-center items-center w-full md:py-10 max-w-[1300px] mx-auto">
-        <div className="w-full flex flex-col md:flex-row items-center md:px-4 pt-10">
-          <div className="w-full md:flex-[3] px-4 md:pr-4 mb-4 md:mb-0">
-            <h1 className="text-4xl font-bold mb-4">Welcome to the new RoboLike</h1>
+        <div className="w-full flex flex-col md:flex-row items-center pt-10">
+          <div className="w-full md:flex-[3] px-4 md:px-15 md:pr-4 mb-4 md:mb-0">
+            <h1 className="text-4xl font-bold mb-4">Welcome to the new Poop</h1>
             <p className="text-lg">
-              Discover the power of automation with RoboLike. 
+              Discover the power of automation with RoboLike.
               Reach your fans, audience, and customers effortlessly.
             </p>
           </div>
@@ -51,7 +49,7 @@ export function Welcome() {
           </div>
           <div className="flex-1">
             <h1 className='text-8xl mb-5 font-serif'>3</h1>
-            
+
             <h3 className="text-2xl font-bold mb-2">Select Tags</h3>
             <p className="text-lg">
               Monitor the usage and make sure it's relevant to your profile.
@@ -63,12 +61,12 @@ export function Welcome() {
         <div className="max-w-[850px] w-full px-4">
           <h2 className="text-3xl font-bold mb-4">How it works</h2>
           <p className="text-lg">
-            If you think about how it feels to have someone "like" a post you publish, 
-            you might conjure images of dopamine, success, and connection. Since the 
-            dawn of social media, we've been spending our days liking this and that. 
-            However, not many people know that liking posts is an evil genius way to 
-            get other people to come to your content. RoboLike makes that process 
-            automated so you can reach more people than you would have just doing that 
+            If you think about how it feels to have someone "like" a post you publish,
+            you might conjure images of dopamine, success, and connection. Since the
+            dawn of social media, we've been spending our days liking this and that.
+            However, not many people know that liking posts is an evil genius way to
+            get other people to come to your content. RoboLike makes that process
+            automated so you can reach more people than you would have just doing that
             on your own.
           </p>
         </div>
