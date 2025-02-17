@@ -3,7 +3,7 @@ import { AnimatedText } from './AnimatedText';
 import { useState } from 'react';
 import { Accordion } from './Accordion';
 
-export function Welcome() {
+export function Home() {
   const [openSection, setOpenSection] = useState(0);
 
   const toggleSection = (index: number) => {

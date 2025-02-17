@@ -9,6 +9,7 @@ export function meta({ }: Route.MetaArgs) {
         { name: "description", content: "***INTERAL USE ONLY*** this page is a backdoor." },
     ];
 }
+
 export default function Layout() {
     return (
         <>
@@ -16,8 +17,6 @@ export default function Layout() {
             <div className="min-h-screen flex flex-col">
                 <Header />
                 <main className="flex-grow">
-                    <div className="text-red">Where am I? </div>
-
                     <Outlet />
                 </main>
                 <Footer />
