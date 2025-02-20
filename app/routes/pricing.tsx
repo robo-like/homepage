@@ -1,4 +1,6 @@
+import Container from "~/components/Container";
 import type { Route } from "./+types/pricing";
+import { H1 } from "~/components/H1";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -8,5 +10,10 @@ export function meta({ }: Route.MetaArgs) {
 }
 
 export default function Pricing() {
-  return <>I am the pricing page!</>
+  return <>
+    <Container className="mt-10">
+      <H1>Pricing</H1>
+      I am the pricing page!
+    </Container>
+  </>
 }

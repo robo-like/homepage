@@ -1,4 +1,5 @@
 import logoDark from "../home/heart.png";
+import NavLink from "./NavLink";
 
 export function Header() {
   return (
@@ -27,18 +28,21 @@ export function Header() {
       </header>
       {/* Navigation */}
       <nav className="flex-1 flex justify-end items-center space-x-4 px-3 py-2">
-        <a href="/downloads" className="leading-6 text-gray-700 dark:text-gray-200 text-center font-bold">
+        <NavLink to="/">
+          Home
+        </NavLink>
+        <NavLink to="/downloads">
           Download
-        </a>
-        <a href="/instagram-auto-liker-how-it-works" className="leading-6 text-gray-700 dark:text-gray-200 text-center font-bold">
+        </NavLink>
+        <NavLink to="/instagram-auto-liker-how-it-works">
           How it Works
-        </a>
-        <a href="/social-media-automation-pricing" className="leading-6 text-gray-700 dark:text-gray-200 text-center font-bold">
+        </NavLink>
+        <NavLink to="/social-media-automation-pricing">
           Pricing
-        </a>
-        <a href="/blog" className="leading-6 text-gray-700 dark:text-gray-200 text-center font-bold">
+        </NavLink>
+        <NavLink to="/blog">
           Blog
-        </a>
+        </NavLink>
       </nav>
     </main>
   );

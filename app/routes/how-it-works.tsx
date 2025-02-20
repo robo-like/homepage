@@ -1,4 +1,6 @@
+import Container from "~/components/Container";
 import type { Route } from "./+types/how-it-works";
+import { H1 } from "~/components/H1";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -8,5 +10,10 @@ export function meta({ }: Route.MetaArgs) {
 }
 
 export default function HowItWorks() {
-  return <>I am the how it works page!</>
+  return <>
+    <Container className="mt-10">
+      <H1>How it Works</H1>
+      I am the how it works page!
+    </Container>
+  </>
 }

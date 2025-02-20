@@ -10,5 +10,14 @@ export default [
             index("routes/blog.tsx"),
             route(":pid", "routes/post.tsx")
         ])
+    ]),
+    layout("./routes/admin/layout.tsx", [
+        ...prefix("admin", [
+            index("routes/admin/index.tsx"),
+            route("create-post", "routes/admin/create-post.tsx")
+        ])
+    ]),
+    ...prefix("api", [
+        route("metrics", "routes/api/metrics.tsx")
     ])
 ] satisfies RouteConfig;
