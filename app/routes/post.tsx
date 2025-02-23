@@ -52,9 +52,10 @@ export default function Post() {
             {new Date(post.createdAt).toLocaleDateString()}
           </time>
         </div>
-        <div className="prose dark:prose-invert max-w-none">
-          {post.body}
-        </div>
+        <div
+          className="prose dark:prose-invert max-w-none"
+          dangerouslySetInnerHTML={{ __html: post.body }}
+        />
       </Card>
     </Container>
   );

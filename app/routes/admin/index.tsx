@@ -3,6 +3,8 @@ import { Card } from "~/components/Card";
 import { H1, H2 } from "~/components/H1";
 import { Link } from "react-router";
 import type { Route } from "./+types/admin/index";
+import { analyticsQueries } from "~/lib/db";
+import { useLoaderData } from "react-router";
 
 export function meta({ }: Route.MetaArgs) {
     return [
@@ -11,14 +13,30 @@ export function meta({ }: Route.MetaArgs) {
     ];
 }
 
+export async function loader() {
+    // Get all pageView events
+    const events = await analyticsQueries.queryEvents({
+        eventType: 'pageView',
+        limit: 1000 // Get a large sample to aggregate
+    });
+
+    // Aggregate views by path
+    const viewsByPath = events.reduce((acc, event) => {
+        acc[event.path] = (acc[event.path] || 0) + 1;
+        return acc;
+    }, {} as Record<string, number>);
+
+    // Convert to array and sort by views
+    const pageViews = Object.entries(viewsByPath)
+        .map(([path, views]) => ({ path, views }))
+        .sort((a, b) => b.views - a.views)
+        .slice(0, 10); // Get top 10
+
+    return { pageViews };
+}
+
 export default function AdminIndex() {
-    // Placeholder data - will be replaced with actual DB data later
-    const mockPageViews = [
-        { path: '/', views: 1500 },
-        { path: '/downloads', views: 800 },
-        { path: '/blog', views: 650 },
-        { path: '/pricing', views: 450 },
-    ];
+    const { pageViews } = useLoaderData<typeof loader>();
 
     return (
         <Container className="mt-10 gap-6">
@@ -48,15 +66,19 @@ export default function AdminIndex() {
             <Card>
                 <H2 className="mb-4">User Activity</H2>
                 <div className="space-y-2">
-                    {mockPageViews.map((page, index) => (
-                        <div
-                            key={index}
-                            className="flex justify-between items-center py-2 border-b border-gray-700 last:border-0"
-                        >
-                            <span className="text-gray-300">{page.path}</span>
-                            <span className="text-gray-400">{page.views} views</span>
-                        </div>
-                    ))}
+                    {pageViews.length === 0 ? (
+                        <p className="text-gray-500 dark:text-gray-400">No events found</p>
+                    ) : (
+                        pageViews.map((page, index) => (
+                            <div
+                                key={index}
+                                className="flex justify-between items-center py-2 border-b border-gray-700 last:border-0"
+                            >
+                                <span className="text-gray-300">{page.path}</span>
+                                <span className="text-gray-400">{page.views} views</span>
+                            </div>
+                        ))
+                    )}
                 </div>
             </Card>
         </Container>

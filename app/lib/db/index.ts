@@ -51,6 +51,51 @@ export const postQueries = {
             .orderBy(orderBy === 'desc' ? desc(posts.createdAt) : asc(posts.createdAt))
             .limit(maxLimit)
             .offset(offset);
+    },
+
+    async getBySlug(slug: string) {
+        if (!slug) {
+            return null;
+        }
+
+        return db.select()
+            .from(posts)
+            .where(eq(posts.slug, slug))
+            .get();
+    },
+
+    async update(id: string, data: {
+        title?: string;
+        slug?: string;
+        body?: string;
+        author?: string;
+        summary?: string;
+        seoTitle?: string;
+        seoDescription?: string;
+        seoImage?: string;
+    }) {
+        if (!id) {
+            throw new Error('Post ID is required');
+        }
+
+        // If slug is being updated, check for conflicts
+        if (data.slug) {
+            const existing = await db.select()
+                .from(posts)
+                .where(and(
+                    eq(posts.slug, data.slug),
+                    eq(posts.id, id) // not equal to current post
+                ))
+                .get();
+
+            if (existing) {
+                throw new Error('A post with this slug already exists');
+            }
+        }
+
+        return db.update(posts)
+            .set(data)
+            .where(eq(posts.id, id));
     }
 };
 

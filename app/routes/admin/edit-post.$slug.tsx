@@ -1,10 +1,10 @@
-import { useActionData, Form, Link } from "react-router";
+import { useActionData, useLoaderData, Form, Link } from "react-router";
 import { TextInput } from "~/components/TextInput";
 import { Card } from "~/components/Card";
 import Container from "~/components/Container";
 import { H1 } from "~/components/H1";
 import { postQueries } from "~/lib/db";
-import type { Route } from "./+types/create-post";
+import type { Route } from "./+types/edit-post.$slug";
 import { useState, useEffect } from "react";
 import { redirect } from "react-router";
 import Tiptap from "~/components/TipTap";
@@ -21,7 +21,15 @@ interface ActionData {
     success?: boolean;
 }
 
-export const action = async ({ request }: Route.ActionArgs) => {
+export const loader = async ({ params }: Route.LoaderArgs) => {
+    const post = await postQueries.getBySlug(params.slug);
+    if (!post) {
+        throw new Response("Post not found", { status: 404 });
+    }
+    return { post };
+};
+
+export const action = async ({ request, params }: Route.ActionArgs) => {
     const formData = await request.formData();
     const title = formData.get("title")?.toString();
     const slug = formData.get("slug")?.toString();
@@ -43,7 +51,8 @@ export const action = async ({ request }: Route.ActionArgs) => {
     if (Object.keys(errors).length > 0) {
         return { errors };
     }
-    await postQueries.create({
+
+    await postQueries.update(params.slug, {
         title,
         slug,
         summary,
@@ -54,10 +63,12 @@ export const action = async ({ request }: Route.ActionArgs) => {
         seoImage,
     });
 
-    return redirect(`/admin/edit-post/${slug}`);
+    return { success: true };
 };
 
-export default function CreatePost() {
+export default function EditPost() {
+    const { post } = useLoaderData<typeof loader>();
+    console.log(post)
     const actionData = useActionData<ActionData>();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -69,7 +80,6 @@ export default function CreatePost() {
         setIsSubmitting(true);
     };
 
-    // Reset submission state when action data changes
     useEffect(() => {
         setIsSubmitting(false);
     }, [actionData]);
@@ -87,9 +97,9 @@ export default function CreatePost() {
             </div>
 
             <div className="mb-8">
-                <H1>Create New Post</H1>
+                <H1>Edit Post</H1>
                 <p className="text-gray-400">
-                    Create a new blog post with rich text editing and SEO optimization.
+                    Edit your blog post with rich text editing and SEO optimization.
                 </p>
             </div>
 
@@ -98,6 +108,7 @@ export default function CreatePost() {
                     <TextInput
                         label="Title"
                         name="title"
+                        defaultValue={post.title}
                         error={actionData?.errors?.title}
                         required
                     />
@@ -105,6 +116,7 @@ export default function CreatePost() {
                     <TextInput
                         label="Slug"
                         name="slug"
+                        defaultValue={post.slug}
                         error={actionData?.errors?.slug}
                         required
                         placeholder="my-post-url"
@@ -113,6 +125,7 @@ export default function CreatePost() {
                     <TextInput
                         label="Author"
                         name="author"
+                        defaultValue={post.author}
                         error={actionData?.errors?.author}
                         required
                     />
@@ -120,6 +133,7 @@ export default function CreatePost() {
                     <TextArea
                         label="Summary"
                         name="summary"
+                        defaultValue={post.summary}
                         error={actionData?.errors?.summary}
                         required
                     />
@@ -130,6 +144,7 @@ export default function CreatePost() {
                         </label>
                         <Tiptap
                             name="body"
+                            initialContent={post.body}
                             className="px-3 py-2 bg-white/5 border border-gray-700 rounded-lg min-h-[200px] focus:outline-none focus:ring-2 focus:ring-[#6A1E55] prose prose-invert max-w-none"
                             required
                         />
@@ -144,16 +159,19 @@ export default function CreatePost() {
                             <TextInput
                                 label="SEO Title"
                                 name="seoTitle"
+                                defaultValue={post.seoTitle}
                                 placeholder="Optional custom SEO title"
                             />
                             <TextArea
                                 label="SEO Description"
                                 name="seoDescription"
+                                defaultValue={post.seoDescription}
                                 placeholder="Optional custom SEO description"
                             />
                             <TextInput
                                 label="SEO Image URL"
                                 name="seoImage"
+                                defaultValue={post.seoImage}
                                 placeholder="Optional custom SEO image URL"
                             />
                         </div>
@@ -165,11 +183,11 @@ export default function CreatePost() {
                             disabled={isSubmitting}
                             className="px-4 py-2 bg-[#6A1E55] text-white rounded-lg hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {isSubmitting ? "Creating..." : "Create Post"}
+                            {isSubmitting ? "Saving..." : "Save Changes"}
                         </button>
                     </div>
                 </Form>
             </Card>
         </Container>
     );
-}
+} 

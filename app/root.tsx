@@ -37,8 +37,8 @@ function getOrCreateSessionId() {
   }
 
   const newSessionId = Math.random().toString(36).substring(2, 15);
-  // Set cookie to expire in 30 days
-  document.cookie = `sessionId=${newSessionId};path=/;max-age=${60 * 60 * 24 * 30}`;
+  // Set cookie to expire in 3 hours
+  document.cookie = `sessionId=${newSessionId};path=/;max-age=${3 * 60 * 60 * 1000}`;
   return newSessionId;
 }
 
@@ -74,27 +74,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
 
-        {typeof document !== "undefined" && (
-          <>
-            <script async src="https://www.googletagmanager.com/gtag/js?id=G-QE23FJW74Y"></script>
-
-            <script
-              async
-              id="gtag-init"
-              dangerouslySetInnerHTML={{
-                __html: `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-
-                gtag('config', '${gaTrackingId}', {
-                  page_path: window.location.pathname,
-                });
-              `,
-              }}
-            />
-          </>
-        )}
       </head>
       <body>
         {children}

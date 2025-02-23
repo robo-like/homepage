@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
@@ -17,9 +18,12 @@ body {
   @apply bg-white dark:bg-[var(--color-darkGrey)];
 
   color-scheme: dark;
-  -webkit-font-smoothing: antialiased; /* For WebKit browsers */
-  -moz-osx-font-smoothing: grayscale; /* For Firefox on macOS */
-  font-smooth: always; /* For other browsers */
+  -webkit-font-smoothing: antialiased;
+  /* For WebKit browsers */
+  -moz-osx-font-smoothing: grayscale;
+  /* For Firefox on macOS */
+  font-smooth: always;
+  /* For other browsers */
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
@@ -30,9 +34,11 @@ body {
   0% {
     transform: translatey(0px);
   }
+
   50% {
     transform: translatey(-10px);
   }
+
   100% {
     transform: translatey(0px);
   }
@@ -49,18 +55,23 @@ body {
 }
 
 @keyframes wave-animation {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
 }
 
 .glow-effect {
-  font-size: 1.5rem; /* Adjust the size as needed */
+  font-size: 1.5rem;
+  /* Adjust the size as needed */
   text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff00ff, 0 0 20px #ff00ff, 0 0 25px #ff00ff, 0 0 30px #ff00ff, 0 0 35px #ff00ff;
 }
+
 .glow-div {
   box-shadow: 0 0 10px #6A1E55, 0 0 20px #6A1E55, 0 0 30px #6A1E55, 0 0 40px #6A1E55;
 }

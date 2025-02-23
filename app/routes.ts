@@ -14,7 +14,8 @@ export default [
     layout("./routes/admin/layout.tsx", [
         ...prefix("admin", [
             index("routes/admin/index.tsx"),
-            route("create-post", "routes/admin/create-post.tsx")
+            route("create-post", "routes/admin/create-post.tsx"),
+            route("edit-post/:slug", "routes/admin/edit-post.$slug.tsx")
         ])
     ]),
     ...prefix("api", [

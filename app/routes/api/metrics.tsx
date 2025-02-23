@@ -21,9 +21,11 @@ export const action = async ({ request }: Route.ActionArgs) => {
             throw new Response("Missing required fields", { status: 400 });
         }
 
-        // Get IP address from request headers
+        // Get IP address from request headers or socket
         const ipAddress = request.headers.get("x-forwarded-for") ||
             request.headers.get("x-real-ip") ||
+            // @ts-expect-error - socket exists on request in development
+            request.socket?.remoteAddress ||
             "unknown";
 
         // Get user agent
