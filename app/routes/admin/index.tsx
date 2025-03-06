@@ -2,8 +2,8 @@ import Container from "~/components/Container";
 import { Card } from "~/components/Card";
 import { H1, H2 } from "~/components/H1";
 import { Link } from "react-router";
-import type { Route } from "./+types/admin/index";
-import { analyticsQueries } from "~/lib/db";
+import type { Route } from "./+types/index";
+import { analyticsQueries, postQueries } from "~/lib/db";
 import { useLoaderData } from "react-router";
 
 export function meta({ }: Route.MetaArgs) {
@@ -14,10 +14,22 @@ export function meta({ }: Route.MetaArgs) {
 }
 
 export async function loader() {
-    // Get all pageView events
+    // Get recent posts
+    const recentPosts = await postQueries.getPosts({
+        limit: 5,
+        orderBy: 'desc'
+    });
+
+    // Get pageview analytics
     const events = await analyticsQueries.queryEvents({
         eventType: 'pageView',
-        limit: 1000 // Get a large sample to aggregate
+        limit: 1000
+    });
+
+    // Get product events
+    const productEvents = await analyticsQueries.queryEvents({
+        eventType: 'productEvent',
+        limit: 15
     });
 
     // Aggregate views by path
@@ -30,13 +42,13 @@ export async function loader() {
     const pageViews = Object.entries(viewsByPath)
         .map(([path, views]) => ({ path, views }))
         .sort((a, b) => b.views - a.views)
-        .slice(0, 10); // Get top 10
+        .slice(0, 10);
 
-    return { pageViews };
+    return { pageViews, recentPosts, productEvents };
 }
 
 export default function AdminIndex() {
-    const { pageViews } = useLoaderData<typeof loader>();
+    const { pageViews, recentPosts, productEvents } = useLoaderData<typeof loader>();
 
     return (
         <Container className="mt-10 gap-6">
@@ -58,13 +70,51 @@ export default function AdminIndex() {
                         Add New
                     </Link>
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">
-                    No posts yet. Click "Add New" to create your first post.
-                </p>
+                <div className="space-y-2">
+                    {recentPosts.length === 0 ? (
+                        <p className="text-gray-500 dark:text-gray-400">
+                            No posts yet. Click "Add New" to create your first post.
+                        </p>
+                    ) : (
+                        recentPosts.map(post => (
+                            <div
+                                key={post.id}
+                                className="flex justify-between items-center py-2 border-b border-gray-700 last:border-0"
+                            >
+                                <div>
+                                    <Link
+                                        to={`/admin/edit-post/${post.slug}`}
+                                        className="text-gray-300 hover:text-white"
+                                    >
+                                        {post.title}
+                                    </Link>
+                                    <p className="text-sm text-gray-500">
+                                        {new Date(post.createdAt).toLocaleDateString()}
+                                    </p>
+                                </div>
+                                <div className="flex gap-4">
+                                    <Link
+                                        to={`/admin/edit-post/${post.slug}`}
+                                        className="text-sm text-gray-400 hover:text-white"
+                                    >
+                                        Edit
+                                    </Link>
+                                    <Link
+                                        to={`/blog/${post.slug}`}
+                                        className="text-sm text-gray-400 hover:text-white"
+                                        target="_blank"
+                                    >
+                                        View →
+                                    </Link>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
             </Card>
 
             <Card>
-                <H2 className="mb-4">User Activity</H2>
+                <H2 className="mb-4">Page Views</H2>
                 <div className="space-y-2">
                     {pageViews.length === 0 ? (
                         <p className="text-gray-500 dark:text-gray-400">No events found</p>
@@ -76,6 +126,35 @@ export default function AdminIndex() {
                             >
                                 <span className="text-gray-300">{page.path}</span>
                                 <span className="text-gray-400">{page.views} views</span>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </Card>
+
+            <Card className="mt-6">
+                <H2 className="mb-4">User Activity</H2>
+                <div className="space-y-2">
+                    {productEvents.length === 0 ? (
+                        <p className="text-gray-500 dark:text-gray-400">No events found</p>
+                    ) : (
+                        productEvents.map((event) => (
+                            <div
+                                key={event.id}
+                                className="flex justify-between items-center py-2 border-b border-gray-700 last:border-0"
+                            >
+                                <div>
+                                    <p className="text-gray-300">{event.description}</p>
+                                    <p className="text-sm text-gray-500">
+                                        Platform: {event.eventValue}
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                        Page: {event.path}
+                                    </p>
+                                </div>
+                                <time className="text-sm text-gray-400">
+                                    {new Date(event.createdAt).toLocaleString()}
+                                </time>
                             </div>
                         ))
                     )}

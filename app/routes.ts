@@ -9,8 +9,10 @@ export default [
         ...prefix("blog", [
             index("routes/blog.tsx"),
             route(":pid", "routes/post.tsx")
-        ])
+        ]),
+        route("terms-and-conditions", "routes/terms-and-conditions.tsx")
     ]),
+    route("sitemap.xml", "routes/sitemap.tsx"),
     layout("./routes/admin/layout.tsx", [
         ...prefix("admin", [
             index("routes/admin/index.tsx"),
@@ -20,5 +22,5 @@ export default [
     ]),
     ...prefix("api", [
         route("metrics", "routes/api/metrics.tsx")
-    ])
+    ]),
 ] satisfies RouteConfig;

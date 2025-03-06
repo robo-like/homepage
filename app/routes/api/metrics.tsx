@@ -4,7 +4,10 @@ import type { Route } from "./+types/metrics";
 interface PageViewData {
     sessionId: string;
     path: string;
+    eventType: string;
+    eventValue?: string;
     userId?: string;
+    description?: string;
 }
 
 export const action = async ({ request }: Route.ActionArgs) => {
@@ -35,6 +38,9 @@ export const action = async ({ request }: Route.ActionArgs) => {
         await analyticsQueries.createPageView({
             sessionId: data.sessionId,
             path: data.path,
+            eventType: data.eventType,
+            eventValue: data.eventValue,
+            description: data.description,
             ipAddress: ipAddress.split(",")[0].trim(), // Get first IP if multiple
             userAgent,
             userId: data.userId,

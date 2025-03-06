@@ -58,6 +58,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       },
       body: JSON.stringify({
         sessionId,
+        eventType: 'pageView',
         path: location.pathname,
       }),
     }).catch(error => {

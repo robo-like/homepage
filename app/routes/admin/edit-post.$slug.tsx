@@ -1,4 +1,4 @@
-import { useActionData, useLoaderData, Form, Link } from "react-router";
+import { useActionData, useLoaderData, Form, Link, useSearchParams } from "react-router";
 import { TextInput } from "~/components/TextInput";
 import { Card } from "~/components/Card";
 import Container from "~/components/Container";
@@ -52,7 +52,7 @@ export const action = async ({ request, params }: Route.ActionArgs) => {
         return { errors };
     }
 
-    await postQueries.update(params.slug, {
+    await postQueries.updateBySlug(params.slug, {
         title,
         slug,
         summary,
@@ -63,13 +63,14 @@ export const action = async ({ request, params }: Route.ActionArgs) => {
         seoImage,
     });
 
-    return { success: true };
+    return redirect(`/admin/edit-post/${slug}?flash=Post updated successfully`);
 };
 
 export default function EditPost() {
     const { post } = useLoaderData<typeof loader>();
-    console.log(post)
+    const [searchParams] = useSearchParams();
     const actionData = useActionData<ActionData>();
+    const flashMessage = searchParams.get('flash');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -82,10 +83,16 @@ export default function EditPost() {
 
     useEffect(() => {
         setIsSubmitting(false);
-    }, [actionData]);
+    }, [post]);
 
     return (
         <Container className="mt-10">
+            {flashMessage && (
+                <div className="mb-4 p-4 bg-green-500/10 text-green-400 rounded-lg">
+                    {flashMessage}
+                </div>
+            )}
+
             <div className="mb-4">
                 <Link
                     to="/admin"

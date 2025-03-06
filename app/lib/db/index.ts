@@ -64,7 +64,8 @@ export const postQueries = {
             .get();
     },
 
-    async update(id: string, data: {
+    /** this is the previous slug */
+    async updateBySlug(slug: string, data: {
         title?: string;
         slug?: string;
         body?: string;
@@ -74,17 +75,16 @@ export const postQueries = {
         seoDescription?: string;
         seoImage?: string;
     }) {
-        if (!id) {
-            throw new Error('Post ID is required');
+        if (!slug) {
+            throw new Error('Slug is required');
         }
 
         // If slug is being updated, check for conflicts
-        if (data.slug) {
+        if (data.slug && data.slug !== slug) {
             const existing = await db.select()
                 .from(posts)
                 .where(and(
-                    eq(posts.slug, data.slug),
-                    eq(posts.id, id) // not equal to current post
+                    eq(posts.slug, data.slug)
                 ))
                 .get();
 
@@ -95,7 +95,7 @@ export const postQueries = {
 
         return db.update(posts)
             .set(data)
-            .where(eq(posts.id, id));
+            .where(eq(posts.slug, slug));
     }
 };
 
@@ -104,21 +104,29 @@ export const analyticsQueries = {
     async createPageView({
         sessionId,
         path,
+        eventType,
+        eventValue,
         ipAddress,
+        description,
         userAgent,
         userId,
     }: {
         sessionId: string;
         path: string;
+        eventType: string;
+        eventValue?: string;
         ipAddress?: string;
+        description?: string;
         userAgent?: string;
         userId?: string;
     }) {
         return db.insert(analytics).values({
-            eventType: 'pageView',
+            eventType,
             sessionId,
             path,
+            eventValue,
             ipAddress,
+            description,
             userAgent,
             userId,
         });
