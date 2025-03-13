@@ -12,7 +12,7 @@ export function Home() {
       <Container fluid={true}>
         <div className="w-full flex md:flex-row items-center pt-10">
           <div className="w-full md:flex-[3] px-4 lg:px-15 md:pr-4 mb-4 md:mb-0">
-            <H1>Welcome to the new Poop</H1>
+            <H1>Welcome to the new RoboLike</H1>
             <p className="text-lg">
               Discover the power of automation with RoboLike.
               Reach your fans, audience, and customers effortlessly.
