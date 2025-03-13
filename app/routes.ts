@@ -13,6 +13,7 @@ export default [
         route("terms-and-conditions", "routes/terms-and-conditions.tsx")
     ]),
     route("sitemap.xml", "routes/sitemap.tsx"),
+    route("install-guide", "routes/install-guide.tsx"),
     layout("./routes/admin/layout.tsx", [
         ...prefix("admin", [
             index("routes/admin/index.tsx"),

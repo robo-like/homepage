@@ -1,4 +1,25 @@
+# Build artifacts
 .react-router
 build
+dist
+
+# Dependencies
 node_modules
-README.md
+
+# Development files
+.git
+.github
+.vscode
+*.log
+*.lock
+*.md
+.env*
+.gitignore
+docker-compose.yml
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Exclude SQLite database from build context (will be copied separately)
+!data/database.sqlite
