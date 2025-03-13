@@ -26,9 +26,6 @@ export default [
             route("edit-post/:slug", "routes/admin/edit-post.$slug.tsx")
         ])
     ]),
-    ...prefix("api", [
-        route("metrics", "routes/api/metrics.tsx")
-    ]),
   ]),
   ...prefix("api", [
     route("metrics", "routes/api/metrics.tsx"),
