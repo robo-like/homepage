@@ -12,9 +12,31 @@ export function meta({}: Route.MetaArgs) {
       content:
         "RoboLike is under construction. Coming soon - your entry point to reaching your fans, audience, customers, all at the click of a robot's button.",
     },
+    // Standard OpenGraph Meta Tags
     {
-      name: "image",
-      content: "/homepage-image.gif",
+      property: "og:title",
+      content: "RoboLike - Under Construction",
+    },
+    {
+      property: "og:description",
+      content: "RoboLike is under construction. Coming soon - your entry point to reaching your fans, audience, customers, all at the click of a robot's button.",
+    },
+    {
+      property: "og:image",
+      content: "/home/homepage-seo-image.gif",
+    },
+    {
+      property: "og:type",
+      content: "website",
+    },
+    // Twitter Card Meta Tags
+    {
+      name: "twitter:card",
+      content: "summary_large_image",
+    },
+    {
+      name: "twitter:image",
+      content: "/home/homepage-seo-image.gif",
     },
   ];
 }
