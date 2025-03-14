@@ -18,7 +18,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         '/instagram-auto-liker-how-it-works',
         '/social-media-automation-pricing',
         '/blog',
-        '/terms-and-conditions'
+        '/terms-and-conditions',
+        '/install-guide'
     ];
 
     // Generate XML
