@@ -12,6 +12,10 @@ export function meta({}: Route.MetaArgs) {
       content:
         "RoboLike is under construction. Coming soon - your entry point to reaching your fans, audience, customers, all at the click of a robot's button.",
     },
+    {
+      name: "image",
+      content: "/homepage-image.gif",
+    },
   ];
 }
 
@@ -149,7 +153,7 @@ export default function Home() {
       <canvas ref={canvasRef} className="block w-full h-full fixed top-0 left-0 z-0" />
       
       {/* Content Overlay */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-white p-6">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-white p-6 mt-[-60px]">
         <div className="max-w-5xl w-full bg-[#0A0A0A] bg-opacity-70 rounded-lg border-2 border-[#07b0ef] p-8 backdrop-blur-sm">
           {/* Logo */}
           <div className="flex justify-center mb-8">
