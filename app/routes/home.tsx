@@ -1,7 +1,6 @@
 import type { Route } from "./+types/home";
 import React, { useEffect, useRef, useState } from "react";
 import logoDark from "../home/heart.png";
-import seoImage from "../home/homepage-seo-image.gif";
 
 const futureDate = new Date("2025-05-01");
 
@@ -24,7 +23,7 @@ export function meta({}: Route.MetaArgs) {
     },
     {
       property: "og:image",
-      content: seoImage,
+      content: "/seo/homepage-seo-image.gif",
     },
     {
       property: "og:type",
@@ -37,7 +36,7 @@ export function meta({}: Route.MetaArgs) {
     },
     {
       name: "twitter:image",
-      content: seoImage,
+      content: "/seo/homepage-seo-image.gif",
     },
   ];
 }
@@ -176,7 +175,7 @@ export default function Home() {
       <canvas ref={canvasRef} className="block w-full h-full fixed top-0 left-0 z-0" />
       
       {/* Content Overlay */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-white p-6 mt-[-60px]">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-white p-6">
         <div className="max-w-5xl w-full bg-[#0A0A0A] bg-opacity-70 rounded-lg border-2 border-[#07b0ef] p-8 backdrop-blur-sm">
           {/* Logo */}
           <div className="flex justify-center mb-8">
