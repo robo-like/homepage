@@ -1,6 +1,7 @@
 import type { Route } from "./+types/home";
 import React, { useEffect, useRef, useState } from "react";
 import logoDark from "../home/heart.png";
+import seoImage from "../home/homepage-seo-image.gif";
 
 const futureDate = new Date("2025-05-01");
 
@@ -23,7 +24,7 @@ export function meta({}: Route.MetaArgs) {
     },
     {
       property: "og:image",
-      content: "/home/homepage-seo-image.gif",
+      content: seoImage,
     },
     {
       property: "og:type",
@@ -36,7 +37,7 @@ export function meta({}: Route.MetaArgs) {
     },
     {
       name: "twitter:image",
-      content: "/home/homepage-seo-image.gif",
+      content: seoImage,
     },
   ];
 }
