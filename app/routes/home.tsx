@@ -2,6 +2,8 @@ import type { Route } from "./+types/home";
 import React, { useEffect, useRef, useState } from "react";
 import logoDark from "../home/heart.png";
 
+const futureDate = new Date("2025-05-01");
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "RoboLike - Under Construction" },
@@ -44,7 +46,6 @@ export default function Home() {
   
   // Calculate countdown to a future date (30 days from now)
   useEffect(() => {
-    const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + 30);
     
     const updateCountdown = () => {
@@ -155,7 +156,7 @@ export default function Home() {
             <img 
               src={logoDark} 
               alt="RoboLike Logo" 
-              className="w-24 h-24 animate-pulse" 
+              className="w-24 animate-pulse" 
             />
           </div>
           
@@ -210,7 +211,7 @@ export default function Home() {
               INSTALLATION GUIDE
             </a>
             <a 
-              href="/downloads" 
+              href="/install-guide" 
               className="relative py-4 px-8 retro-button mx-2"
             >
               DOWNLOAD NOW

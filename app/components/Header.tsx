@@ -23,7 +23,7 @@ export function Header() {
         </a>
       </header>
       {/* Navigation */}
-      <nav className="flex-1 flex justify-end items-center space-x-4 px-3 py-2">
+      {/* <nav className="flex-1 flex justify-end items-center space-x-4 px-3 py-2">
         <NavLink to="/" style={{
           fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
         }}>
@@ -56,7 +56,7 @@ export function Header() {
         }}>
           Installation Guide
         </NavLink>
-      </nav>
+      </nav> */}
     </main>
   );
 }

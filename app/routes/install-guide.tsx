@@ -54,8 +54,9 @@ export default function InstallGuide() {
               className="w-full animate-pulse"
             />
           </div>
-          <h1 className="text-2xl" style={{
-            fontFamily: 'var(--heading-font, "Press Start 2P", cursive)',
+          <h1 className="text-2xl font-bold font-set-4" style={{
+            fontFamily: 'var(--heading-font, "Syncopate", sans-serif)',
+            textRendering: 'optimizeLegibility'
           }}>
             ROBO<span className="text-[#07b0ef]">LIKE</span>
           </h1>
@@ -80,16 +81,16 @@ export default function InstallGuide() {
         {/* Platform Selector */}
         <div className="relative mb-12">
           {detectedOS && (
-            <div className="absolute top-0 left-0 right-0 -mt-8 text-center" style={{
+            <div className="absolute top-0 left-0 right-0 -mt-8 text-center  -mb-20 pt-1" style={{
               fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
             }}>
-              <span className="inline-block px-4 py-1 text-xs bg-[#07b0ef] text-black rounded-t-md">
+              <span className="inline-block px-4 py-1 text-xs bg-[#07b0ef] text-black rounded-t-md" >
                 🎮 WE DETECTED YOUR OS: {detectedOS.toUpperCase()} 🎮
               </span>
             </div>
           )}
           
-          <div className="flex justify-center border-b border-[#07b0ef]">
+          <div className="flex justify-center border-b border-[#07b0ef] pt-5">
             <button 
               onClick={() => setSelectedPlatform('macos')}
               className={cn(
@@ -367,7 +368,9 @@ export default function InstallGuide() {
         <div className="relative mb-4">
           <div className="absolute inset-0 bg-[#FA8E10] blur-lg opacity-30 animate-pulse"></div>
           <a 
-            href="/downloads" 
+            onClick={() => {
+              alert("Coming soon! \n\nCheck app root for FETCH RELEASES for next steps.");
+            }}
             className="relative inline-block py-4 px-8 retro-button primary"
           >
             CLICK TO DOWNLOAD
