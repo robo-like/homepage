@@ -89,18 +89,20 @@ export default function HowItWorks() {
   return (
     <div className="font-set-1 min-h-screen bg-[#0A0A0A] text-white relative pb-16">
       {/* Canvas Background */}
-      <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0" />
+      <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none" />
       
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 pt-16">
         {/* Hero Section */}
         <div className="text-center mb-16">
           <div className="inline-block mb-4">
-            <img 
-              src={logoDark} 
-              alt="RoboLike Logo" 
-              className="w-20 h-20 animate-pulse mx-auto" 
-            />
+            <a href="/">
+              <img 
+                src={logoDark} 
+                alt="RoboLike Logo" 
+                className="w-20 h-20 animate-pulse mx-auto cursor-pointer" 
+              />
+            </a>
           </div>
           <h1 
             className="text-4xl md:text-5xl lg:text-6xl mb-4 gradient-text" 

@@ -172,7 +172,7 @@ export default function Home() {
   return (
     <div className="font-set-1 min-h-screen overflow-hidden relative">
       {/* Canvas Background */}
-      <canvas ref={canvasRef} className="block w-full h-full fixed top-0 left-0 z-0" />
+      <canvas ref={canvasRef} className="block w-full h-full fixed top-0 left-0 z-0 pointer-events-none" />
       
       {/* Content Overlay */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-white p-6">
