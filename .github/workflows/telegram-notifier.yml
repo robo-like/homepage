@@ -19,7 +19,11 @@ jobs:
             🚀 *New Push to Main!* 🚀
             
             👤 *Author:* ${{ github.actor }}
-            📝 *Commit Message:* ${{ github.event.commits[0].message }}
+            
+            📝 *Commit Messages:*
+            ${{ join(github.event.commits.*.message, '
+
+            ') }}
             
             📂 *Repository:* ${{ github.repository }}
             🔗 [See Changes](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
