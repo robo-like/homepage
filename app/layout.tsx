@@ -19,7 +19,7 @@ export default function Layout() {
                 <main className="flex-grow pb-10">
                     <Outlet />
                 </main>
-                <Footer />
+                {/* <Footer /> */}
             </div>
         </>
     );

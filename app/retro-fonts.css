@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Orbitron:wght@400;700&family=Righteous&family=Chakra+Petch:wght@400;700&family=Teko:wght@400;600&family=Russo+One&family=Cairo:wght@400;700&family=Audiowide&family=Syncopate:wght@400;700&display=swap');
+
+/* Font Sets */
+.font-set-1 {
+  --heading-font: 'Press Start 2P', cursive;
+  --subheading-font: 'Orbitron', sans-serif;
+  --body-font: 'Chakra Petch', sans-serif;
+}
+
+.font-set-4 {
+  --heading-font: 'Syncopate', sans-serif;
+  --subheading-font: 'Orbitron', sans-serif;
+  --body-font: 'Chakra Petch', sans-serif;
+}
+
+/* Retro Text Effects */
+.neon-glow {
+  text-shadow: 
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 15px #07b0ef,
+    0 0 20px #07b0ef,
+    0 0 25px #07b0ef;
+}
+
+.text-outline {
+  text-shadow: 
+    2px 2px 0 #980E03,
+    -2px 2px 0 #980E03,
+    2px -2px 0 #980E03,
+    -2px -2px 0 #980E03;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #980E03, #FA8E10, #07b0ef, #9633ac);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.retro-button {
+  background-color: #07b0ef;
+  color: #fff;
+  border: none;
+  padding: 1rem 2rem;
+  font-family: var(--heading-font, 'Press Start 2P', cursive);
+  font-weight: bold;
+  border-radius: 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow: 0 6px 0 #0580af;
+  transition: all 0.2s;
+  position: relative;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.retro-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 0 #0580af;
+}
+
+.retro-button:active {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 #0580af;
+}
+
+.retro-button.primary {
+  background-color: #FA8E10;
+  box-shadow: 0 6px 0 #C05908;
+}
+
+.retro-button.primary:hover {
+  box-shadow: 0 9px 0 #C05908;
+}
+
+.retro-button.primary:active {
+  box-shadow: 0 3px 0 #C05908;
+}
+
+.platform-tab {
+  font-family: var(--subheading-font, 'Orbitron', sans-serif);
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.platform-tab.active {
+  background-color: rgba(7, 176, 239, 0.2);
+  color: #07b0ef;
+  border-bottom: 3px solid #07b0ef;
+}
+
+.platform-tab:hover:not(.active) {
+  color: #07b0ef;
+  background-color: rgba(7, 176, 239, 0.1);
+}
+
+.grid-lines {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(7, 176, 239, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(7, 176, 239, 0.1) 1px, transparent 1px);
+}
+
+.instruction-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--heading-font, 'Press Start 2P', cursive);
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #fff;
+}
