@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>80's Inspired Color Scheme</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Orbitron:wght@400;700&family=Righteous&family=Chakra+Petch:wght@400;700&family=Teko:wght@400;600&family=Russo+One&family=Cairo:wght@400;700&family=Audiowide&family=Syncopate:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Chakra Petch', sans-serif;
+            background-color: #0A0A0A;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #980E03, #FA8E10, #07b0ef, #9633ac);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 1rem 0;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .color-section {
+            margin-bottom: 3rem;
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .color-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .color-display {
+            height: 150px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 1rem;
+            color: #000;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        
+        .color-info {
+            background-color: #222;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .usage-example {
+            background-color: #222;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .example-page {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .example-header {
+            background: linear-gradient(135deg, #FA8E10, #E53103);
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .example-content {
+            background-color: #0A0A0A;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .example-feature {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .example-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .example-text {
+            flex: 1;
+        }
+        
+        .example-cta {
+            background-color: #FA8E10;
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .example-button {
+            background-color: #07b0ef;
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 4px 0 #0580af;
+            transition: all 0.2s;
+        }
+        
+        .example-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 0 #0580af;
+        }
+        
+        .color-combination {
+            margin-top: 3rem;
+        }
+        
+        .combination-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .combination-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .combination-header {
+            padding: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .combination-colors {
+            display: flex;
+            height: 100px;
+        }
+        
+        .combination-color {
+            flex: 1;
+        }
+        
+        .neon-glow {
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 15px #0580af,
+                0 0 20px #0580af,
+                0 0 25px #0580af;
+        }
+        /* Font Switcher Styles */
+        .font-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .font-button {
+            background-color: #222;
+            color: #fff;
+            border: 2px solid #07b0ef;
+            padding: 8px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .font-button:hover {
+            background-color: #07b0ef;
+            color: #fff;
+        }
+        
+        .font-button.active {
+            background-color: #07b0ef;
+            box-shadow: 0 0 10px #07b0ef;
+        }
+        
+        /* Font Combinations */
+        body.font-set-1 {
+            --heading-font: 'Press Start 2P', cursive;
+            --subheading-font: 'Orbitron', sans-serif;
+            --body-font: 'Chakra Petch', sans-serif;
+        }
+        
+        body.font-set-2 {
+            --heading-font: 'Audiowide', cursive;
+            --subheading-font: 'Russo One', sans-serif;
+            --body-font: 'Teko', sans-serif;
+        }
+        
+        body.font-set-3 {
+            --heading-font: 'VT323', monospace;
+            --subheading-font: 'Righteous', cursive;
+            --body-font: 'Cairo', sans-serif;
+        }
+        
+        body.font-set-4 {
+            --heading-font: 'Syncopate', sans-serif;
+            --subheading-font: 'Orbitron', sans-serif;
+            --body-font: 'Chakra Petch', sans-serif;
+        }
+        
+        /* Apply font variables */
+        h1, h2.neon-glow, .example-header h2 {
+            font-family: var(--heading-font, 'Press Start 2P', cursive);
+            line-height: 1.3;
+        }
+        
+        h2:not(.neon-glow):not(.example-header h2), h3 {
+            font-family: var(--subheading-font, 'Orbitron', sans-serif);
+        }
+        
+        body, p, button, .color-info, .combination-header {
+            font-family: var(--body-font, 'Chakra Petch', sans-serif);
+        }
+        
+        /* Adjustments for specific fonts */
+        body.font-set-1 h1 {
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+        
+        body.font-set-1 .example-header h2 {
+            font-size: 2rem;
+        }
+        
+        body.font-set-2 .example-header h2 {
+            letter-spacing: 3px;
+        }
+        
+        body.font-set-3 h1, 
+        body.font-set-3 .example-header h2 {
+            font-size: 3rem;
+            letter-spacing: 2px;
+        }
+        
+        body.font-set-4 h1 {
+            font-size: 2rem;
+            letter-spacing: 4px;
+        }
+        
+        body.font-set-4 .example-header h2 {
+            font-size: 2.2rem;
+        }
+    </style>
+</head>
+<body class="font-set-1">
+    <div class="container">
+        <div class="font-switcher">
+            <button class="font-button active" data-font="1">Font Set 1</button>
+            <button class="font-button" data-font="2">Font Set 2</button>
+            <button class="font-button" data-font="3">Font Set 3</button>
+            <button class="font-button" data-font="4">Font Set 4</button>
+        </div>
+        <h1>80's Inspired Color Scheme</h1>
+        
+        <div class="color-section">
+            <h2>Primary Colors</h2>
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #f7ee2a;">
+                        #f7ee2a
+                    </div>
+                    <div class="color-info">
+                        Vibrant Yellow
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #ed1e79;">
+                        #ed1e79
+                    </div>
+                    <div class="color-info">
+                        Hot Pink
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #07b0ef;">
+                        #07b0ef
+                    </div>
+                    <div class="color-info">
+                        Electric Blue
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #9633ac;">
+                        #9633ac
+                    </div>
+                    <div class="color-info">
+                        Purple
+                    </div>
+                </div>
+            </div>
+            
+            <h2>Secondary Colors</h2>
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #980E03;">
+                        #980E03
+                    </div>
+                    <div class="color-info">
+                        Deep Red
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #FDB95C;">
+                        #FDB95C
+                    </div>
+                    <div class="color-info">
+                        Mango
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #FA8E10;">
+                        #FA8E10
+                    </div>
+                    <div class="color-info">
+                        Orange
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #FEE4B2;">
+                        #FEE4B2
+                    </div>
+                    <div class="color-info">
+                        Cream
+                    </div>
+                </div>
+            </div>
+            
+            <h2>Accent Colors</h2>
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #E53103;">
+                        #E53103
+                    </div>
+                    <div class="color-info">
+                        Bright Red
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #FB7441;">
+                        #FB7441
+                    </div>
+                    <div class="color-info">
+                        Coral
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #FCA989;">
+                        #FCA989
+                    </div>
+                    <div class="color-info">
+                        Peach
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #C05908;">
+                        #C05908
+                    </div>
+                    <div class="color-info">
+                        Bronze
+                    </div>
+                </div>
+            </div>
+            
+            <h2>Background Options</h2>
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #0A0A0A; color: #fff;">
+                        #0A0A0A
+                    </div>
+                    <div class="color-info">
+                        Rich Black
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-display" style="background-color: #1c1c1c; color: #fff;">
+                        #1c1c1c
+                    </div>
+                    <div class="color-info">
+                        Deep Gray
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-display" style="background: radial-gradient(circle, #07b0ef 0%, #9633ac 100%); color: #fff;">
+                        Gradient
+                    </div>
+                    <div class="color-info">
+                        Blue-Purple Radial
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-display" style="background: linear-gradient(135deg, #FA8E10, #E53103); color: #fff;">
+                        Gradient
+                    </div>
+                    <div class="color-info">
+                        Orange-Red Linear
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="color-combination">
+            <h2>Recommended Color Combinations</h2>
+            <div class="combination-grid">
+                <div class="combination-card">
+                    <div class="combination-header" style="background-color: #0A0A0A; color: #fff;">
+                        Primary Call-to-Action
+                    </div>
+                    <div class="combination-colors">
+                        <div class="combination-color" style="background-color: #0A0A0A;"></div>
+                        <div class="combination-color" style="background-color: #FA8E10;"></div>
+                        <div class="combination-color" style="background-color: #07b0ef;"></div>
+                    </div>
+                </div>
+                <div class="combination-card">
+                    <div class="combination-header" style="background-color: #0A0A0A; color: #fff;">
+                        Secondary Elements
+                    </div>
+                    <div class="combination-colors">
+                        <div class="combination-color" style="background-color: #0A0A0A;"></div>
+                        <div class="combination-color" style="background-color: #ed1e79;"></div>
+                        <div class="combination-color" style="background-color: #f7ee2a;"></div>
+                    </div>
+                </div>
+                <div class="combination-card">
+                    <div class="combination-header" style="background-color: #0A0A0A; color: #fff;">
+                        Feature Highlights
+                    </div>
+                    <div class="combination-colors">
+                        <div class="combination-color" style="background-color: #0A0A0A;"></div>
+                        <div class="combination-color" style="background-color: #9633ac;"></div>
+                        <div class="combination-color" style="background-color: #FDB95C;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="usage-example">
+            <h2 style="text-align: center; margin-bottom: 2rem;" class="neon-glow">Landing Page Example</h2>
+            
+            <div class="example-page">
+                <div class="example-header">
+                    <h2 style="margin: 0; color: #fff; font-size: 2.5rem; text-transform: uppercase; letter-spacing: 2px; text-shadow: 4px 4px 0px #980E03;">SYNTHWARE</h2>
+                    <p style="margin: 0.5rem 0 0; color: #fff;">The Future of Software is Here</p>
+                </div>
+                
+                <div class="example-content">
+                    <div class="example-feature" style="background-color: rgba(237, 30, 121, 0.15);">
+                        <div class="example-circle" style="background-color: #ed1e79; color: #fff;">1</div>
+                        <div class="example-text">
+                            <h3 style="margin: 0; color: #ed1e79;">Breakthrough Technology</h3>
+                            <p style="margin: 0.5rem 0 0; color: #fff;">Our revolutionary algorithms power the next generation of software solutions.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="example-feature" style="background-color: rgba(7, 176, 239, 0.15);">
+                        <div class="example-circle" style="background-color: #07b0ef; color: #fff;">2</div>
+                        <div class="example-text">
+                            <h3 style="margin: 0; color: #07b0ef;">Lightning Fast</h3>
+                            <p style="margin: 0.5rem 0 0; color: #fff;">Experience speeds that will transform how you work and create.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="example-feature" style="background-color: rgba(150, 51, 172, 0.15);">
+                        <div class="example-circle" style="background-color: #9633ac; color: #fff;">3</div>
+                        <div class="example-text">
+                            <h3 style="margin: 0; color: #9633ac;">Endless Possibilities</h3>
+                            <p style="margin: 0.5rem 0 0; color: #fff;">Unlock creative potential with our suite of innovative tools.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="example-cta">
+                    <button class="example-button">Get Started Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fontButtons = document.querySelectorAll('.font-button');
+            
+            fontButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    fontButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Get font set number
+                    const fontSet = this.getAttribute('data-font');
+                    
+                    // Remove all font set classes
+                    document.body.classList.remove('font-set-1', 'font-set-2', 'font-set-3', 'font-set-4');
+                    
+                    // Add selected font set class
+                    document.body.classList.add(`font-set-${fontSet}`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
