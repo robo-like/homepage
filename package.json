@@ -12,6 +12,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@libsql/client": "^0.15.1",
     "@react-router/node": "^7.1.5",
     "@react-router/serve": "^7.1.5",
     "@tiptap/pm": "^2.11.5",
@@ -19,6 +20,7 @@
     "@tiptap/starter-kit": "^2.11.5",
     "better-sqlite3": "^11.8.1",
     "clsx": "^2.1.0",
+    "dotenv": "^16.4.7",
     "drizzle-orm": "^0.39.3",
     "isbot": "^5.1.17",
     "react": "^19.0.0",
