@@ -2,7 +2,7 @@ import {
     sqliteTable,
     text,
     integer,
-    uniqueIndex
+    uniqueIndex,
 } from "drizzle-orm/sqlite-core";
 import { randomUUID } from 'crypto';
 
@@ -70,6 +70,9 @@ export const users = sqliteTable('users', {
     // Role - "user" or "admin"
     role: text('role').notNull().default('user'),
 
+    // Stripe information
+    stripeCustomerId: text('stripe_customer_id'),
+    
     // Timestamps
     createdAt: integer('created_at', { mode: 'timestamp' })
         .notNull()
@@ -117,6 +120,32 @@ export const expiringEmailKeys = sqliteTable('expiring_email_keys', {
 
     // When the key was created
     createdAt: integer('created_at', { mode: 'timestamp' })
+        .notNull()
+        .$defaultFn(() => new Date()),
+});
+
+// Subscriptions table for Stripe integration
+export const subscriptions = sqliteTable('subscriptions', {
+    // Unique identifier
+    id: text('id').primaryKey().$defaultFn(() => randomUUID()),
+    
+    // User this subscription belongs to
+    userId: text('user_id').notNull(),
+    
+    // Stripe subscription information
+    stripeSubscriptionId: text('stripe_subscription_id').notNull(),
+    status: text('status').notNull().default('active'), // active, canceled, etc.
+    
+    // Subscription details
+    priceId: text('price_id'), // Stripe price ID
+    currentPeriodStart: integer('current_period_start', { mode: 'timestamp' }),
+    currentPeriodEnd: integer('current_period_end', { mode: 'timestamp' }),
+    
+    // Timestamps
+    createdAt: integer('created_at', { mode: 'timestamp' })
+        .notNull()
+        .$defaultFn(() => new Date()),
+    updatedAt: integer('updated_at', { mode: 'timestamp' })
         .notNull()
         .$defaultFn(() => new Date()),
 });

@@ -24,6 +24,11 @@ export default [
       route("login", "routes/auth/login.server.tsx"),
       route("confirm", "routes/auth/confirm.tsx"),
       route("success", "routes/auth/success.tsx"),
+      route("logout", "routes/auth/logout.tsx"),
+    ]),
+    ...prefix("u", [
+      route("profile", "routes/user/profile.server.tsx"),
+      route("me", "routes/user/me.tsx"),
     ]),
     layout("./routes/admin/layout.tsx", [
       ...prefix("admin", [
@@ -35,6 +40,7 @@ export default [
   ]),
   ...prefix("api", [
     route("metrics", "routes/api/metrics.tsx"),
+    route("download-tracking", "routes/api/download-tracking.tsx"),
     route(
       "instagram/hashtag/:hashtag/recent",
       "routes/api/instagram.hashtag.$hashtag.recent.tsx"

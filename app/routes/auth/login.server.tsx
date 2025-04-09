@@ -1,7 +1,8 @@
 import { Form, useActionData, useLoaderData, useLocation, redirect } from "react-router";
 import { useState } from "react";
-import { auth, createMagicLinkKey, sendMagicLinkEmail } from "~/lib/auth.server";
+import { auth, createMagicLinkKey, sendMagicLinkEmail, getSession } from "~/lib/auth.server";
 import { authQueries } from "~/lib/db";
+import { trackAuthEvent, trackUserCreated, EVENT_TYPES } from "~/lib/analytics/events.server";
 import type { Route } from "../+types/auth-common";
 
 // Check for valid email format and constraints from prompts
@@ -35,13 +36,17 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
-  const email = formData.get("email")?.toString().toLowerCase();
+  // Normalize email: lowercase and trim whitespace
+  const rawEmail = formData.get("email")?.toString() || "";
+  const email = rawEmail.toLowerCase().trim();
   const redirectTo = formData.get("redirectTo")?.toString() || undefined;
 
+  // Validate email presence
   if (!email) {
     return { success: false, error: "Email is required" };
   }
 
+  // Validate email format
   if (!isValidEmail(email)) {
     return {
       success: false,
@@ -50,12 +55,47 @@ export async function action({ request }: Route.ActionArgs) {
   }
 
   try {
-    const user = await authQueries.createUser({
-      email,
-      role: email == process.env.ADMIN_EMAIL ? "admin" : "user"
-    });
+    // Get IP address and user agent for analytics
+    const ipAddress = request.headers.get("x-forwarded-for") ||
+      request.headers.get("x-real-ip") ||
+      // @ts-expect-error - socket exists on request in development
+      request.socket?.remoteAddress ||
+      "localhost";
+    const userAgent = request.headers.get("user-agent") || undefined;
+    
+    // Get session for analytics
+    const session = await getSession(request.headers.get("Cookie"));
+    const sessionId = session?.id || "unknown";
+    
+    // First check if user already exists
+    let user = await authQueries.getUserByEmail(email);
+    let isNewUser = false;
+    
+    // If no user exists, create a new one
+    if (!user) {
+      isNewUser = true;
+      // Determine role based on admin email
+      const isAdmin = email === process.env.ADMIN_EMAIL?.toLowerCase();
+      
+      user = await authQueries.createUser({
+        email,
+        role: isAdmin ? "admin" : "user"
+      });
+      
+      // Track new user sign up
+      await trackUserCreated({
+        userId: user.id,
+        email,
+        sessionId,
+        ipAddress: ipAddress.split(",")[0].trim(),
+        userAgent
+      });
+    }
 
+    // Generate magic link key for authentication
     const key = await createMagicLinkKey(user.id);
+    
+    // Construct the magic link URL
     const url = new URL(request.url);
     const origin = `${url.protocol}//${url.host}`;
     let magicLinkUrl = `${origin}/auth/confirm?key=${key}`;
@@ -63,16 +103,31 @@ export async function action({ request }: Route.ActionArgs) {
     if (redirectTo) {
       magicLinkUrl += `&redirectTo=${encodeURIComponent(redirectTo)}`;
     }
+    
+    // Track login attempt event (existing user or signup)
+    await trackAuthEvent({
+      eventType: isNewUser ? EVENT_TYPES.SIGNUP : EVENT_TYPES.LOGIN_SUCCESS,
+      userId: user.id,
+      email,
+      sessionId,
+      ipAddress: ipAddress.split(",")[0].trim(),
+      userAgent,
+      success: true
+    });
+    
+    // Send the magic link email
     const emailSent = await sendMagicLinkEmail(email, magicLinkUrl, origin);
+    
     if (!emailSent) {
       return {
         success: false,
         error: "Failed to send magic link email. Please try again."
       };
     }
+    
     return { success: true };
   } catch (error) {
-    console.error("Error creating magic link:", error);
+    console.error("Error in authentication flow:", error);
     return {
       success: false,
       error: "An error occurred. Please try again."
@@ -82,8 +137,8 @@ export async function action({ request }: Route.ActionArgs) {
 
 export function meta({ }: Route.MetaArgs) {
   return [
-    { title: "Log in to RoboLike" },
-    { name: "description", content: "Log in to your RoboLike account" }
+    { title: "Log in or Sign up | RoboLike" },
+    { name: "description", content: "Log in to your existing account or sign up for a new RoboLike account" }
   ];
 }
 
@@ -92,6 +147,7 @@ export default function Login() {
   const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   // Get redirectTo from query params
@@ -104,6 +160,7 @@ export default function Login() {
       e.preventDefault();
       return;
     }
+    setIsSubmitting(true);
     setSubmitted(true);
   };
 
@@ -113,7 +170,7 @@ export default function Login() {
         <h1 className="text-2xl font-bold mb-2" style={{
           fontFamily: 'var(--heading-font, "Press Start 2P", cursive)'
         }}>
-          LOGIN TO ROBOLIKE
+          ROBOLIKE ACCOUNT
         </h1>
         <div className="w-full h-1 my-4 bg-gradient-to-r from-[#ed1e79] via-[#07b0ef] to-[#f7ee2a]"></div>
       </div>
@@ -146,6 +203,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={isSubmitting}
             />
             {redirectTo && (
               <input type="hidden" name="redirectTo" value={redirectTo} />
@@ -154,10 +212,21 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-[#07b0ef] text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+            className="w-full py-2 px-4 bg-[#07b0ef] text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 disabled:opacity-70"
             style={{ fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)' }}
+            disabled={isSubmitting}
           >
-            SEND MAGIC LINK
+            {isSubmitting ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                PROCESSING...
+              </span>
+            ) : (
+              "LOGIN / SIGNUP"
+            )}
           </button>
         </Form>
       )}

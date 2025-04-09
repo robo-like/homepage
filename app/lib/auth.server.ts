@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
 import { redirect, createSessionStorage } from 'react-router';
 import { authQueries } from './db';
+import emailTemplate from './email-template';
 
 // Define user type
 export interface User {
@@ -8,6 +9,7 @@ export interface User {
     email: string;
     name?: string;
     role: 'user' | 'admin';
+    createdAt: Date | string;
 }
 
 // Define session data type
@@ -23,6 +25,9 @@ export type SessionFlashData = {
 
 // Create database session storage
 function createDatabaseSessionStorage() {
+    // Default session duration - 7 days
+    const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000;
+    
     return createSessionStorage<SessionData, SessionFlashData>({
         cookie: {
             name: "__robolike_session",
@@ -31,15 +36,18 @@ function createDatabaseSessionStorage() {
             sameSite: "lax",
             secrets: [process.env.COOKIE_SECRET || "s3cr3t"],
             secure: process.env.NODE_ENV === "production",
-            maxAge: 60 * 60 * 24 * 7, // 7 days
+            maxAge: SESSION_DURATION, // 7 days
         },
         async createData(data, expires) {
             // Create a new session in the database
             const sessionId = randomUUID();
+            // Use provided expiration time or calculate default
+            const expirationTime = expires || new Date(Date.now() + SESSION_DURATION);
+            
             await authQueries.createSession({
                 id: sessionId,
                 userId: data.userId,
-                expiresAt: expires || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
+                expiresAt: expirationTime 
             });
             return sessionId;
         },
@@ -52,10 +60,13 @@ function createDatabaseSessionStorage() {
             return { userId: session.userId };
         },
         async updateData(id, data, expires) {
+            // Use provided expiration time or calculate default
+            const expirationTime = expires || new Date(Date.now() + SESSION_DURATION);
+            
             // Update session in database
             await authQueries.updateSession(id, {
                 userId: data.userId,
-                expiresAt: expires || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
+                expiresAt: expirationTime
             });
         },
         async deleteData(id) {
@@ -90,7 +101,8 @@ export async function auth(request: Request) {
                     id: user.id,
                     email: user.email,
                     name: user.name,
-                    role: user.role as 'user' | 'admin'
+                    role: user.role as 'user' | 'admin',
+                    createdAt: user.createdAt
                 }
             };
         }
@@ -212,7 +224,6 @@ export async function sendMagicLinkEmail(
             console.error('BREVO_API_KEY not set in environment');
             return false;
         }
-
         const response = await fetch('https://api.brevo.com/v3/smtp/email', {
             method: 'POST',
             headers: {
@@ -232,28 +243,7 @@ export async function sendMagicLinkEmail(
                     }
                 ],
                 subject: 'Your RoboLike Magic Link',
-                htmlContent: `
-          <html>
-            <head>
-              <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                .button { display: inline-block; background-color: #07b0ef; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; }
-                .logo { max-width: 200px; }
-              </style>
-            </head>
-            <body>
-              <div class="container">
-                <img src="${origin}/images/logo.png" alt="RoboLike Logo" class="logo" />
-                <h1>Your Magic Link</h1>
-                <p>Click the button below to log in to your RoboLike account. This link will expire in 5 minutes.</p>
-                <p><a href="${magicLinkUrl}" class="button">Log In</a></p>
-                <p>If you did not request this link, you can safely ignore this email.</p>
-                <p>- The RoboLike Team</p>
-              </div>
-            </body>
-          </html>
-        `
+                htmlContent: emailTemplate(origin, magicLinkUrl)
             })
         });
 

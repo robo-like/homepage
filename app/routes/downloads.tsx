@@ -20,29 +20,34 @@ interface DownloadCardProps {
 }
 
 function DownloadCard({ platform, icon, version, releaseDate, downloadUrl, requirements }: DownloadCardProps) {
-  const handleDownloadClick = () => {
-    // Get existing session ID from cookie
-    const sessionId = document.cookie.match(/sessionId=([^;]+)/)?.[1];
-    console.log('sessionId', sessionId);
-    if (!sessionId) return;
-
-    // Track download event
-    fetch('/api/metrics', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sessionId,
-        path: '/downloads',
-        eventType: 'productEvent',
-        eventValue: platform.toLowerCase(),
-        description: `User clicked download for ${platform}`,
-      }),
-    }).catch(error => {
-      // Silently fail for analytics
+  const handleDownloadClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Prevent the default anchor behavior to allow time for tracking
+    e.preventDefault();
+    
+    try {
+      // Track download event with the new dedicated tracking endpoint
+      await fetch('/api/download-tracking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          platform: platform.toLowerCase(),
+          version,
+        }),
+      });
+      
+      // After tracking is complete, proceed with the download
+      // For a real implementation, you'd uncomment this:
+      // window.location.href = downloadUrl;
+      
+      // For now, just log
+      console.log(`Download started for ${platform} v${version}`);
+    } catch (error) {
       console.error('Error tracking download:', error);
-    });
+      // Even if tracking fails, proceed with download
+      // window.location.href = downloadUrl;
+    }
   };
 
   return (
@@ -67,9 +72,9 @@ function DownloadCard({ platform, icon, version, releaseDate, downloadUrl, requi
       </div>
 
       <a
-        // href={downloadUrl}
+        href={downloadUrl}
         onClick={handleDownloadClick}
-        className="w-full py-2 px-4 bg-darkPurple text-white rounded-lg text-center hover:bg-opacity-90 transition-colors"
+        className="w-full py-2 px-4 bg-darkPurple text-white rounded-lg text-center hover:bg-opacity-90 transition-colors cursor-pointer"
       >
         Download for {platform}
       </a>

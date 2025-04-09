@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
-import { posts, analytics, users, activeSessions, expiringEmailKeys } from './schema';
-import { eq, desc, asc, and, lte, gte, gt } from 'drizzle-orm';
+import { posts, analytics, users, activeSessions, expiringEmailKeys, subscriptions } from './schema';
+import { eq, desc, asc, and, lte, gte, gt, isNull } from 'drizzle-orm';
 
 // Initialize Turso database connection
 const turso = createClient({
@@ -203,6 +203,7 @@ export const authQueries = {
         email: string;
         name?: string;
         role?: 'user' | 'admin';
+        stripeCustomerId?: string;
     }) {
         const existingUser = await db.select()
             .from(users)
@@ -216,10 +217,21 @@ export const authQueries = {
         const result = await db.insert(users).values({
             email: data.email.toLowerCase(),
             name: data.name,
-            role: data.role || 'user'
+            role: data.role || 'user',
+            stripeCustomerId: data.stripeCustomerId
         }).returning();
         
         return result[0];
+    },
+    
+    async updateUser(id: string, data: {
+        name?: string;
+        stripeCustomerId?: string;
+    }) {
+        return db.update(users)
+            .set(data)
+            .where(eq(users.id, id))
+            .returning();
     },
 
     // Session operations
@@ -297,5 +309,73 @@ export const authQueries = {
         return db.update(expiringEmailKeys)
             .set({ utilized: true })
             .where(eq(expiringEmailKeys.id, id));
+    },
+
+    // Subscription operations
+    async getActiveSubscription(userId: string) {
+        return db.select()
+            .from(subscriptions)
+            .where(
+                and(
+                    eq(subscriptions.userId, userId),
+                    eq(subscriptions.status, 'active')
+                )
+            )
+            .get();
+    },
+
+    async getAllUserSubscriptions(userId: string) {
+        return db.select()
+            .from(subscriptions)
+            .where(eq(subscriptions.userId, userId))
+            .orderBy(desc(subscriptions.createdAt));
+    },
+
+    async createSubscription(data: {
+        userId: string;
+        stripeSubscriptionId: string;
+        priceId?: string;
+        status?: string;
+        currentPeriodStart?: Date;
+        currentPeriodEnd?: Date;
+    }) {
+        return db.insert(subscriptions).values({
+            userId: data.userId,
+            stripeSubscriptionId: data.stripeSubscriptionId,
+            priceId: data.priceId,
+            status: data.status || 'active',
+            currentPeriodStart: data.currentPeriodStart,
+            currentPeriodEnd: data.currentPeriodEnd,
+        }).returning();
+    },
+
+    async updateSubscription(stripeSubscriptionId: string, data: {
+        status?: string;
+        currentPeriodStart?: Date;
+        currentPeriodEnd?: Date;
+    }) {
+        return db.update(subscriptions)
+            .set({
+                ...data,
+                updatedAt: new Date()
+            })
+            .where(eq(subscriptions.stripeSubscriptionId, stripeSubscriptionId))
+            .returning();
+    },
+
+    async cancelSubscription(stripeSubscriptionId: string) {
+        return db.update(subscriptions)
+            .set({
+                status: 'canceled',
+                updatedAt: new Date()
+            })
+            .where(eq(subscriptions.stripeSubscriptionId, stripeSubscriptionId))
+            .returning();
+    },
+    
+    async getUsersWithoutStripeCustomer() {
+        return db.select()
+            .from(users)
+            .where(isNull(users.stripeCustomerId));
     }
 };
