@@ -57,3 +57,66 @@ export const analytics = sqliteTable('analytics', {
         .notNull()
         .$defaultFn(() => new Date()),
 });
+
+// Users table for authentication
+export const users = sqliteTable('users', {
+    // Unique identifier
+    id: text('id').primaryKey().$defaultFn(() => randomUUID()),
+
+    // User information
+    email: text('email').notNull(),
+    name: text('name'),
+
+    // Role - "user" or "admin"
+    role: text('role').notNull().default('user'),
+
+    // Timestamps
+    createdAt: integer('created_at', { mode: 'timestamp' })
+        .notNull()
+        .$defaultFn(() => new Date()),
+    updatedAt: integer('updated_at', { mode: 'timestamp' })
+        .notNull()
+        .$defaultFn(() => new Date()),
+}, (table) => [
+    uniqueIndex('email_idx').on(table.email),
+]);
+
+// Active sessions table
+export const activeSessions = sqliteTable('active_sessions', {
+    // Unique identifier (this is the cookie value)
+    id: text('id').primaryKey().$defaultFn(() => randomUUID()),
+
+    // Link to user if authenticated
+    userId: text('user_id'),
+
+    // Session validity
+    createdAt: integer('created_at', { mode: 'timestamp' })
+        .notNull()
+        .$defaultFn(() => new Date()),
+    expiresAt: integer('expires_at', { mode: 'timestamp' })
+        .notNull(),
+});
+
+// Expiring email keys for magic link auth
+export const expiringEmailKeys = sqliteTable('expiring_email_keys', {
+    // Unique identifier
+    id: text('id').primaryKey().$defaultFn(() => randomUUID()),
+
+    // The key sent in the email
+    key: text('key').notNull(),
+
+    // The user this key is for
+    userId: text('user_id').notNull(),
+
+    // Expiration (5 minutes from creation)
+    expiresAt: integer('expires_at', { mode: 'timestamp' })
+        .notNull(),
+
+    // Whether this key has been used
+    utilized: integer('utilized', { mode: 'boolean' }).notNull().default(false),
+
+    // When the key was created
+    createdAt: integer('created_at', { mode: 'timestamp' })
+        .notNull()
+        .$defaultFn(() => new Date()),
+});

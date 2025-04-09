@@ -5,7 +5,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
   useLocation,
 } from "react-router";
 import { useEffect } from "react";
@@ -26,44 +25,21 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
-export const loader = async () => {
-  return { gaTrackingId: process.env.GA_TRACKING_ID }
-};
-
-// Generate a random session ID and store it in a cookie
-function getOrCreateSessionId() {
-  const existingSessionId = document.cookie.match(/sessionId=([^;]+)/)?.[1];
-  if (existingSessionId) {
-    return existingSessionId;
-  }
-
-  const newSessionId = Math.random().toString(36).substring(2, 15);
-  // Set cookie to expire in 3 hours
-  document.cookie = `sessionId=${newSessionId};path=/;max-age=${3 * 60 * 60 * 1000}`;
-  return newSessionId;
-}
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { gaTrackingId } = useLoaderData<typeof loader>();
   const location = useLocation();
 
   useEffect(() => {
-    // Get existing or create new session ID
-    const sessionId = getOrCreateSessionId();
-
-    // Send page view data to metrics endpoint
     fetch('/api/metrics', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        sessionId,
         eventType: 'pageView',
         path: location.pathname,
       }),
     }).catch(error => {
-      // Silently fail for analytics
       console.error('Error tracking page view:', error);
     });
   }, [location.pathname]);

@@ -1,10 +1,23 @@
-import { Outlet } from "react-router";
+import { Outlet, redirect } from "react-router";
 import { Header } from "~/components/Header";
-import type { Route } from "./+types/layout"
+import type { Route } from "./+types/layout";
+import { requireAuth } from "../../lib/auth.server";
+
 export async function loader({ request }: Route.ClientLoaderArgs) {
     const url = new URL(request.url);
-    if (!url.hostname.includes('localhost')) {
+    
+    // Local development check
+    if (!url.hostname.includes('localhost') && process.env.NODE_ENV === 'production') {
         throw new Response('Not Found', { status: 404 });
+    }
+    
+    // Authentication check - only allow admins
+    try {
+        const authData = await requireAuth(request, '/auth/login', ['admin']);
+        return { user: authData.user };
+    } catch (error) {
+        // requireAuth will throw a redirect if not authenticated
+        throw error;
     }
 }
 

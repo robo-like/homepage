@@ -1,4 +1,4 @@
--- Create a default blog post about RoboLike
+-- Create a default blog post about RoboLike (only if it doesn't exist)
 INSERT INTO posts (
   id, 
   title, 
@@ -11,7 +11,7 @@ INSERT INTO posts (
   seo_description,
   seo_image
 ) 
-VALUES (
+SELECT
   'e47518b7-9b74-43e1-812b-2e2a3f7133fe', 
   'Introducing RoboLike: The Open Source Social Media Auto-Liker',
   'the-new-social-media-auto-liker',
@@ -87,4 +87,6 @@ Download RoboLike today and transform how you engage on Instagram!
   'RoboLike: Open Source Instagram Engagement Tool | Boost Your Social Media Presence',
   'Automate your Instagram engagement with RoboLike, the free open source tool that helps creators and businesses save time while growing their audience.',
   '/seo/homepage-seo-image.gif'
+WHERE NOT EXISTS (
+  SELECT 1 FROM posts WHERE id = 'e47518b7-9b74-43e1-812b-2e2a3f7133fe' OR slug = 'the-new-social-media-auto-liker'
 );

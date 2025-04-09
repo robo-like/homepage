@@ -19,12 +19,18 @@ export default [
       route(":pid", "routes/post.tsx"),
     ]),
     route("sitemap.xml", "routes/sitemap.tsx"),
+    ...prefix("auth", [
+      index("routes/auth/index.tsx"),
+      route("login", "routes/auth/login.server.tsx"),
+      route("confirm", "routes/auth/confirm.tsx"),
+      route("success", "routes/auth/success.tsx"),
+    ]),
     layout("./routes/admin/layout.tsx", [
-        ...prefix("admin", [
-            index("routes/admin/index.tsx"),
-            route("create-post", "routes/admin/create-post.tsx"),
-            route("edit-post/:slug", "routes/admin/edit-post.$slug.tsx")
-        ])
+      ...prefix("admin", [
+        index("routes/admin/index.tsx"),
+        route("create-post", "routes/admin/create-post.tsx"),
+        route("edit-post/:slug", "routes/admin/edit-post.$slug.tsx")
+      ])
     ]),
   ]),
   ...prefix("api", [

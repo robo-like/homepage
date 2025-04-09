@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
-import { posts, analytics } from './schema';
-import { eq, desc, asc, and, lte, gte } from 'drizzle-orm';
+import { posts, analytics, users, activeSessions, expiringEmailKeys } from './schema';
+import { eq, desc, asc, and, lte, gte, gt } from 'drizzle-orm';
 
 // Initialize Turso database connection
 const turso = createClient({
@@ -179,5 +179,123 @@ export const analyticsQueries = {
         if (endDate) query = query.where(lte(analytics.createdAt, endDate));
 
         return query.limit(limit).orderBy(desc(analytics.createdAt));
+    }
+};
+
+// Authentication Queries
+export const authQueries = {
+    // User operations
+    async getUserByEmail(email: string) {
+        return db.select()
+            .from(users)
+            .where(eq(users.email, email.toLowerCase()))
+            .get();
+    },
+
+    async getUserById(id: string) {
+        return db.select()
+            .from(users)
+            .where(eq(users.id, id))
+            .get();
+    },
+
+    async createUser(data: {
+        email: string;
+        name?: string;
+        role?: 'user' | 'admin';
+    }) {
+        const existingUser = await db.select()
+            .from(users)
+            .where(eq(users.email, data.email.toLowerCase()))
+            .get();
+        
+        if (existingUser) {
+            return existingUser;
+        }
+        
+        const result = await db.insert(users).values({
+            email: data.email.toLowerCase(),
+            name: data.name,
+            role: data.role || 'user'
+        }).returning();
+        
+        return result[0];
+    },
+
+    // Session operations
+    async createSession(data: {
+        id: string;
+        userId?: string;
+        expiresAt: Date;
+    }) {
+        return db.insert(activeSessions).values({
+            id: data.id,
+            userId: data.userId,
+            expiresAt: data.expiresAt,
+        }).returning();
+    },
+
+    async getSession(id: string) {
+        return db.select()
+            .from(activeSessions)
+            .where(
+                and(
+                    eq(activeSessions.id, id),
+                    gt(activeSessions.expiresAt, new Date())
+                )
+            )
+            .get();
+    },
+
+    async updateSession(id: string, data: {
+        userId?: string;
+        expiresAt?: Date;
+    }) {
+        return db.update(activeSessions)
+            .set(data)
+            .where(eq(activeSessions.id, id));
+    },
+
+    async deleteSession(id: string) {
+        return db.delete(activeSessions)
+            .where(eq(activeSessions.id, id));
+    },
+
+    async deleteUserSessions(userId: string) {
+        return db.delete(activeSessions)
+            .where(eq(activeSessions.userId, userId));
+    },
+
+    // Magic link operations
+    async createEmailKey(data: {
+        key: string;
+        userId: string;
+        expiresAt: Date;
+    }) {
+        return db.insert(expiringEmailKeys).values({
+            key: data.key,
+            userId: data.userId,
+            expiresAt: data.expiresAt,
+            utilized: false
+        }).returning();
+    },
+
+    async getEmailKey(key: string) {
+        return db.select()
+            .from(expiringEmailKeys)
+            .where(
+                and(
+                    eq(expiringEmailKeys.key, key),
+                    eq(expiringEmailKeys.utilized, false),
+                    gt(expiringEmailKeys.expiresAt, new Date())
+                )
+            )
+            .get();
+    },
+
+    async markEmailKeyAsUtilized(id: string) {
+        return db.update(expiringEmailKeys)
+            .set({ utilized: true })
+            .where(eq(expiringEmailKeys.id, id));
     }
 };

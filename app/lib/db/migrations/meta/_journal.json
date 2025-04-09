@@ -8,6 +8,27 @@
       "when": 1743108592330,
       "tag": "0000_robust_raider",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1743108592331,
+      "tag": "0001_default_blog_post",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1743108592332,
+      "tag": "0002_add_auth_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1743723767429,
+      "tag": "0003_majestic_warpath",
+      "breakpoints": true
     }
   ]
 }

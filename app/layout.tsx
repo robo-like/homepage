@@ -1,7 +1,6 @@
 import { Outlet } from "react-router";
 import { Header } from "~/components/Header";
 import type { Route } from "./+types/layout";
-import { Footer } from "./components/Footer";
 
 export function meta({ }: Route.MetaArgs) {
     return [
