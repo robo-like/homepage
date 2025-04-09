@@ -9,6 +9,10 @@ import {
 import { trackSubscriptionEvent, EVENT_TYPES } from "~/lib/analytics/events.server";
 import type { Route } from "../+types/auth-common";
 
+// This file uses the separator pattern to split server and client code
+// See: https://remix.run/docs/en/1.18.1/guides/routing#route-module-constraints
+
+// Server-only code section
 // Require authentication for this route
 export async function loader({ request }: Route.LoaderArgs) {
   try {
@@ -42,6 +46,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
 }
 
+// Server-only code section
 export async function action({ request }: Route.ActionArgs) {
   // Ensure user is authenticated
   const authData = await requireAuth(request, '/auth/login');
@@ -145,6 +150,7 @@ export function meta({ }: Route.MetaArgs) {
   ];
 }
 
+// Client component section
 export default function Profile() {
   const { user, subscriptionDetails, sessionExpiresAt } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
@@ -156,7 +162,7 @@ export default function Profile() {
     new Date(sessionExpiresAt).toLocaleString() : 
     'Session information unavailable';
     
-  // Check for trial information - in a real implementation this would come from the loader
+  // Client-side calculation of trial information
   const createdAt = user.createdAt ? new Date(user.createdAt) : null;
   const now = new Date();
   const trialEnd = createdAt ? new Date(createdAt.getTime() + 3 * 24 * 60 * 60 * 1000) : null;
@@ -164,6 +170,13 @@ export default function Profile() {
   const trialDaysLeft = isInTrial && trialEnd 
     ? Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
     : 0;
+    
+  // Client-side function to confirm subscription cancellation
+  const confirmCancellation = (e: React.FormEvent) => {
+    if (!confirm('Are you sure you want to cancel your subscription? You will still have access until the end of your billing period.')) {
+      e.preventDefault();
+    }
+  };
   
   return (
     <div className="max-w-xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mt-16 mb-16">
@@ -293,11 +306,7 @@ export default function Profile() {
               </Form>
               
               {!subscriptionDetails.subscription?.cancelAtPeriodEnd && (
-                <Form method="post" onSubmit={(e) => {
-                  if (!confirm('Are you sure you want to cancel your subscription? You will still have access until the end of your billing period.')) {
-                    e.preventDefault();
-                  }
-                }}>
+                <Form method="post" onSubmit={confirmCancellation}>
                   <input type="hidden" name="action" value="cancel" />
                   <input
                     type="hidden"

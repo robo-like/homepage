@@ -21,13 +21,13 @@ export default [
     route("sitemap.xml", "routes/sitemap.tsx"),
     ...prefix("auth", [
       index("routes/auth/index.tsx"),
-      route("login", "routes/auth/login.server.tsx"),
+      route("login", "routes/auth/login.tsx"),
       route("confirm", "routes/auth/confirm.tsx"),
       route("success", "routes/auth/success.tsx"),
       route("logout", "routes/auth/logout.tsx"),
     ]),
     ...prefix("u", [
-      route("profile", "routes/user/profile.server.tsx"),
+      route("profile", "routes/user/profile.tsx"),
       route("me", "routes/user/me.tsx"),
     ]),
     layout("./routes/admin/layout.tsx", [

@@ -20,6 +20,7 @@ function isValidEmail(email: string) {
   return true;
 }
 
+// This is server-only code
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const error = url.searchParams.get("error");
@@ -34,6 +35,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { error: error || undefined };
 }
 
+// This is server-only code
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   // Normalize email: lowercase and trim whitespace
@@ -142,6 +144,7 @@ export function meta({ }: Route.MetaArgs) {
   ];
 }
 
+// This is the client component
 export default function Login() {
   const location = useLocation();
   const loaderData = useLoaderData<typeof loader>();
@@ -154,9 +157,24 @@ export default function Login() {
   const params = new URLSearchParams(location.search);
   const redirectTo = params.get("redirectTo") || undefined;
 
+  // Client-side email validation function
+  const validateEmail = (email: string) => {
+    if (!email) return false;
+
+    // Validate email format
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) return false;
+
+    // Check for "+" in the local part as per requirements
+    const localPart = email.split('@')[0];
+    if (localPart.includes('+')) return false;
+
+    return true;
+  };
+
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
-    if (!isValidEmail(email)) {
+    if (!validateEmail(email)) {
       e.preventDefault();
       return;
     }
