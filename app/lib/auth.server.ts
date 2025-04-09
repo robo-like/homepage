@@ -223,7 +223,7 @@ export async function sendMagicLinkEmail(
             body: JSON.stringify({
                 sender: {
                     name: 'RoboLike',
-                    email: 'auth@robo-like.com'
+                    email: 'self@robolike.com'
                 },
                 to: [
                     {
