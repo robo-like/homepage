@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+build/
+dist/
+
+# Cache
+.eslintcache
+.npm
+.cache
+
+# Database
+data/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+
+# Temp
+.DS_Store
+.temp

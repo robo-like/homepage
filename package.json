@@ -9,7 +9,8 @@
     "typecheck": "react-router typegen && tsc",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\""
   },
   "dependencies": {
     "@libsql/client": "^0.15.1",
@@ -38,6 +39,7 @@
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.1",
     "drizzle-kit": "^0.30.4",
+    "prettier": "^3.2.0",
     "react-router-devtools": "^1.1.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.2",
