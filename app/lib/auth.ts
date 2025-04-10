@@ -138,7 +138,7 @@ export async function requireAuth(
  * Create a magic link key for authentication
  */
 export async function createMagicLinkKey(userId: string): Promise<string> {
-  const key = randomUUID();
+  const key = crypto.randomUUID();
   const now = new Date();
   const expiresAt = new Date(now.getTime() + 5 * 60 * 1000); // 5 minutes
 

@@ -13,7 +13,7 @@ export const posts = sqliteTable(
     id: text("id")
       .primaryKey()
       .notNull()
-      .$defaultFn(() => randomUUID()),
+      .$defaultFn(() => crypto.randomUUID()),
 
     // SEO and content fields
     title: text("title").notNull(),
@@ -40,7 +40,7 @@ export const analytics = sqliteTable("analytics", {
   // Unique identifier for each event
   id: text("id")
     .primaryKey()
-    .$defaultFn(() => randomUUID()),
+    .$defaultFn(() => crypto.randomUUID()),
 
   // Session and user tracking
   sessionId: text("session_id").notNull(),
@@ -71,7 +71,7 @@ export const users = sqliteTable(
     // Unique identifier
     id: text("id")
       .primaryKey()
-      .$defaultFn(() => randomUUID()),
+      .$defaultFn(() => crypto.randomUUID()),
 
     // User information
     email: text("email").notNull(),
@@ -99,7 +99,7 @@ export const activeSessions = sqliteTable("active_sessions", {
   // Unique identifier (this is the cookie value)
   id: text("id")
     .primaryKey()
-    .$defaultFn(() => randomUUID()),
+    .$defaultFn(() => crypto.randomUUID()),
 
   // Link to user if authenticated
   userId: text("user_id"),
@@ -116,7 +116,7 @@ export const expiringEmailKeys = sqliteTable("expiring_email_keys", {
   // Unique identifier
   id: text("id")
     .primaryKey()
-    .$defaultFn(() => randomUUID()),
+    .$defaultFn(() => crypto.randomUUID()),
 
   // The key sent in the email
   key: text("key").notNull(),
@@ -141,7 +141,7 @@ export const subscriptions = sqliteTable("subscriptions", {
   // Unique identifier
   id: text("id")
     .primaryKey()
-    .$defaultFn(() => randomUUID()),
+    .$defaultFn(() => crypto.randomUUID()),
 
   // User this subscription belongs to
   userId: text("user_id").notNull(),
