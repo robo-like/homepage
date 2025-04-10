@@ -9,6 +9,7 @@
     "typecheck": "react-router typegen && tsc",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
+    "db:migrate:prod": "drizzle-kit migrate --config drizzle.config.prod.ts",
     "db:studio": "drizzle-kit studio",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\""
   },

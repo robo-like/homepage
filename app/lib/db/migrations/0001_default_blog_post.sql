@@ -90,4 +90,3 @@ Download RoboLike today and transform how you engage on Instagram!
 WHERE NOT EXISTS (
   SELECT 1 FROM posts WHERE id = 'e47518b7-9b74-43e1-812b-2e2a3f7133fe' OR slug = 'the-new-social-media-auto-liker'
 );
---> statement-breakpoint
