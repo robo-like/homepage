@@ -82,7 +82,7 @@ export default function InstallGuide() {
     };
     const otherExtensions = {
       windows: ['win', '.exe', '.msi'],
-      linux: ['linux', '.AppImage', '.deb', '.rpm']
+      linux: ['linux', '.deb', '.AppImage', '.rpm']
     };
     let platformExtensions: string[] = [];
     if (selectedPlatform === 'macos' && macArchitecture) {
@@ -395,10 +395,10 @@ export default function InstallGuide() {
                   <div>
                     <h3 className="text-xl mb-2 text-[#ed1e79]" style={{
                       fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                    }}>DOWNLOAD THE APPIMAGE</h3>
+                    }}>DOWNLOAD THE DEB PACKAGE</h3>
                     <p className="text-gray-300" style={{
                       fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-                    }}>Click the download button at the bottom to get the latest version of RoboLike for Linux (.AppImage file).</p>
+                    }}>Click the download button at the bottom to get the latest version of RoboLike for Linux (.deb file).</p>
                   </div>
                 </div>
 
@@ -409,10 +409,15 @@ export default function InstallGuide() {
                   <div>
                     <h3 className="text-xl mb-2 text-[#07b0ef]" style={{
                       fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                    }}>MAKE IT EXECUTABLE</h3>
+                    }}>INSTALL WITH DPKG</h3>
                     <p className="text-gray-300" style={{
                       fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-                    }}>Open a terminal, navigate to the download location, and run: <code className="bg-[#0A0A0A] px-2 py-1 rounded border border-[#07b0ef]">chmod +x RoboLike.AppImage</code></p>
+                    }}>Open a terminal, navigate to the download location, and run:</p> 
+                    <p className='mt-2'>
+                      <code className="bg-[#0A0A0A] px-2 py-1 rounded border border-[#07b0ef]">
+                        sudo dpkg -i robolike_0.0.1_amd64.deb
+                      </code>
+                    </p>
                   </div>
                 </div>
 
@@ -423,38 +428,10 @@ export default function InstallGuide() {
                   <div>
                     <h3 className="text-xl mb-2 text-[#f7ee2a]" style={{
                       fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                    }}>RUN THE APPIMAGE</h3>
+                    }}>LAUNCH ROBOLIKE</h3>
                     <p className="text-gray-300" style={{
                       fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-                    }}>Double-click the AppImage file or run it from the terminal: <code className="bg-[#0A0A0A] px-2 py-1 rounded border border-[#f7ee2a]">./RoboLike.AppImage</code></p>
-                  </div>
-                </div>
-
-                <div className="flex">
-                  <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#9633ac]">4</div>
-                  </div>
-                  <div>
-                    <h3 className="text-xl mb-2 text-[#9633ac]" style={{
-                      fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                    }}>CREATE DESKTOP SHORTCUT</h3>
-                    <p className="text-gray-300" style={{
-                      fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-                    }}>To create a desktop shortcut, you can integrate the AppImage with your desktop environment using tools like AppImageLauncher.</p>
-                  </div>
-                </div>
-
-                <div className="flex">
-                  <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#FA8E10]">5</div>
-                  </div>
-                  <div>
-                    <h3 className="text-xl mb-2 text-[#FA8E10]" style={{
-                      fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                    }}>INSTALL DEPENDENCIES</h3>
-                    <p className="text-gray-300" style={{
-                      fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-                    }}>If you encounter any errors, you may need to install dependencies. Check our documentation for specific requirements.</p>
+                    }}>After installation, you can launch RoboLike from your application menu or by running <code className="bg-[#0A0A0A] px-2 py-1 rounded border border-[#f7ee2a]">robolike</code> in the terminal.</p>
                   </div>
                 </div>
               </div>

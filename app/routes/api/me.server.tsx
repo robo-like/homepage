@@ -1,6 +1,6 @@
-import { data } from "react-router";
-import { auth, commitSession, getSession } from "~/lib/auth.server";
-import { getUserSubscriptionDetails } from "~/lib/billing/stripe.server";
+import { data, useLoaderData } from "react-router";
+import { auth, commitSession, getSession } from "./me.server";
+import { getUserSubscriptionDetails } from "../../lib/billing/stripe.server";
 import type { Route } from "../+types/auth-common";
 
 /**
@@ -74,4 +74,14 @@ export async function loader({ request }: Route.LoaderArgs) {
       }
     );
   }
+}
+
+export default function Me() {
+  const { authenticated, user, subscription, session } = useLoaderData();
+
+  return (
+    <div>
+      <h1>Me</h1>
+    </div>
+  );
 }

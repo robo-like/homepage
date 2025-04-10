@@ -1,4 +1,5 @@
 import { Form, useActionData, useLoaderData } from "react-router";
+export {action, loader} from './profile.server'
 
 interface User {
   id: string;
@@ -207,7 +208,7 @@ export default function Profile() {
                 className="w-full py-2 px-4 bg-[#07b0ef] text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
                 style={{ fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)' }}
               >
-                SUBSCRIBE NOW
+                ACTIVATE SUBSCRIPTION ($19.99/month)
               </button>
             </Form>
           )}

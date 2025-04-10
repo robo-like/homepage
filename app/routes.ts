@@ -21,22 +21,14 @@ export default [
     route("sitemap.xml", "routes/sitemap.tsx"),
     ...prefix("auth", [
       index("routes/auth/index.tsx"),
-      route("login", {
-        element: "routes/auth/login.tsx",
-        loader: "routes/auth/login.server.ts:loader",
-        action: "routes/auth/login.server.ts:action"
-      }),
+      route("login", "routes/auth/login.tsx"),
       route("confirm", "routes/auth/confirm.tsx"),
       route("success", "routes/auth/success.tsx"),
       route("logout", "routes/auth/logout.tsx"),
     ]),
     ...prefix("u", [
-      route("profile", {
-        element: "routes/user/profile.tsx",
-        loader: "routes/user/profile.server.ts:loader",
-        action: "routes/user/profile.server.ts:action"
-      }),
-      route("me", "routes/user/me.tsx"),
+      route("profile",  "routes/user/profile.tsx"),
+      route("me", "routes/user/me.server.tsx"),
     ]),
     layout("./routes/admin/layout.tsx", [
       ...prefix("admin", [

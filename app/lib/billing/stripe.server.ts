@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY || '', {
 
 // Price ID for the monthly subscription - this should be an ID from a Stripe price object
 // Create price objects in the Stripe Dashboard or via API following https://docs.stripe.com/products-prices/overview#create-prices
-const MONTHLY_PRICE_ID = process.env.STRIPE_MONTHLY_PRICE_ID || 'price_1234567890';
+const MONTHLY_PRICE_ID = process.env.STRIPE_MONTHLY_PRICE_ID || 'product_monthly_single_device';
 
 /**
  * Create a Stripe customer for a user
