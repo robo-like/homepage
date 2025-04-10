@@ -1,5 +1,5 @@
 import { data, useLoaderData } from "react-router";
-import { auth, commitSession, getSession } from "./me.server";
+import { auth, commitSession, getSession } from "./me";
 import { getUserSubscriptionDetails } from "../../lib/billing/stripe.server";
 import type { Route } from "../+types/auth-common";
 

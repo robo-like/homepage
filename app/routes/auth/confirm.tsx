@@ -3,7 +3,7 @@ import {
   validateMagicLinkKey,
   createUserSession,
   getSession,
-} from "~/lib/auth.server";
+} from "~/lib/auth";
 import { handleEmailConfirmation } from "~/lib/billing/confirmEmail.server";
 import { trackAuthEvent, EVENT_TYPES } from "~/lib/analytics/events.server";
 import { authQueries } from "~/lib/db";

@@ -1,4 +1,4 @@
-import { getSession } from "~/lib/auth.server";
+import { getSession } from "~/lib/auth";
 import { trackDownload } from "~/lib/analytics/events.server";
 import type { Route } from "../+types/metrics";
 
@@ -70,7 +70,9 @@ export async function action({ request }: Route.ActionArgs) {
       throw error;
     }
     throw new Response(
-      `Internal server error: ${error instanceof Error ? error.message : "Unknown error"}`,
+      `Internal server error: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`,
       { status: 500 }
     );
   }

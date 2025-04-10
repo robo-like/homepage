@@ -1,10 +1,5 @@
 import { redirect } from "react-router";
-import {
-  auth,
-  requireAuth,
-  getSession,
-  commitSession,
-} from "~/lib/auth.server";
+import { auth, requireAuth, getSession, commitSession } from "~/lib/auth";
 import {
   createBillingPortalSession,
   createCheckoutSession,

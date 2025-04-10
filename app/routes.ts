@@ -28,7 +28,7 @@ export default [
     ]),
     ...prefix("u", [
       route("profile", "routes/user/profile.tsx"),
-      route("me", "routes/user/me.server.tsx"),
+      route("me", "routes/user/me.tsx"),
     ]),
     layout("./routes/admin/layout.tsx", [
       ...prefix("admin", [

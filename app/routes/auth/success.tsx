@@ -1,5 +1,5 @@
 import { redirect, useLoaderData, useNavigate } from "react-router";
-import { auth } from "~/lib/auth.server";
+import { auth } from "~/lib/auth";
 import { useEffect, useState } from "react";
 import type { Route } from "../+types/auth-common";
 

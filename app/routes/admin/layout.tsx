@@ -1,7 +1,7 @@
 import { Outlet, redirect } from "react-router";
 import { Header } from "~/components/Header";
 import type { Route } from "./+types/layout";
-import { requireAuth } from "../../lib/auth.server";
+import { requireAuth } from "../../lib/auth";
 
 export async function loader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);

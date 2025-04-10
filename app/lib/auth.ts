@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { redirect, createSessionStorage } from "react-router";
 import { authQueries } from "./db";
 import emailTemplate from "./email-template";
@@ -40,7 +39,7 @@ function createDatabaseSessionStorage() {
     },
     async createData(data, expires) {
       // Create a new session in the database
-      const sessionId = randomUUID();
+      const sessionId = crypto.randomUUID();
       // Use provided expiration time or calculate default
       const expirationTime = expires || new Date(Date.now() + SESSION_DURATION);
 

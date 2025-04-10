@@ -1,5 +1,5 @@
 import { data } from "react-router";
-import { auth, commitSession, getSession } from "~/lib/auth.server";
+import { auth, commitSession, getSession } from "~/lib/auth";
 import { getUserSubscriptionDetails } from "~/lib/billing/stripe.server";
 import type { Route } from "../+types/auth-common";
 

@@ -4,7 +4,7 @@ import {
   createMagicLinkKey,
   sendMagicLinkEmail,
   getSession,
-} from "~/lib/auth.server";
+} from "~/lib/auth";
 import { authQueries } from "~/lib/db";
 import {
   trackAuthEvent,

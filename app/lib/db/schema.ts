@@ -4,7 +4,6 @@ import {
   integer,
   uniqueIndex,
 } from "drizzle-orm/sqlite-core";
-import { randomUUID } from "crypto";
 
 // Posts table for managing blog content
 export const posts = sqliteTable(
