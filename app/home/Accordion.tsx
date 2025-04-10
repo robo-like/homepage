@@ -1,5 +1,5 @@
 // app/welcome/Accordion.tsx
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 interface FAQItem {
   question: string;
@@ -30,13 +30,14 @@ export function Accordion({ faqData }: AccordionProps) {
               {item.question}
             </button>
             <div
-              className={`accordion-content ${openSection === index ? 'open' : ''
-                }`}
+              className={`accordion-content ${
+                openSection === index ? "open" : ""
+              }`}
               style={{
-                maxHeight: openSection === index ? '200px' : '0',
+                maxHeight: openSection === index ? "200px" : "0",
                 opacity: openSection === index ? 1 : 0,
-                transition: 'max-height 0.3s ease, opacity 0.3s ease',
-                overflow: 'hidden',
+                transition: "max-height 0.3s ease, opacity 0.3s ease",
+                overflow: "hidden",
               }}
             >
               <p>{item.answer}</p>

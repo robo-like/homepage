@@ -8,7 +8,8 @@ import { Card } from "~/components/Card";
 import { H1 } from "~/components/H1";
 
 export async function loader({ params }: Route.LoaderArgs) {
-  const post = await db.select()
+  const post = await db
+    .select()
     .from(posts)
     .where(eq(posts.slug, params.pid))
     .get();
@@ -24,13 +25,19 @@ export function meta({ data }: Route.MetaArgs) {
   if (!data?.post) {
     return [
       { title: "Post Not Found" },
-      { name: "description", content: "The requested post could not be found." },
+      {
+        name: "description",
+        content: "The requested post could not be found.",
+      },
     ];
   }
 
   return [
     { title: data.post.seoTitle || data.post.title },
-    { name: "description", content: data.post.seoDescription || data.post.summary },
+    {
+      name: "description",
+      content: data.post.seoDescription || data.post.summary,
+    },
   ];
 }
 

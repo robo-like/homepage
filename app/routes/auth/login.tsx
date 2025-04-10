@@ -11,8 +11,8 @@ function validateEmail(email: string) {
   if (!emailRegex.test(email)) return false;
 
   // Check for "+" in the local part as per requirements
-  const localPart = email.split('@')[0];
-  if (localPart.includes('+')) return false;
+  const localPart = email.split("@")[0];
+  if (localPart.includes("+")) return false;
 
   return true;
 }
@@ -21,7 +21,11 @@ function validateEmail(email: string) {
 export function meta() {
   return [
     { title: "Log in or Sign up | RoboLike" },
-    { name: "description", content: "Log in to your existing account or sign up for a new RoboLike account" }
+    {
+      name: "description",
+      content:
+        "Log in to your existing account or sign up for a new RoboLike account",
+    },
   ];
 }
 
@@ -61,9 +65,12 @@ export default function Login() {
   return (
     <div className="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mt-16">
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold mb-2" style={{
-          fontFamily: 'var(--heading-font, "Press Start 2P", cursive)'
-        }}>
+        <h1
+          className="text-2xl font-bold mb-2"
+          style={{
+            fontFamily: 'var(--heading-font, "Press Start 2P", cursive)',
+          }}
+        >
           ROBOLIKE ACCOUNT
         </h1>
         <div className="w-full h-1 my-4 bg-gradient-to-r from-[#ed1e79] via-[#07b0ef] to-[#f7ee2a]"></div>
@@ -85,7 +92,9 @@ export default function Login() {
             <label
               htmlFor="email"
               className="block text-gray-700 dark:text-gray-300 font-medium mb-2"
-              style={{ fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)' }}
+              style={{
+                fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
+              }}
             >
               Email Address
             </label>
@@ -107,14 +116,32 @@ export default function Login() {
           <button
             type="submit"
             className="w-full py-2 px-4 bg-[#07b0ef] text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 disabled:opacity-70"
-            style={{ fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)' }}
+            style={{
+              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+            }}
             disabled={isSubmitting}
           >
             {isSubmitting ? (
               <span className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
                 PROCESSING...
               </span>

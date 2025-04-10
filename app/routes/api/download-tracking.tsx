@@ -5,7 +5,7 @@ import type { Route } from "../+types/metrics";
 /**
  * API endpoint to track download events
  * This is called when a user clicks any of the download buttons
- * 
+ *
  * Expected payload:
  * {
  *   platform: 'windows' | 'macos' | 'linux',
@@ -19,7 +19,10 @@ export async function action({ request }: Route.ActionArgs) {
   }
 
   try {
-    const data = await request.json() as { platform: string; version?: string };
+    const data = (await request.json()) as {
+      platform: string;
+      version?: string;
+    };
 
     // Validate required fields
     if (!data.platform) {
@@ -27,12 +30,16 @@ export async function action({ request }: Route.ActionArgs) {
     }
 
     // Validate platform is one of the expected values
-    if (!['windows', 'macos', 'linux'].includes(data.platform.toLowerCase())) {
-      throw new Response("Invalid platform. Expected: windows, macos, or linux", { status: 400 });
+    if (!["windows", "macos", "linux"].includes(data.platform.toLowerCase())) {
+      throw new Response(
+        "Invalid platform. Expected: windows, macos, or linux",
+        { status: 400 }
+      );
     }
 
     // Get IP address from request headers or socket
-    const ipAddress = request.headers.get("x-forwarded-for") ||
+    const ipAddress =
+      request.headers.get("x-forwarded-for") ||
       request.headers.get("x-real-ip") ||
       // @ts-expect-error - socket exists on request in development
       request.socket?.remoteAddress ||
@@ -53,7 +60,7 @@ export async function action({ request }: Route.ActionArgs) {
       userId,
       sessionId,
       ipAddress: ipAddress.split(",")[0].trim(),
-      userAgent
+      userAgent,
     });
 
     return { success: true };
@@ -62,6 +69,9 @@ export async function action({ request }: Route.ActionArgs) {
     if (error instanceof Response) {
       throw error;
     }
-    throw new Response(`Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}`, { status: 500 });
+    throw new Response(
+      `Internal server error: ${error instanceof Error ? error.message : "Unknown error"}`,
+      { status: 500 }
+    );
   }
 }

@@ -30,17 +30,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
 
   useEffect(() => {
-    fetch('/api/metrics', {
-      method: 'POST',
+    fetch("/api/metrics", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        eventType: 'pageView',
+        eventType: "pageView",
         path: location.pathname,
       }),
-    }).catch(error => {
-      console.error('Error tracking page view:', error);
+    }).catch((error) => {
+      console.error("Error tracking page view:", error);
     });
   }, [location.pathname]);
 
@@ -51,7 +51,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-
       </head>
       <body>
         {children}

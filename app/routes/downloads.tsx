@@ -3,10 +3,14 @@ import type { Route } from "./+types/downloads";
 import { H1, H2 } from "~/components/H1";
 import { Card } from "~/components/Card";
 
-export function meta({ }: Route.MetaArgs) {
+export function meta({}: Route.MetaArgs) {
   return [
     { title: "Download RoboLike - Automated Social Media Growth" },
-    { name: "description", content: "Download RoboLike for your platform. Available for Windows, MacOS, and Linux." },
+    {
+      name: "description",
+      content:
+        "Download RoboLike for your platform. Available for Windows, MacOS, and Linux.",
+    },
   ];
 }
 
@@ -19,32 +23,41 @@ interface DownloadCardProps {
   requirements: string[];
 }
 
-function DownloadCard({ platform, icon, version, releaseDate, downloadUrl, requirements }: DownloadCardProps) {
-  const handleDownloadClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+function DownloadCard({
+  platform,
+  icon,
+  version,
+  releaseDate,
+  downloadUrl,
+  requirements,
+}: DownloadCardProps) {
+  const handleDownloadClick = async (
+    e: React.MouseEvent<HTMLAnchorElement>
+  ) => {
     // Prevent the default anchor behavior to allow time for tracking
     e.preventDefault();
-    
+
     try {
       // Track download event with the new dedicated tracking endpoint
-      await fetch('/api/download-tracking', {
-        method: 'POST',
+      await fetch("/api/download-tracking", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           platform: platform.toLowerCase(),
           version,
         }),
       });
-      
+
       // After tracking is complete, proceed with the download
       // For a real implementation, you'd uncomment this:
       // window.location.href = downloadUrl;
-      
+
       // For now, just log
       console.log(`Download started for ${platform} v${version}`);
     } catch (error) {
-      console.error('Error tracking download:', error);
+      console.error("Error tracking download:", error);
       // Even if tracking fails, proceed with download
       // window.location.href = downloadUrl;
     }
@@ -88,9 +101,9 @@ export default function Downloads() {
       <div className="text-center">
         <H1>Download RoboLike</H1>
         <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-          Choose your platform to get started with RoboLike. Our desktop application
-          runs locally on your machine, providing better security and control over
-          your social media automation.
+          Choose your platform to get started with RoboLike. Our desktop
+          application runs locally on your machine, providing better security
+          and control over your social media automation.
         </p>
       </div>
 
@@ -105,7 +118,7 @@ export default function Downloads() {
             "MacOS 11.0 or later",
             "4GB RAM minimum",
             "500MB free disk space",
-            "Intel or Apple Silicon"
+            "Intel or Apple Silicon",
           ]}
         />
         <DownloadCard
@@ -118,7 +131,7 @@ export default function Downloads() {
             "Windows 10 or later",
             "4GB RAM minimum",
             "500MB free disk space",
-            "64-bit processor"
+            "64-bit processor",
           ]}
         />
         <DownloadCard
@@ -131,7 +144,7 @@ export default function Downloads() {
             "Ubuntu 20.04 or equivalent",
             "4GB RAM minimum",
             "500MB free disk space",
-            "64-bit processor"
+            "64-bit processor",
           ]}
         />
       </div>
@@ -139,14 +152,21 @@ export default function Downloads() {
       <Card className="text-center p-8">
         <H2>Need Help Getting Started?</H2>
         <p className="text-gray-400 mb-4">
-          Check out our documentation and guides to help you get up and running quickly.
+          Check out our documentation and guides to help you get up and running
+          quickly.
         </p>
         <div className="flex justify-center gap-4">
-          <a href="/instagram-auto-liker-how-it-works" className="text-lightPurple hover:underline font-bold text-lg">
+          <a
+            href="/instagram-auto-liker-how-it-works"
+            className="text-lightPurple hover:underline font-bold text-lg"
+          >
             View Guide
           </a>
           <span className="text-gray-600">•</span>
-          <a href="/blog" className="text-lightPurple hover:underline font-bold text-lg">
+          <a
+            href="/blog"
+            className="text-lightPurple hover:underline font-bold text-lg"
+          >
             Read Blog
           </a>
         </div>

@@ -13,29 +13,39 @@ export async function loader({ request }: Route.LoaderArgs) {
   const posts = await postQueries.getPosts({
     limit: postsPerPage,
     offset: (page - 1) * postsPerPage,
-    orderBy: "desc"
+    orderBy: "desc",
   });
 
   // Get total count for pagination
   const totalPosts = await postQueries.getPosts({
-    limit: 1000 // This is a hack, ideally we'd have a count query
+    limit: 1000, // This is a hack, ideally we'd have a count query
   });
 
   return {
     posts,
     currentPage: page,
-    totalPages: Math.ceil(totalPosts.length / postsPerPage)
+    totalPages: Math.ceil(totalPosts.length / postsPerPage),
   };
 }
 
-export function meta({ }: Route.MetaArgs) {
+export function meta({}: Route.MetaArgs) {
   return [
-    { title: "const page = new RoboLike(\"Blog\"); //@todo" },
-    { name: "description", content: "RoboLike blog: sharing our story and tips and tricks for how to get the most out of your automations." },
+    { title: 'const page = new RoboLike("Blog"); //@todo' },
+    {
+      name: "description",
+      content:
+        "RoboLike blog: sharing our story and tips and tricks for how to get the most out of your automations.",
+    },
   ];
 }
 
-function Pagination({ currentPage, totalPages }: { currentPage: number; totalPages: number }) {
+function Pagination({
+  currentPage,
+  totalPages,
+}: {
+  currentPage: number;
+  totalPages: number;
+}) {
   if (totalPages <= 1) return null;
 
   return (
@@ -73,7 +83,7 @@ export default function Blog() {
       <H1>Blog</H1>
 
       <div className="space-y-6">
-        {posts.map(post => (
+        {posts.map((post) => (
           <Card key={post.id}>
             <Link to={`/blog/${post.slug}`}>
               <H5>{post.title}</H5>

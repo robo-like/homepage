@@ -17,26 +17,31 @@ export async function loader({ request }: Route.LoaderArgs) {
     // Get authentication data and check if user is logged in
     const authData = await auth(request);
     if (!authData.user) {
-      return data({ 
-        authenticated: false,
-        error: "Not authenticated" 
-      }, { 
-        status: 401,
-        statusText: "Unauthorized"
-      });
+      return data(
+        {
+          authenticated: false,
+          error: "Not authenticated",
+        },
+        {
+          status: 401,
+          statusText: "Unauthorized",
+        }
+      );
     }
 
     // Get user's subscription details
-    const subscriptionDetails = await getUserSubscriptionDetails(authData.user.id);
-    
+    const subscriptionDetails = await getUserSubscriptionDetails(
+      authData.user.id
+    );
+
     // Refresh the session by extending its expiration time
     // First, get existing session
     const session = authData.session;
-    
+
     // Calculate session expiry time
     const now = new Date();
     const sessionExpiry = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
-    
+
     // Return user data with refreshed session cookie
     return data(
       {
@@ -45,32 +50,32 @@ export async function loader({ request }: Route.LoaderArgs) {
           id: authData.user.id,
           email: authData.user.email,
           name: authData.user.name,
-          role: authData.user.role
+          role: authData.user.role,
         },
         subscription: {
           active: subscriptionDetails.subscribed,
-          details: subscriptionDetails.subscription
+          details: subscriptionDetails.subscription,
         },
         session: {
-          expiresAt: sessionExpiry.toISOString()
-        }
+          expiresAt: sessionExpiry.toISOString(),
+        },
       },
       {
         headers: {
-          "Set-Cookie": await commitSession(session)
-        }
+          "Set-Cookie": await commitSession(session),
+        },
       }
     );
   } catch (error) {
     console.error("Error in /api/me endpoint:", error);
     return data(
-      { 
+      {
         authenticated: false,
-        error: "Internal server error" 
+        error: "Internal server error",
       },
-      { 
+      {
         status: 500,
-        statusText: "Internal Server Error"
+        statusText: "Internal Server Error",
       }
     );
   }

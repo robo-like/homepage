@@ -1,4 +1,4 @@
-import { analyticsQueries } from '../db';
+import { analyticsQueries } from "../db";
 
 /**
  * Track various user actions in the application.
@@ -8,23 +8,23 @@ import { analyticsQueries } from '../db';
 // Event type constants
 export const EVENT_TYPES = {
   // Page views
-  PAGE_VIEW: 'pageView',
-  
+  PAGE_VIEW: "pageView",
+
   // Authentication events
-  SIGNUP: 'signup',
-  LOGIN_SUCCESS: 'loginSuccess',
-  LOGIN_FAILED: 'loginFailed',
-  
+  SIGNUP: "signup",
+  LOGIN_SUCCESS: "loginSuccess",
+  LOGIN_FAILED: "loginFailed",
+
   // Download events
-  DOWNLOAD: 'download',
-  
+  DOWNLOAD: "download",
+
   // Subscription events
-  SUBSCRIPTION_STARTED: 'subscriptionStarted',
-  SUBSCRIPTION_CANCELED: 'subscriptionCanceled',
-  SUBSCRIPTION_UPDATED: 'subscriptionUpdated',
-  
+  SUBSCRIPTION_STARTED: "subscriptionStarted",
+  SUBSCRIPTION_CANCELED: "subscriptionCanceled",
+  SUBSCRIPTION_UPDATED: "subscriptionUpdated",
+
   // User events
-  USER_CREATED: 'userCreated',
+  USER_CREATED: "userCreated",
 };
 
 /**
@@ -38,7 +38,7 @@ export async function trackAuthEvent({
   ipAddress,
   userAgent,
   success = true,
-  errorMessage = '',
+  errorMessage = "",
 }: {
   eventType: string;
   userId?: string;
@@ -52,18 +52,18 @@ export async function trackAuthEvent({
   try {
     return analyticsQueries.createPageView({
       sessionId,
-      path: '/auth',
+      path: "/auth",
       eventType,
-      eventValue: success ? 'success' : 'failed',
-      description: success ? 
-        `Auth event for ${email}` : 
-        `Auth event failed for ${email}${errorMessage ? `: ${errorMessage}` : ''}`,
+      eventValue: success ? "success" : "failed",
+      description: success
+        ? `Auth event for ${email}`
+        : `Auth event failed for ${email}${errorMessage ? `: ${errorMessage}` : ""}`,
       ipAddress,
       userAgent,
       userId,
     });
   } catch (error) {
-    console.error('Error tracking auth event:', error);
+    console.error("Error tracking auth event:", error);
     // Don't throw - analytics should never break core functionality
   }
 }
@@ -89,13 +89,13 @@ export async function trackDownload({
   try {
     return analyticsQueries.createProductEvent({
       sessionId,
-      path: '/downloads',
+      path: "/downloads",
       eventValue: platform,
-      description: `Downloaded ${platform} version${version ? ` ${version}` : ''}`,
+      description: `Downloaded ${platform} version${version ? ` ${version}` : ""}`,
       userId,
     });
   } catch (error) {
-    console.error('Error tracking download event:', error);
+    console.error("Error tracking download event:", error);
     // Don't throw - analytics should never break core functionality
   }
 }
@@ -119,13 +119,13 @@ export async function trackSubscriptionEvent({
   try {
     return analyticsQueries.createProductEvent({
       sessionId,
-      path: '/u/profile',
+      path: "/u/profile",
       eventValue: subscriptionId,
-      description: `Subscription ${eventType}${priceId ? ` for plan ${priceId}` : ''}`,
+      description: `Subscription ${eventType}${priceId ? ` for plan ${priceId}` : ""}`,
       userId,
     });
   } catch (error) {
-    console.error('Error tracking subscription event:', error);
+    console.error("Error tracking subscription event:", error);
     // Don't throw - analytics should never break core functionality
   }
 }
@@ -149,7 +149,7 @@ export async function trackUserCreated({
   try {
     return analyticsQueries.createPageView({
       sessionId,
-      path: '/auth',
+      path: "/auth",
       eventType: EVENT_TYPES.USER_CREATED,
       eventValue: email,
       description: `New user created: ${email}`,
@@ -158,7 +158,7 @@ export async function trackUserCreated({
       userId,
     });
   } catch (error) {
-    console.error('Error tracking user created event:', error);
+    console.error("Error tracking user created event:", error);
     // Don't throw - analytics should never break core functionality
   }
 }

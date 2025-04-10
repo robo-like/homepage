@@ -57,6 +57,7 @@ RoboLike uses a hybrid authentication approach:
 The `/u/me` endpoint provides complete user information, subscription status, and session management:
 
 **Request:**
+
 ```
 GET /u/me HTTP/1.1
 Host: app.robolike.com
@@ -64,6 +65,7 @@ Cookie: __robolike_session=<session_cookie>
 ```
 
 **Response:**
+
 ```json
 {
   "authenticated": true,
@@ -85,7 +87,7 @@ Cookie: __robolike_session=<session_cookie>
   },
   "trial": {
     "isInTrial": false,
-    "trialEndDate": "2023-04-04T00:00:00.000Z", 
+    "trialEndDate": "2023-04-04T00:00:00.000Z",
     "daysLeft": 0
   },
   "access": {
@@ -104,14 +106,14 @@ Cookie: __robolike_session=<session_cookie>
 
 ```javascript
 // In your Electron app's main process
-app.setAsDefaultProtocolClient('robolike');
+app.setAsDefaultProtocolClient("robolike");
 
 // Handle the deep link
-app.on('open-url', (event, url) => {
+app.on("open-url", (event, url) => {
   // Parse the URL, extract auth token if present
   const authUrl = new URL(url);
   // Handle the authentication
-  mainWindow.webContents.send('auth-callback', authUrl.searchParams);
+  mainWindow.webContents.send("auth-callback", authUrl.searchParams);
 });
 ```
 
@@ -119,11 +121,13 @@ app.on('open-url', (event, url) => {
 
 ```javascript
 // In your Electron app's renderer process
-const loginButton = document.getElementById('login-button');
+const loginButton = document.getElementById("login-button");
 
-loginButton.addEventListener('click', () => {
+loginButton.addEventListener("click", () => {
   // Open the system browser with the login URL
-  shell.openExternal('https://app.robolike.com/auth/login?redirectTo=robolike://auth/callback');
+  shell.openExternal(
+    "https://app.robolike.com/auth/login?redirectTo=robolike://auth/callback"
+  );
 });
 ```
 
@@ -134,38 +138,38 @@ loginButton.addEventListener('click', () => {
 async function checkSession() {
   try {
     // Create a fetch request that includes credentials (cookies)
-    const response = await fetch('https://app.robolike.com/u/me', {
-      credentials: 'include',
+    const response = await fetch("https://app.robolike.com/u/me", {
+      credentials: "include",
       headers: {
-        'Accept': 'application/json'
-      }
+        Accept: "application/json",
+      },
     });
-    
+
     if (response.ok) {
       const userData = await response.json();
       if (userData.authenticated) {
         // User is authenticated, update UI accordingly
         updateUserInterface(userData);
-        
+
         // Check if user has valid access
         if (userData.access.expired) {
           showExpiredAccessMessage(userData.access.reason);
         }
-        
+
         // Check if user is in trial
         if (userData.trial.isInTrial) {
           showTrialMessage(userData.trial.daysLeft);
         }
-        
+
         return userData;
       }
     }
-    
+
     // User is not authenticated, show login screen
     showLoginScreen();
     return null;
   } catch (error) {
-    console.error('Error checking session:', error);
+    console.error("Error checking session:", error);
     showOfflineScreen();
     return null;
   }
@@ -193,7 +197,7 @@ The Electron app should check the session status:
 checkSession();
 
 // Check session when app comes from background
-app.on('activate', () => {
+app.on("activate", () => {
   checkSession();
 });
 
@@ -216,7 +220,7 @@ class SessionManager {
     this.userData = null;
     this.offlineGracePeriod = 7 * 24 * 60 * 60 * 1000; // 7 days
   }
-  
+
   async verify() {
     try {
       const userData = await checkSession();
@@ -229,14 +233,16 @@ class SessionManager {
       return false;
     } catch (error) {
       // Check if we're within offline grace period
-      if (this.lastVerifiedTime && 
-          (Date.now() - this.lastVerifiedTime < this.offlineGracePeriod)) {
+      if (
+        this.lastVerifiedTime &&
+        Date.now() - this.lastVerifiedTime < this.offlineGracePeriod
+      ) {
         return true;
       }
       return false;
     }
   }
-  
+
   // ... other methods
 }
 ```

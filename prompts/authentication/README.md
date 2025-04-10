@@ -112,13 +112,13 @@ The authentication system seamlessly integrates with Stripe for subscription man
 
 ## API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/auth/login` | POST | Initiate login flow by sending magic link |
-| `/auth/confirm` | GET | Confirm magic link and create session |
-| `/auth/logout` | GET | End session and log out user |
-| `/u/me` | GET | Get authenticated user data and refresh session |
-| `/u/profile` | GET | View and manage user profile and subscription |
+| Endpoint        | Method | Description                                     |
+| --------------- | ------ | ----------------------------------------------- |
+| `/auth/login`   | POST   | Initiate login flow by sending magic link       |
+| `/auth/confirm` | GET    | Confirm magic link and create session           |
+| `/auth/logout`  | GET    | End session and log out user                    |
+| `/u/me`         | GET    | Get authenticated user data and refresh session |
+| `/u/profile`    | GET    | View and manage user profile and subscription   |
 
 ## Development and Testing
 

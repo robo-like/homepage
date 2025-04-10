@@ -8,17 +8,16 @@ export function Header() {
       <header className="flex flex-row items-center px-3 py-3 ">
         <a href="/" className="flex flex-row items-center cursor-pointer">
           <div className="w-[35px] mr-2">
-            <img
-              src={logoDark}
-              alt="RoboLike Heart Logo"
-              className="w-full"
-            />
+            <img src={logoDark} alt="RoboLike Heart Logo" className="w-full" />
           </div>
-          <h1 className="text-2xl font-bold" style={{
-            fontFamily: 'var(--heading-font, "Syncopate", sans-serif)',
-            textRendering: 'optimizeLegibility'
-          }}>
-            ROBO<span style={{ color: '#07b0ef' }}>LIKE</span>
+          <h1
+            className="text-2xl font-bold"
+            style={{
+              fontFamily: 'var(--heading-font, "Syncopate", sans-serif)',
+              textRendering: "optimizeLegibility",
+            }}
+          >
+            ROBO<span style={{ color: "#07b0ef" }}>LIKE</span>
           </h1>
         </a>
       </header>
