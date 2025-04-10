@@ -1,4 +1,4 @@
-import { logout } from "~/lib/auth.server";
+import { logout } from "~/lib/auth";
 import type { Route } from "../+types/auth-common";
 
 // Simple loader that logs out the user

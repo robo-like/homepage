@@ -27,15 +27,15 @@ export default [
       route("logout", "routes/auth/logout.tsx"),
     ]),
     ...prefix("u", [
-      route("profile",  "routes/user/profile.tsx"),
-      route("me", "routes/user/me.server.tsx"),
+      route("profile", "routes/user/profile.tsx"),
+      route("me", "routes/user/me.tsx"),
     ]),
     layout("./routes/admin/layout.tsx", [
       ...prefix("admin", [
         index("routes/admin/index.tsx"),
         route("create-post", "routes/admin/create-post.tsx"),
-        route("edit-post/:slug", "routes/admin/edit-post.$slug.tsx")
-      ])
+        route("edit-post/:slug", "routes/admin/edit-post.$slug.tsx"),
+      ]),
     ]),
   ]),
   ...prefix("api", [
