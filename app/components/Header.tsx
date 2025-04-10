@@ -109,7 +109,7 @@ export function Header() {
               style={{
                 fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
                 color: "#b11b0c",
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
             >
               LOGOUT
@@ -120,7 +120,7 @@ export function Header() {
               style={{
                 fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
                 color: "#0fcc45",
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
               className="px-3 py-1 rounded border border-current hover:bg-green-50"
             >
@@ -171,7 +171,7 @@ export function Header() {
               style={{
                 fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
                 color: "#b11b0c",
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
             >
               LOGOUT
@@ -182,7 +182,7 @@ export function Header() {
               style={{
                 fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
                 color: "#0fcc45",
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
               className="px-3 py-1 rounded border border-current hover:bg-green-50"
             >

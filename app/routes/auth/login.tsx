@@ -38,7 +38,7 @@ interface ActionData {
   error?: string;
 }
 
-export { loader, action } from './login.server'
+export { loader, action } from "./login.server";
 
 // Client component only - no server imports
 export default function Login() {

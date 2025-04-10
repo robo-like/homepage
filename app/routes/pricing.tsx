@@ -44,7 +44,9 @@ function PricingTier({
     <div
       className={cn(
         "bg-black bg-opacity-40 p-6 rounded-lg border",
-        (discount || highlighted) ? "border-[#07b0ef] border-2 relative" : "border-gray-700"
+        discount || highlighted
+          ? "border-[#07b0ef] border-2 relative"
+          : "border-gray-700"
       )}
     >
       {highlighted && !discount && (
@@ -54,13 +56,14 @@ function PricingTier({
           </span>
         </div>
       )}
-      {discount || !highlighted && (
-        <div className="absolute -top-3 right-3">
-          <span className="bg-gradient-to-r from-[#ed1e79] to-[#07b0ef] text-white px-3 py-1 rounded-full text-sm font-bold">
-            {discount}
-          </span>
-        </div>
-      )}
+      {discount ||
+        (!highlighted && (
+          <div className="absolute -top-3 right-3">
+            <span className="bg-gradient-to-r from-[#ed1e79] to-[#07b0ef] text-white px-3 py-1 rounded-full text-sm font-bold">
+              {discount}
+            </span>
+          </div>
+        ))}
       <div className="mb-6">
         <h2
           className="text-2xl font-bold mb-2"
@@ -102,11 +105,12 @@ function PricingTier({
       </ul>
       <a
         href={ctaLink}
-        className={`block w-full py-3 px-4 text-center rounded-lg transition-colors ${
+        className={cn(
+          "block w-full py-3 px-4 text-center rounded-lg transition-colors relative retro-button",
           highlighted
-            ? "bg-[#07b0ef] text-black hover:bg-opacity-90 relative retro-button primary"
-            : "bg-[#9633ac] text-white hover:bg-opacity-90 relative retro-button"
-        }`}
+            ? "bg-[#07b0ef] text-black hover:bg-opacity-90 primary"
+            : "bg-[#9633ac] text-white hover:bg-opacity-90"
+        )}
         style={{ fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)' }}
       >
         {ctaText}
@@ -274,12 +278,14 @@ export default function Pricing() {
                     required
                     value={enterpriseEmail}
                     onChange={(e) => setEnterpriseEmail(e.target.value)}
-                    className="w-full bg-black bg-opacity-70 border border-[#f7ee2a] text-white"
+                    className={cn("w-full bg-black bg-opacity-70 border border-[#f7ee2a] text-white")}
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-3 px-4 bg-[#f7ee2a] text-black rounded-lg transition-colors hover:bg-opacity-90 relative retro-button"
+                  className={cn(
+                    "w-full py-3 px-4 bg-[#f7ee2a] text-black rounded-lg transition-colors hover:bg-opacity-90 relative retro-button"
+                  )}
                   style={{
                     fontFamily:
                       'var(--subheading-font, "Orbitron", sans-serif)',
