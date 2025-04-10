@@ -7,7 +7,9 @@ CREATE TABLE IF NOT EXISTS users (
     created_at INTEGER NOT NULL,
     updated_at INTEGER NOT NULL
 );
+--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS email_idx ON users (email);
+--> statement-breakpoint
 
 -- Create active_sessions table
 CREATE TABLE IF NOT EXISTS active_sessions (
@@ -16,7 +18,9 @@ CREATE TABLE IF NOT EXISTS active_sessions (
     created_at INTEGER NOT NULL,
     expires_at INTEGER NOT NULL
 );
+--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS active_sessions_user_id_idx ON active_sessions (user_id);
+--> statement-breakpoint
 
 -- Create expiring_email_keys table
 CREATE TABLE IF NOT EXISTS expiring_email_keys (
@@ -27,5 +31,7 @@ CREATE TABLE IF NOT EXISTS expiring_email_keys (
     utilized INTEGER NOT NULL DEFAULT 0,
     created_at INTEGER NOT NULL
 );
+--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS expiring_email_keys_key_idx ON expiring_email_keys (key);
+--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS expiring_email_keys_user_id_idx ON expiring_email_keys (user_id);
