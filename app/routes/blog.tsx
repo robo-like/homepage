@@ -4,6 +4,7 @@ import { Card } from "~/components/Card";
 import { H1, H5 } from "~/components/H1";
 import { postQueries } from "~/lib/db";
 import { Link, useLoaderData } from "react-router";
+import "~/retro-fonts.css";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
@@ -53,20 +54,20 @@ function Pagination({
       {currentPage > 1 && (
         <Link
           to={`?page=${currentPage - 1}`}
-          className="px-4 py-2 bg-[#6A1E55] text-white rounded-lg hover:bg-opacity-90"
+          className="retro-button"
         >
           Previous
         </Link>
       )}
 
-      <span className="px-4 py-2">
+      <span className="px-4 py-2 font-[var(--subheading-font)]">
         Page {currentPage} of {totalPages}
       </span>
 
       {currentPage < totalPages && (
         <Link
           to={`?page=${currentPage + 1}`}
-          className="px-4 py-2 bg-[#6A1E55] text-white rounded-lg hover:bg-opacity-90"
+          className="retro-button primary"
         >
           Next
         </Link>
@@ -79,16 +80,16 @@ export default function Blog() {
   const { posts, currentPage, totalPages } = useLoaderData<typeof loader>();
 
   return (
-    <Container className="mt-10 gap-6">
-      <H1>Blog</H1>
+    <Container className="mt-10 gap-6 font-set-1">
+      <H1 className="gradient-text">Blog</H1>
 
-      <div className="space-y-6">
+      <div className="space-y-6 grid-lines p-4">
         {posts.map((post) => (
-          <Card key={post.id}>
+          <Card key={post.id} className="border-2 border-[#07b0ef] hover:border-[#fa8e10] transition-colors">
             <Link to={`/blog/${post.slug}`}>
-              <H5>{post.title}</H5>
-              <p className="text-gray-400 mb-2">{post.summary}</p>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
+              <H5 className="font-[var(--subheading-font)] text-[#07b0ef]">{post.title}</H5>
+              <p className="text-gray-300 mb-2 font-[var(--body-font)]">{post.summary}</p>
+              <div className="flex items-center gap-2 text-sm text-[#fa8e10]">
                 <span>{post.author}</span>
                 <span>•</span>
                 <time dateTime={new Date(post.createdAt).toISOString()}>

@@ -3,6 +3,7 @@ import NavLink from "./NavLink";
 import { useOutletContext } from "react-router";
 import { useState } from "react";
 import { type OutletContext } from "../root";
+import "../retro-fonts.css";
 
 export function Header() {
   const { user } = useOutletContext<OutletContext>();
@@ -106,9 +107,13 @@ export function Header() {
           {isLoggedIn ? (
             <NavLink
               to="/auth/logout"
+              className="retro-button"
               style={{
                 fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                color: "#b11b0c",
+                backgroundColor: "#bb1504",
+                boxShadow: "0 6px 0 #8a1002",
+                padding: "0.5rem 1rem",
+                fontSize: "0.9rem",
                 fontWeight: "bold",
               }}
             >
@@ -117,12 +122,13 @@ export function Header() {
           ) : (
             <NavLink
               to="/auth/login"
+              className="retro-button primary"
               style={{
                 fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                color: "#0fcc45",
+                padding: "0.5rem 1rem",
+                fontSize: "0.9rem",
                 fontWeight: "bold",
               }}
-              className="px-3 py-1 rounded border border-current hover:bg-green-50"
             >
               LOGIN/SIGNUP
             </NavLink>
@@ -168,9 +174,13 @@ export function Header() {
           {isLoggedIn ? (
             <NavLink
               to="/auth/logout"
+              className="retro-button"
               style={{
                 fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                color: "#b11b0c",
+                backgroundColor: "#bb1504",
+                boxShadow: "0 6px 0 #8a1002",
+                padding: "0.5rem 1rem",
+                fontSize: "0.9rem",
                 fontWeight: "bold",
               }}
             >
@@ -179,12 +189,13 @@ export function Header() {
           ) : (
             <NavLink
               to="/auth/login"
+              className="retro-button primary"
               style={{
                 fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                color: "#0fcc45",
+                padding: "0.5rem 1rem",
+                fontSize: "0.9rem",
                 fontWeight: "bold",
               }}
-              className="px-3 py-1 rounded border border-current hover:bg-green-50"
             >
               LOGIN/SIGNUP
             </NavLink>

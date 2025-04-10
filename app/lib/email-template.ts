@@ -70,7 +70,7 @@ export default function generateEmailTemplate(
                 <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
                     <td>
-                      <img src="${origin}/images/logo.png" alt="RoboLike Logo" width="200" height="auto" style="display: block; max-width: 200px;">
+                      <img src="${origin}/app/home/heart.png" alt="RoboLike Logo" width="200" height="auto" style="display: block; max-width: 200px;">
                     </td>
                   </tr>
                 </table>

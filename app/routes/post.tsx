@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import Container from "~/components/Container";
 import { Card } from "~/components/Card";
 import { H1 } from "~/components/H1";
+import "~/retro-fonts.css";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const post = await db
@@ -45,14 +46,14 @@ export default function Post() {
   const { post } = useLoaderData<typeof loader>();
 
   return (
-    <Container className="mt-10 gap-1">
+    <Container className="mt-10 gap-1 font-set-1">
       <div>
-        <H1>{post.title}</H1>
-        <p className="text-gray-400 mb-4">{post.summary}</p>
+        <H1 className="gradient-text">{post.title}</H1>
+        <p className="text-[#07b0ef] mb-4 font-[var(--subheading-font)]">{post.summary}</p>
       </div>
 
-      <Card>
-        <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+      <Card className="border-2 border-[#07b0ef] grid-lines">
+        <div className="flex items-center gap-2 text-sm text-[#fa8e10] mb-4">
           <span>{post.author}</span>
           <span>•</span>
           <time dateTime={new Date(post.createdAt).toISOString()}>
@@ -60,7 +61,7 @@ export default function Post() {
           </time>
         </div>
         <div
-          className="prose dark:prose-invert max-w-none"
+          className="prose dark:prose-invert max-w-none font-[var(--body-font)] prose-headings:font-[var(--subheading-font)] prose-headings:text-[#07b0ef] prose-a:text-[#fa8e10]"
           dangerouslySetInnerHTML={{ __html: post.body }}
         />
       </Card>
