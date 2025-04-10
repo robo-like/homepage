@@ -13,13 +13,15 @@ export function meta({ }: Route.MetaArgs) {
 interface PricingTierProps {
   name: string;
   price: string;
+  originalPrice?: string;
   description: string;
   features: string[];
   highlighted?: boolean;
   ctaText: string;
+  discount?: string;
 }
 
-function PricingTier({ name, price, description, features, highlighted, ctaText }: PricingTierProps) {
+function PricingTier({ name, price, originalPrice, description, features, highlighted, ctaText, discount }: PricingTierProps) {
   return (
     <Card className={`flex flex-col ${highlighted ? 'border-2 border-lightPurple relative' : ''}`}>
       {highlighted && (
@@ -29,11 +31,21 @@ function PricingTier({ name, price, description, features, highlighted, ctaText 
           </span>
         </div>
       )}
+      {discount && (
+        <div className="absolute -top-3 right-3">
+          <span className="bg-gradient-to-r from-pink-500 to-lightPurple text-white px-3 py-1 rounded-full text-sm font-bold">
+            {discount}
+          </span>
+        </div>
+      )}
       <div className="mb-4">
         <h2 className="text-2xl font-bold mb-2">{name}</h2>
-        <div className="mb-3">
+        <div className="mb-3 flex items-baseline">
           <span className="text-3xl font-bold">{price}</span>
           {price !== "Free" && <span className="text-gray-400">/month</span>}
+          {originalPrice && (
+            <span className="ml-2 text-gray-400 line-through text-lg">${originalPrice}</span>
+          )}
         </div>
         <p className="text-gray-400">{description}</p>
       </div>
@@ -91,12 +103,13 @@ export default function Pricing() {
             "Email Support",
             "24/7 Customer Service"
           ]}
-          highlighted={true}
           ctaText="Get Started"
         />
         <PricingTier
           name="Premium"
-          price="$19"
+          price="$19.99"
+          originalPrice="29.99"
+          discount="Founder Price"
           description="For power users"
           features={[
             "5 Social Accounts",
@@ -106,6 +119,7 @@ export default function Pricing() {
             "Priority Support",
             "Custom Action Rules"
           ]}
+          highlighted={true}
           ctaText="Go Premium"
         />
       </div>
