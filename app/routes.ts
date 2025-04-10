@@ -7,9 +7,9 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
-  route("install-guide", "routes/install-guide.tsx"),
   layout("./layout.tsx", [
     index("routes/home.tsx"),
+    route("install-guide", "routes/install-guide.tsx"),
     route("downloads", "routes/downloads.tsx"),
     route("instagram-auto-liker-how-it-works", "routes/how-it-works.tsx"),
     route("social-media-automation-pricing", "routes/pricing.tsx"),

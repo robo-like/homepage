@@ -145,34 +145,12 @@ export default function InstallGuide() {
   }, []);
 
   return (
-    <div className="font-set-1 min-h-screen flex flex-col bg-[#0A0A0A] text-white">
+    <div className="font-set-1 min-h-screen flex flex-col text-white mt-[5px] pt-[73px]">
       {/* Grid Lines Background */}
-      <div className="fixed inset-0 grid-lines opacity-70"></div>
-
-      {/* Logo Section */}
-      <div className="py-6 px-6 flex z-10">
-        <a href="/" className="flex items-center gap-3">
-          <div className="w-[45px]">
-            <img
-              src={logoDark}
-              alt="RoboLike Heart Logo"
-              className="w-full animate-pulse"
-            />
-          </div>
-          <h1
-            className="text-2xl font-bold font-set-4"
-            style={{
-              fontFamily: 'var(--heading-font, "Syncopate", sans-serif)',
-              textRendering: "optimizeLegibility",
-            }}
-          >
-            ROBO<span className="text-[#07b0ef]">LIKE</span>
-          </h1>
-        </a>
-      </div>
+      <div className="fixed inset-0 grid-lines opacity-70 z-[-1]"></div>
 
       {/* Hero Section */}
-      <div className="max-w-4xl mx-auto px-6 py-6 text-center flex-1 z-2">
+      <div className="max-w-4xl mx-auto px-6 text-center flex-1 z-2">
         <h1
           className="text-3xl md:text-4xl mb-6 gradient-text"
           style={{
@@ -294,7 +272,9 @@ export default function InstallGuide() {
                       }}
                     >
                       Click the download button at the bottom to get the latest
-                      version of RoboLike for MacOS (.dmg file).
+                      version of RoboLike for MacOS. You may need to click
+                      "Accept" or "Keep" in your browser since this is a zip
+                      file.
                     </p>
                   </div>
                 </div>
@@ -311,7 +291,7 @@ export default function InstallGuide() {
                           'var(--subheading-font, "Orbitron", sans-serif)',
                       }}
                     >
-                      OPEN THE DMG FILE
+                      OPEN THE ZIP FILE
                     </h3>
                     <p
                       className="text-gray-300"
@@ -320,8 +300,8 @@ export default function InstallGuide() {
                           'var(--body-font, "Chakra Petch", sans-serif)',
                       }}
                     >
-                      Locate the downloaded file and double-click to mount the
-                      disk image.
+                      Locate the downloaded zip file and double-click to extract
+                      it. This will create the RoboLike application file.
                     </p>
                   </div>
                 </div>
@@ -349,8 +329,9 @@ export default function InstallGuide() {
                           'var(--body-font, "Chakra Petch", sans-serif)',
                       }}
                     >
-                      Drag the RoboLike icon to the Applications folder shortcut
-                      in the window.
+                      Drag the RoboLike application to your Applications folder
+                      to install it. This ensures the app is properly registered
+                      with your system.
                     </p>
                   </div>
                 </div>
@@ -367,7 +348,7 @@ export default function InstallGuide() {
                           'var(--subheading-font, "Orbitron", sans-serif)',
                       }}
                     >
-                      LAUNCH ROBOLIKE
+                      RIGHT-CLICK AND OPEN
                     </h3>
                     <p
                       className="text-gray-300"
@@ -376,8 +357,10 @@ export default function InstallGuide() {
                           'var(--body-font, "Chakra Petch", sans-serif)',
                       }}
                     >
-                      Open your Applications folder and double-click RoboLike to
-                      start the app.
+                      Navigate to your Applications folder, right-click (or
+                      Control-click) on the RoboLike app and select "Open" from
+                      the menu. This is important for first-time launch on
+                      macOS.
                     </p>
                   </div>
                 </div>
@@ -394,7 +377,7 @@ export default function InstallGuide() {
                           'var(--subheading-font, "Orbitron", sans-serif)',
                       }}
                     >
-                      ALLOW PERMISSIONS
+                      CONFIRM PERMISSIONS
                     </h3>
                     <p
                       className="text-gray-300"
@@ -403,8 +386,9 @@ export default function InstallGuide() {
                           'var(--body-font, "Chakra Petch", sans-serif)',
                       }}
                     >
-                      If prompted by macOS security, go to System Preferences →
-                      Security & Privacy → General and click "Open Anyway".
+                      When prompted by macOS security dialog, click "Open" to
+                      confirm you want to run the app. After doing this once,
+                      you'll be able to open the app normally in the future.
                     </p>
                   </div>
                 </div>

@@ -2,8 +2,9 @@ import Container from "~/components/Container";
 import type { Route } from "./+types/pricing";
 import { H1 } from "~/components/H1";
 import { Card } from "~/components/Card";
-import TextInput from "~/components/TextInput";
+import { TextInput } from "~/components/TextInput";
 import { useState } from "react";
+import { cn } from "~/lib/utils";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -41,18 +42,19 @@ function PricingTier({
 }: PricingTierProps) {
   return (
     <div
-      className={`bg-black bg-opacity-40 p-6 rounded-lg border ${
-        highlighted ? "border-[#07b0ef] border-2 relative" : "border-gray-700"
-      }`}
+      className={cn(
+        "bg-black bg-opacity-40 p-6 rounded-lg border",
+        (discount || highlighted) ? "border-[#07b0ef] border-2 relative" : "border-gray-700"
+      )}
     >
-      {highlighted && (
+      {highlighted && !discount && (
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
           <span className="bg-[#07b0ef] text-black px-3 py-1 rounded-full text-sm font-bold">
             Most Popular
           </span>
         </div>
       )}
-      {discount && (
+      {discount || !highlighted && (
         <div className="absolute -top-3 right-3">
           <span className="bg-gradient-to-r from-[#ed1e79] to-[#07b0ef] text-white px-3 py-1 rounded-full text-sm font-bold">
             {discount}

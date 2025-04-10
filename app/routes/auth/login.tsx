@@ -1,6 +1,5 @@
 import { Form, useActionData, useLoaderData, useLocation } from "react-router";
 import { useState } from "react";
-import type { Route } from "../+types/auth-common";
 
 // Client-side email validation (duplicated from server for safety)
 function validateEmail(email: string) {
@@ -38,6 +37,8 @@ interface ActionData {
   success?: boolean;
   error?: string;
 }
+
+export { loader, action } from './login.server'
 
 // Client component only - no server imports
 export default function Login() {
