@@ -1,159 +1,35 @@
-import { Form, redirect, useActionData, useLoaderData } from "react-router";
-import { auth, requireAuth, getSession, commitSession } from "~/lib/auth.server";
-import {
-  createBillingPortalSession,
-  createCheckoutSession,
-  cancelSubscription,
-  getUserSubscriptionDetails
-} from "~/lib/billing/stripe.server";
-import { trackSubscriptionEvent, EVENT_TYPES } from "~/lib/analytics/events.server";
-import type { Route } from "../+types/auth-common";
+import { Form, useActionData, useLoaderData } from "react-router";
 
-// This file uses the separator pattern to split server and client code
-// See: https://remix.run/docs/en/1.18.1/guides/routing#route-module-constraints
-
-// Server-only code section
-// Require authentication for this route
-export async function loader({ request }: Route.LoaderArgs) {
-  try {
-    // Ensure user is authenticated
-    const authData = await requireAuth(request, '/auth/login');
-    
-    // Get user's subscription details directly
-    const subscriptionDetails = await getUserSubscriptionDetails(authData.user.id);
-    
-    // Get session for refreshing
-    const session = await getSession(request.headers.get("Cookie"));
-    // Commit the session to refresh it
-    const cookie = await commitSession(session);
-    
-    // Calculate expiry date - 7 days from now
-    const now = new Date();
-    const sessionExpiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-    
-    // Return user and subscription information with the refreshed session cookie
-    return {
-      headers: {
-        "Set-Cookie": cookie
-      },
-      user: authData.user,
-      subscriptionDetails,
-      sessionExpiresAt: sessionExpiresAt.toISOString()
-    };
-  } catch (error) {
-    // requireAuth will throw a redirect if not authenticated
-    throw error;
-  }
+interface User {
+  id: string;
+  email: string;
+  name?: string;
+  role: string;
+  createdAt: string;
 }
 
-// Server-only code section
-export async function action({ request }: Route.ActionArgs) {
-  // Ensure user is authenticated
-  const authData = await requireAuth(request, '/auth/login');
-  const user = authData.user;
-  
-  const formData = await request.formData();
-  const action = formData.get('action')?.toString();
-  
-  // Get URL for redirecting back to profile
-  const origin = new URL(request.url).origin;
-  const returnUrl = `${origin}/u/profile`;
-  
-  // Get session for analytics tracking
-  const session = await getSession(request.headers.get("Cookie"));
-  const sessionId = session?.id || "unknown";
-  
-  try {
-    switch (action) {
-      case 'subscribe': {
-        // Create checkout session
-        const session = await createCheckoutSession(
-          user.id, 
-          user.email, 
-          returnUrl
-        );
-        
-        // Track subscription attempt
-        // The actual subscription started event will be tracked when webhook is received
-        await trackSubscriptionEvent({
-          eventType: EVENT_TYPES.SUBSCRIPTION_STARTED,
-          userId: user.id,
-          subscriptionId: 'pending_checkout', // We don't have ID yet
-          sessionId
-        });
-        
-        // Redirect to Stripe checkout
-        return redirect(session.url || returnUrl);
-      }
-      
-      case 'manage': {
-        // Create billing portal session
-        const session = await createBillingPortalSession(
-          user.id,
-          user.email,
-          returnUrl
-        );
-        
-        // Track subscription management action
-        await trackSubscriptionEvent({
-          eventType: EVENT_TYPES.SUBSCRIPTION_UPDATED,
-          userId: user.id,
-          subscriptionId: 'managed_via_portal',
-          sessionId
-        });
-        
-        // Redirect to Stripe billing portal
-        return redirect(session.url);
-      }
-      
-      case 'cancel': {
-        // Get subscription ID from form data
-        const subscriptionId = formData.get('subscriptionId')?.toString();
-        
-        if (!subscriptionId) {
-          return { error: 'Subscription ID is required' };
-        }
-        
-        // Cancel subscription
-        await cancelSubscription(subscriptionId);
-        
-        // Track subscription cancellation
-        await trackSubscriptionEvent({
-          eventType: EVENT_TYPES.SUBSCRIPTION_CANCELED,
-          userId: user.id,
-          subscriptionId,
-          sessionId
-        });
-        
-        return { success: 'Your subscription has been canceled. You will have access until the end of your billing period.' };
-      }
-      
-      default:
-        return { error: 'Invalid action' };
-    }
-  } catch (error) {
-    console.error('Error in profile action:', error);
-    
-    // Handle Stripe errors nicely
-    if (error instanceof Error) {
-      return { error: error.message };
-    }
-    
-    return { error: 'An error occurred processing your request' };
-  }
+interface Subscription {
+  stripeSubscriptionId: string;
+  status: string;
+  currentPeriodEnd: string;
+  cancelAtPeriodEnd: boolean;
 }
 
-export function meta({ }: Route.MetaArgs) {
-  return [
-    { title: "Your Profile | RoboLike" },
-    { name: "description", content: "Manage your RoboLike account and subscription" }
-  ];
+interface SubscriptionDetails {
+  subscribed: boolean;
+  subscription?: Subscription;
+}
+
+interface LoaderData {
+  user: User;
+  subscriptionDetails: SubscriptionDetails;
+  sessionExpiresAt: string;
 }
 
 // Client component section
 export default function Profile() {
-  const { user, subscriptionDetails, sessionExpiresAt } = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
+  const { user, subscriptionDetails, sessionExpiresAt } = useLoaderData() as LoaderData;
+  const actionData = useActionData() as { success?: string; error?: string } | undefined;
   
   const isSubscribed = subscriptionDetails.subscribed;
   
@@ -357,4 +233,12 @@ export default function Profile() {
       </div>
     </div>
   );
+}
+
+// Meta function that doesn't use server imports
+export function meta() {
+  return [
+    { title: "Your Profile | RoboLike" },
+    { name: "description", content: "Manage your RoboLike account and subscription" }
+  ];
 }

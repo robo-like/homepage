@@ -1,12 +1,9 @@
-import { Form, useActionData, useLoaderData, useLocation, redirect } from "react-router";
+import { Form, useActionData, useLoaderData, useLocation } from "react-router";
 import { useState } from "react";
-import { auth, createMagicLinkKey, sendMagicLinkEmail, getSession } from "~/lib/auth.server";
-import { authQueries } from "~/lib/db";
-import { trackAuthEvent, trackUserCreated, EVENT_TYPES } from "~/lib/analytics/events.server";
 import type { Route } from "../+types/auth-common";
 
-// Check for valid email format and constraints from prompts
-function isValidEmail(email: string) {
+// Client-side email validation (duplicated from server for safety)
+function validateEmail(email: string) {
   if (!email) return false;
 
   // Validate email format
@@ -20,135 +17,29 @@ function isValidEmail(email: string) {
   return true;
 }
 
-// This is server-only code
-export async function loader({ request }: Route.LoaderArgs) {
-  const url = new URL(request.url);
-  const error = url.searchParams.get("error");
-  const authData = await auth(request);
-  if (authData.user) {
-    if (authData.user.role === "admin") {
-      return redirect("/admin");
-    } else {
-      return redirect("/auth/success");
-    }
-  }
-  return { error: error || undefined };
-}
-
-// This is server-only code
-export async function action({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  // Normalize email: lowercase and trim whitespace
-  const rawEmail = formData.get("email")?.toString() || "";
-  const email = rawEmail.toLowerCase().trim();
-  const redirectTo = formData.get("redirectTo")?.toString() || undefined;
-
-  // Validate email presence
-  if (!email) {
-    return { success: false, error: "Email is required" };
-  }
-
-  // Validate email format
-  if (!isValidEmail(email)) {
-    return {
-      success: false,
-      error: "Please provide a valid email address without + characters"
-    };
-  }
-
-  try {
-    // Get IP address and user agent for analytics
-    const ipAddress = request.headers.get("x-forwarded-for") ||
-      request.headers.get("x-real-ip") ||
-      // @ts-expect-error - socket exists on request in development
-      request.socket?.remoteAddress ||
-      "localhost";
-    const userAgent = request.headers.get("user-agent") || undefined;
-    
-    // Get session for analytics
-    const session = await getSession(request.headers.get("Cookie"));
-    const sessionId = session?.id || "unknown";
-    
-    // First check if user already exists
-    let user = await authQueries.getUserByEmail(email);
-    let isNewUser = false;
-    
-    // If no user exists, create a new one
-    if (!user) {
-      isNewUser = true;
-      // Determine role based on admin email
-      const isAdmin = email === process.env.ADMIN_EMAIL?.toLowerCase();
-      
-      user = await authQueries.createUser({
-        email,
-        role: isAdmin ? "admin" : "user"
-      });
-      
-      // Track new user sign up
-      await trackUserCreated({
-        userId: user.id,
-        email,
-        sessionId,
-        ipAddress: ipAddress.split(",")[0].trim(),
-        userAgent
-      });
-    }
-
-    // Generate magic link key for authentication
-    const key = await createMagicLinkKey(user.id);
-    
-    // Construct the magic link URL
-    const url = new URL(request.url);
-    const origin = `${url.protocol}//${url.host}`;
-    let magicLinkUrl = `${origin}/auth/confirm?key=${key}`;
-
-    if (redirectTo) {
-      magicLinkUrl += `&redirectTo=${encodeURIComponent(redirectTo)}`;
-    }
-    
-    // Track login attempt event (existing user or signup)
-    await trackAuthEvent({
-      eventType: isNewUser ? EVENT_TYPES.SIGNUP : EVENT_TYPES.LOGIN_SUCCESS,
-      userId: user.id,
-      email,
-      sessionId,
-      ipAddress: ipAddress.split(",")[0].trim(),
-      userAgent,
-      success: true
-    });
-    
-    // Send the magic link email
-    const emailSent = await sendMagicLinkEmail(email, magicLinkUrl, origin);
-    
-    if (!emailSent) {
-      return {
-        success: false,
-        error: "Failed to send magic link email. Please try again."
-      };
-    }
-    
-    return { success: true };
-  } catch (error) {
-    console.error("Error in authentication flow:", error);
-    return {
-      success: false,
-      error: "An error occurred. Please try again."
-    };
-  }
-}
-
-export function meta({ }: Route.MetaArgs) {
+// Meta function that doesn't use server imports
+export function meta() {
   return [
     { title: "Log in or Sign up | RoboLike" },
     { name: "description", content: "Log in to your existing account or sign up for a new RoboLike account" }
   ];
 }
 
-// This is the client component
+// Interfaces for type safety
+interface LoaderData {
+  error?: string;
+}
+
+interface ActionData {
+  success?: boolean;
+  error?: string;
+}
+
+// Client component only - no server imports
 export default function Login() {
   const location = useLocation();
-  const loaderData = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
+  const loaderData = useLoaderData() as LoaderData;
+  const actionData = useActionData() as ActionData;
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -156,21 +47,6 @@ export default function Login() {
   // Get redirectTo from query params
   const params = new URLSearchParams(location.search);
   const redirectTo = params.get("redirectTo") || undefined;
-
-  // Client-side email validation function
-  const validateEmail = (email: string) => {
-    if (!email) return false;
-
-    // Validate email format
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(email)) return false;
-
-    // Check for "+" in the local part as per requirements
-    const localPart = email.split('@')[0];
-    if (localPart.includes('+')) return false;
-
-    return true;
-  };
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
