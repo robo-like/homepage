@@ -3,8 +3,23 @@ import type { Route } from "./+types/pricing";
 import { TextInput } from "~/components/TextInput";
 import { useState } from "react";
 import { cn } from "~/lib/utils";
-import { useOutletContext } from "react-router";
 import { type OutletContext } from "~/root";
+import { ContactModal } from "~/components/ContactModal";
+import { FloatingContactButton } from "~/components/FloatingContactButton";
+import { getUserSubscriptionDetails } from "~/lib/billing/stripe.server";
+import { requireAuth } from "~/lib/auth";
+import { useLoaderData } from "react-router";
+
+export async function loader({ request }: Route.LoaderArgs) {
+  try {
+    const authData = await requireAuth(request, "/auth/login");
+    const subscriptionDetails = await getUserSubscriptionDetails(authData.user.id);
+    return { subscriptionDetails, user: authData.user };
+  } catch (error) {
+    // If not authenticated, return null subscription details
+    return { subscriptionDetails: { subscribed: false }, user: null };
+  }
+}
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -122,9 +137,10 @@ function PricingTier({
 export default function Pricing() {
   const [enterpriseEmail, setEnterpriseEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const { user } = useOutletContext<OutletContext>();
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+  const { user, subscriptionDetails } = useLoaderData<typeof loader>();
   const isLoggedIn = !!user;
-  const hasSubscription = user?.subscription?.status === "active";
+  const hasSubscription = subscriptionDetails.subscribed;
 
   const handleEnterpriseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -197,24 +213,95 @@ export default function Pricing() {
             ctaText={!isLoggedIn ? "LOGIN & START" : hasSubscription ? "DOWNLOAD" : "START NOW"}
             ctaLink={!isLoggedIn ? "/auth/login?returnTo=/u/profile" : hasSubscription ? "/install-guide" : "/u/profile"}
           />
-          <PricingTier
-            name="CREATOR PLAN"
-            price="$39"
-            originalPrice="59"
-            discount="Founder Price"
-            description="Ideal for serious creators and small businesses"
-            features={[
-              "Run on up to 5 machines",
-              "3 Instagram accounts",
-              "Unlimited likes per day",
-              "Advanced targeting options",
-              "Priority email support",
-              "Engagement analytics",
-            ]}
-            highlighted={true}
-            ctaText={!isLoggedIn ? "LOGIN & UPGRADE" : hasSubscription ? "UPGRADE PLAN" : "SUBSCRIBE NOW"}
-            ctaLink={!isLoggedIn ? "/auth/login?returnTo=/u/profile" : "/u/profile"}
-          />
+          <div className="bg-black bg-opacity-40 p-6 rounded-lg border border-2 border-[#07b0ef] relative">
+            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+              <span className="bg-[#07b0ef] text-black px-3 py-1 rounded-full text-sm font-bold">
+                Most Popular
+              </span>
+            </div>
+            <div className="mb-6">
+              <h2
+                className="text-2xl font-bold mb-2"
+                style={{
+                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+                }}
+              >
+                CREATOR PLAN
+              </h2>
+              <div className="mb-3">
+                <span className="text-3xl font-bold">CONTACT US</span>
+              </div>
+              <p
+                className="text-gray-300"
+                style={{ fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)' }}
+              >
+                Ideal for serious creators and small businesses
+              </p>
+            </div>
+            <ul className="space-y-4 mb-8 flex-grow">
+              <li
+                className="flex items-start gap-2"
+                style={{
+                  fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
+                }}
+              >
+                <div className="text-[#07b0ef] text-xl mr-2 mt-0.5">⚡</div>
+                Run on up to 5 machines
+              </li>
+              <li
+                className="flex items-start gap-2"
+                style={{
+                  fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
+                }}
+              >
+                <div className="text-[#07b0ef] text-xl mr-2 mt-0.5">⚡</div>
+                3 Instagram accounts
+              </li>
+              <li
+                className="flex items-start gap-2"
+                style={{
+                  fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
+                }}
+              >
+                <div className="text-[#07b0ef] text-xl mr-2 mt-0.5">⚡</div>
+                Unlimited likes per day
+              </li>
+              <li
+                className="flex items-start gap-2"
+                style={{
+                  fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
+                }}
+              >
+                <div className="text-[#07b0ef] text-xl mr-2 mt-0.5">⚡</div>
+                Advanced targeting options
+              </li>
+              <li
+                className="flex items-start gap-2"
+                style={{
+                  fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
+                }}
+              >
+                <div className="text-[#07b0ef] text-xl mr-2 mt-0.5">⚡</div>
+                Priority support
+              </li>
+              <li
+                className="flex items-start gap-2"
+                style={{
+                  fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
+                }}
+              >
+                <div className="text-[#07b0ef] text-xl mr-2 mt-0.5">⚡</div>
+                Engagement analytics
+              </li>
+            </ul>
+            <button
+              onClick={() => setContactModalOpen(true)}
+              className="w-full py-3 px-4 text-center rounded-lg transition-colors relative retro-button primary"
+              style={{ fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)' }}
+            >
+              CONTACT FOR PRICING
+            </button>
+          </div>
           <div className="bg-black bg-opacity-40 p-6 rounded-lg border border-[#f7ee2a]">
             <h2
               className="text-2xl font-bold mb-2 text-[#f7ee2a]"
@@ -414,6 +501,13 @@ export default function Pricing() {
           </div>
         </div>
       </Container>
+      
+      {/* Contact modal for Creator Plan */}
+      <ContactModal 
+        isOpen={contactModalOpen} 
+        onClose={() => setContactModalOpen(false)}
+        defaultSubject="Creator Plan Inquiry"
+      />
     </div>
   );
 }

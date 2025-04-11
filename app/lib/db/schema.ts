@@ -3,6 +3,7 @@ import {
   text,
   integer,
   uniqueIndex,
+  index,
 } from "drizzle-orm/sqlite-core";
 
 // Posts table for managing blog content
@@ -163,3 +164,37 @@ export const subscriptions = sqliteTable("subscriptions", {
     .notNull()
     .$defaultFn(() => new Date()),
 });
+
+// Support tickets table for user inquiries and support requests
+export const supportTickets = sqliteTable(
+  "support_tickets",
+  {
+    // Unique identifier
+    id: text("id")
+      .primaryKey()
+      .notNull()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    // User who created the ticket
+    userId: text("user_id").notNull(),
+
+    // Ticket content
+    subject: text("subject").notNull(),
+    message: text("message").notNull(),
+    
+    // Status tracking: OPEN, CLOSED, IN_PROGRESS
+    status: text("status").notNull().default("OPEN"),
+
+    // Timestamps
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (table) => [
+    index("idx_support_tickets_user_id").on(table.userId),
+    index("idx_support_tickets_status").on(table.status)
+  ]
+);

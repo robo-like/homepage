@@ -1,7 +1,9 @@
-import { Outlet } from "react-router";
+import { Outlet, useOutletContext } from "react-router";
 import { Header } from "~/components/Header";
 import type { Route } from "./+types/layout";
 import React from "react";
+import { FloatingContactButton } from "~/components/FloatingContactButton";
+import type { OutletContext } from "./root";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -14,6 +16,9 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Layout() {
+  const { user } = useOutletContext<OutletContext>();
+  const isLoggedIn = !!user;
+
   return (
     <>
       {/* Background Canvas for Hearts */}
@@ -26,6 +31,9 @@ export default function Layout() {
           <Outlet />
         </main>
         {/* <Footer /> */}
+        
+        {/* Floating contact button only for logged in users */}
+        {isLoggedIn && <FloatingContactButton />}
       </div>
     </>
   );
