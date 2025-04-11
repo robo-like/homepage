@@ -333,6 +333,14 @@ export const authQueries = {
       )
       .get();
   },
+  
+  async getSubscriptionByStripeId(stripeSubscriptionId: string) {
+    return db
+      .select()
+      .from(subscriptions)
+      .where(eq(subscriptions.stripeSubscriptionId, stripeSubscriptionId))
+      .get();
+  },
 
   async getAllUserSubscriptions(userId: string) {
     return db

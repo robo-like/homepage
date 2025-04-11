@@ -197,27 +197,65 @@ export async function handleCheckoutSessionCompleted(
 }
 
 /**
- * Get subscription details for a user
+ * Get subscription details for a user directly from Stripe
  */
 export async function getUserSubscriptionDetails(userId: string) {
   try {
-    // Get active subscription from our database
-    const subscription = await authQueries.getActiveSubscription(userId);
-
-    if (!subscription) {
+    // Get user from database to find Stripe customer ID
+    const user = await authQueries.getUserById(userId);
+    
+    if (!user || !user.stripeCustomerId) {
       return { subscribed: false };
     }
-
-    // Get subscription details from Stripe
-    const stripeSubscription = await stripe.subscriptions.retrieve(
-      subscription.stripeSubscriptionId
+    
+    // Get all subscriptions for this customer directly from Stripe
+    const subscriptions = await stripe.subscriptions.list({
+      customer: user.stripeCustomerId,
+      status: 'active',
+      limit: 1
+    });
+    
+    // If no active subscriptions found
+    if (subscriptions.data.length === 0) {
+      return { subscribed: false };
+    }
+    
+    // Use the most recent active subscription
+    const stripeSubscription = subscriptions.data[0];
+    
+    // Check if we have this subscription in our database
+    let localSubscription = await authQueries.getSubscriptionByStripeId(
+      stripeSubscription.id
     );
-
+    
+    // If not in database, create it to keep local records in sync
+    if (!localSubscription) {
+      const newSubscription = await authQueries.createSubscription({
+        userId,
+        stripeSubscriptionId: stripeSubscription.id,
+        priceId: stripeSubscription.items.data[0]?.price.id,
+        status: stripeSubscription.status,
+        currentPeriodStart: new Date(stripeSubscription.current_period_start * 1000),
+        currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
+      });
+      
+      if (newSubscription && newSubscription.length > 0) {
+        localSubscription = newSubscription[0];
+      }
+    } else {
+      // Update local record to stay in sync with Stripe
+      await authQueries.updateSubscription(stripeSubscription.id, {
+        status: stripeSubscription.status,
+        currentPeriodStart: new Date(stripeSubscription.current_period_start * 1000),
+        currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
+      });
+    }
+    
     return {
       subscribed: stripeSubscription.status === "active",
       subscription: {
-        id: subscription.id,
-        stripeSubscriptionId: subscription.stripeSubscriptionId,
+        id: localSubscription?.id || "unknown",
+        stripeSubscriptionId: stripeSubscription.id,
         status: stripeSubscription.status,
         currentPeriodEnd: new Date(
           stripeSubscription.current_period_end * 1000
@@ -226,7 +264,7 @@ export async function getUserSubscriptionDetails(userId: string) {
       },
     };
   } catch (error) {
-    console.error("Error getting user subscription details:", error);
+    console.error("Error getting user subscription details from Stripe:", error);
     // Return not subscribed if there's an error
     return { subscribed: false };
   }
