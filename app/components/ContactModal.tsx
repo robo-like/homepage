@@ -37,7 +37,15 @@ export function ContactModal({
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [ticketsLoaded, setTicketsLoaded] = useState(false);
   
-  const { user } = useOutletContext<OutletContext>();
+  // Try to get user from outlet context, but handle the case when it's not available
+  let user;
+  try {
+    const context = useOutletContext<OutletContext>();
+    user = context?.user;
+  } catch (error) {
+    // Outlet context not available, user will be undefined
+    user = undefined;
+  }
   const navigate = useNavigate();
   
   // Handle modal backdrop click (close only if clicking the backdrop)

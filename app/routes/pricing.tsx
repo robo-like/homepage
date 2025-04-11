@@ -3,21 +3,17 @@ import type { Route } from "./+types/pricing";
 import { TextInput } from "~/components/TextInput";
 import { useState } from "react";
 import { cn } from "~/lib/utils";
-import { type OutletContext } from "~/root";
 import { ContactModal } from "~/components/ContactModal";
-import { FloatingContactButton } from "~/components/FloatingContactButton";
-import { getUserSubscriptionDetails } from "~/lib/billing/stripe.server";
 import { requireAuth } from "~/lib/auth";
 import { useLoaderData } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
   try {
     const authData = await requireAuth(request, "/auth/login");
-    const subscriptionDetails = await getUserSubscriptionDetails(authData.user.id);
-    return { subscriptionDetails, user: authData.user };
+    return {  user: authData.user };
   } catch (error) {
     // If not authenticated, return null subscription details
-    return { subscriptionDetails: { subscribed: false }, user: null };
+    return { user: null };
   }
 }
 
@@ -138,9 +134,10 @@ export default function Pricing() {
   const [enterpriseEmail, setEnterpriseEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
-  const { user, subscriptionDetails } = useLoaderData<typeof loader>();
-  const isLoggedIn = !!user;
-  const hasSubscription = subscriptionDetails.subscribed;
+  const loaderData = useLoaderData<typeof loader>();
+  const userData = loaderData?.user;
+  const isLoggedIn = !!userData;
+  const hasSubscription = userData?.subscription?.subscribed;
 
   const handleEnterpriseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -507,6 +504,7 @@ export default function Pricing() {
         isOpen={contactModalOpen} 
         onClose={() => setContactModalOpen(false)}
         defaultSubject="Creator Plan Inquiry"
+        showHistory={isLoggedIn}
       />
     </div>
   );
