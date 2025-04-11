@@ -51,7 +51,7 @@ export default function Login() {
 
   // Get redirectTo from query params
   const params = new URLSearchParams(location.search);
-  const redirectTo = params.get("redirectTo") || undefined;
+  const redirectTo = params.get("redirectTo") || params.get("returnTo") || undefined;
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {

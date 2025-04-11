@@ -1,10 +1,10 @@
 import Container from "~/components/Container";
 import type { Route } from "./+types/pricing";
-import { H1 } from "~/components/H1";
-import { Card } from "~/components/Card";
 import { TextInput } from "~/components/TextInput";
 import { useState } from "react";
 import { cn } from "~/lib/utils";
+import { useOutletContext } from "react-router";
+import { type OutletContext } from "~/root";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -122,6 +122,9 @@ function PricingTier({
 export default function Pricing() {
   const [enterpriseEmail, setEnterpriseEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const { user } = useOutletContext<OutletContext>();
+  const isLoggedIn = !!user;
+  const hasSubscription = user?.subscription?.status === "active";
 
   const handleEnterpriseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -191,8 +194,8 @@ export default function Pricing() {
               "No rate limiting",
             ]}
             highlighted={false}
-            ctaText="START NOW"
-            ctaLink="/install-guide"
+            ctaText={!isLoggedIn ? "LOGIN & START" : hasSubscription ? "DOWNLOAD" : "START NOW"}
+            ctaLink={!isLoggedIn ? "/auth/login?returnTo=/u/profile" : hasSubscription ? "/install-guide" : "/u/profile"}
           />
           <PricingTier
             name="CREATOR PLAN"
@@ -209,8 +212,8 @@ export default function Pricing() {
               "Engagement analytics",
             ]}
             highlighted={true}
-            ctaText="UPGRADE TO CREATOR"
-            ctaLink="/install-guide"
+            ctaText={!isLoggedIn ? "LOGIN & UPGRADE" : hasSubscription ? "UPGRADE PLAN" : "SUBSCRIBE NOW"}
+            ctaLink={!isLoggedIn ? "/auth/login?returnTo=/u/profile" : "/u/profile"}
           />
           <div className="bg-black bg-opacity-40 p-6 rounded-lg border border-[#f7ee2a]">
             <h2

@@ -40,6 +40,7 @@ export default [
   ]),
   ...prefix("api", [
     route("metrics", "routes/api/metrics.tsx"),
+    route("enterprise-lead", "routes/api/enterprise-lead.ts"),
     route("download-tracking", "routes/api/download-tracking.tsx"),
     route(
       "instagram/hashtag/:hashtag/recent",
