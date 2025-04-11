@@ -210,7 +210,7 @@ export default function Pricing() {
             ctaText={!isLoggedIn ? "LOGIN & START" : hasSubscription ? "DOWNLOAD" : "START NOW"}
             ctaLink={!isLoggedIn ? "/auth/login?returnTo=/u/profile" : hasSubscription ? "/install-guide" : "/u/profile"}
           />
-          <div className="bg-black bg-opacity-40 p-6 rounded-lg border border-gray-700 relative">
+          <div className="bg-black bg-opacity-40 p-6 rounded-lg border border-[#07b0ef] border-2 relative">
             <div className="mb-6">
               <h2
                 className="text-2xl font-bold mb-2"
