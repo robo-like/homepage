@@ -32,9 +32,8 @@ export function ContactModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [activeTab, setActiveTab] = useState<"new" | "history">(
-    showHistory ? "history" : "new"
-  );
+  // Always default to new ticket tab
+  const [activeTab, setActiveTab] = useState<"new" | "history">("new");
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [ticketsLoaded, setTicketsLoaded] = useState(false);
   
@@ -116,10 +115,24 @@ export function ContactModal({
     }
   };
   
+  // Create a ref for the subject input
+  const subjectInputRef = React.useRef<HTMLInputElement>(null);
+  
   // Load tickets if showing history tab
   React.useEffect(() => {
     if (isOpen && showHistory && activeTab === "history" && !ticketsLoaded) {
       loadTickets();
+    }
+    
+    // Auto-focus and select the subject field when the modal opens
+    if (isOpen && activeTab === "new" && subjectInputRef.current) {
+      // Short timeout to ensure DOM is ready
+      setTimeout(() => {
+        if (subjectInputRef.current) {
+          subjectInputRef.current.focus();
+          subjectInputRef.current.select();
+        }
+      }, 50);
     }
   }, [isOpen, showHistory, activeTab, ticketsLoaded]);
 
@@ -213,13 +226,14 @@ export function ContactModal({
               >
                 SUBJECT
               </label>
-              <TextInput
+              <input
+                ref={subjectInputRef}
                 id="subject"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 required
                 placeholder="Enter subject..."
-                className="w-full bg-black bg-opacity-70 border border-[#07b0ef] text-white"
+                className="w-full bg-black bg-opacity-70 border border-[#07b0ef] text-white px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#07b0ef]"
               />
             </div>
             
