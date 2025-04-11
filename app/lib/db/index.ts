@@ -7,6 +7,7 @@ import {
   activeSessions,
   expiringEmailKeys,
   subscriptions,
+  supportTickets,
 } from "./schema";
 import { eq, desc, asc, and, lte, gte, gt, isNull } from "drizzle-orm";
 
@@ -393,5 +394,78 @@ export const authQueries = {
 
   async getUsersWithoutStripeCustomer() {
     return db.select().from(users).where(isNull(users.stripeCustomerId));
+  },
+};
+
+// Support ticket queries
+export const supportQueries = {
+  // Create a new support ticket
+  async createTicket(data: {
+    userId: string;
+    subject: string;
+    message: string;
+    status?: string;
+  }) {
+    return db
+      .insert(supportTickets)
+      .values({
+        userId: data.userId,
+        subject: data.subject,
+        message: data.message,
+        status: data.status || "OPEN",
+      })
+      .returning();
+  },
+
+  // Get all tickets for a user
+  async getUserTickets(userId: string) {
+    return db
+      .select()
+      .from(supportTickets)
+      .where(eq(supportTickets.userId, userId))
+      .orderBy(desc(supportTickets.createdAt));
+  },
+
+  // Get a specific ticket by ID
+  async getTicketById(id: string) {
+    return db
+      .select()
+      .from(supportTickets)
+      .where(eq(supportTickets.id, id))
+      .get();
+  },
+
+  // Update a ticket's status
+  async updateTicketStatus(id: string, status: string) {
+    return db
+      .update(supportTickets)
+      .set({
+        status,
+        updatedAt: new Date(),
+      })
+      .where(eq(supportTickets.id, id))
+      .returning();
+  },
+
+  // Get all tickets (admin only)
+  async getAllTickets({
+    limit = 50,
+    offset = 0,
+    status,
+  }: {
+    limit?: number;
+    offset?: number;
+    status?: string;
+  } = {}) {
+    let query = db.select().from(supportTickets);
+    
+    if (status) {
+      query = query.where(eq(supportTickets.status, status));
+    }
+    
+    return query
+      .orderBy(desc(supportTickets.createdAt))
+      .limit(limit)
+      .offset(offset);
   },
 };
