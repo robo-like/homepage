@@ -6,7 +6,7 @@ const futureDate = new Date("2025-05-01");
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "RoboLike - Under Construction" },
+    { title: "RoboLike, Instagram Auto Liker (Free, 2025)" },
     {
       name: "description",
       content:
@@ -78,7 +78,6 @@ const retro80sColors = [
 ];
 
 export default function Home() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [countdown, setCountdown] = useState<number>(0);
 
   // Calculate countdown to a future date (30 days from now)
@@ -98,103 +97,8 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    const hearts: {
-      x: number;
-      y: number;
-      color: string;
-      size: number;
-      speed: number;
-    }[] = [];
-
-    // Initialize hearts
-    const initHearts = () => {
-      hearts.length = 0;
-      for (let i = 0; i < 15; i++) {
-        hearts.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          color:
-            retro80sColors[Math.floor(Math.random() * retro80sColors.length)],
-          size: 30 + Math.random() * 70,
-          speed: 0.5 + Math.random() * 1.5,
-        });
-      }
-    };
-
-    const drawHearts = () => {
-      if (!ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw grid lines for retro effect (same as the installation page)
-      const gridSize = 40;
-      ctx.strokeStyle = "rgba(7, 176, 239, 0.1)";
-      ctx.lineWidth = 1;
-
-      // Draw vertical lines
-      for (let x = 0; x <= canvas.width; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-      }
-
-      // Draw horizontal lines
-      for (let y = 0; y <= canvas.height; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-      }
-
-      // Draw hearts
-      hearts.forEach((heart) => {
-        drawHeart(ctx, heart.x, heart.y, heart.color, heart.size);
-        // Move heart upward
-        heart.y -= heart.speed;
-
-        // If heart moves off screen, reset it at the bottom
-        if (heart.y < -heart.size) {
-          heart.y = canvas.height + heart.size;
-          heart.x = Math.random() * canvas.width;
-          heart.color =
-            retro80sColors[Math.floor(Math.random() * retro80sColors.length)];
-        }
-      });
-
-      requestAnimationFrame(drawHearts);
-    };
-
-    resizeCanvas();
-    initHearts();
-    drawHearts();
-    window.addEventListener("resize", () => {
-      resizeCanvas();
-      initHearts();
-    });
-
-    return () => {
-      window.removeEventListener("resize", resizeCanvas);
-    };
-  }, []);
-
   return (
     <div className="font-set-1 min-h-screen overflow-hidden relative">
-      {/* Canvas Background */}
-      <canvas
-        ref={canvasRef}
-        className="block w-full h-full fixed top-0 left-0 z-0 pointer-events-none"
-      />
 
       {/* Content Overlay */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-white p-6">

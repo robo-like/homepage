@@ -72,66 +72,89 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex flex-1 justify-end items-center space-x-4 px-3 py-2">
-          <NavLink
-            to="/instagram-auto-liker-how-it-works"
+          <div
             style={{
               fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
             }}
           >
-            HOW IT WORKS
-          </NavLink>
-          <NavLink
-            to="/install-guide"
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            DOWNLOAD
-          </NavLink>
-          <NavLink
-            to="/social-media-automation-pricing"
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            PRICING
-          </NavLink>
-          <NavLink
-            to="/blog"
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            BLOG
-          </NavLink>
-          {isLoggedIn ? (
-            <NavLink
-              to="/auth/logout"
-              className="retro-button"
-              style={{
-                fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                backgroundColor: "#bb1504",
-                boxShadow: "0 6px 0 #8a1002",
-                padding: "0.5rem 1rem",
-                fontSize: "0.9rem",
-                fontWeight: "bold",
-              }}
-            >
-              LOGOUT
+            <NavLink to="/instagram-auto-liker-how-it-works">
+              HOW IT WORKS
             </NavLink>
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+            }}
+          >
+            <NavLink to="/install-guide">
+              DOWNLOAD
+            </NavLink>
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+            }}
+          >
+            <NavLink to="/social-media-automation-pricing">
+              PRICING
+            </NavLink>
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+            }}
+          >
+            <NavLink to="/blog">
+              BLOG
+            </NavLink>
+          </div>
+          {isLoggedIn ? (
+            <div className="flex space-x-3">
+              <div 
+                className="retro-button primary"
+                style={{
+                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+                  backgroundColor: "#0fcc45", 
+                  boxShadow: "0 6px 0 #0a8f31",
+                  padding: "0.25rem 0.5rem",
+                  fontSize: "0.9rem",
+                  fontWeight: "bold",
+                }}
+              >
+                <NavLink to="/u/profile">
+                  PROFILE
+                </NavLink>
+              </div>
+              <div 
+                className="retro-button"
+                style={{
+                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+                  backgroundColor: "#bb1504",
+                  boxShadow: "0 6px 0 #8a1002",
+                  padding: "0.25rem 0.5rem",
+                  fontSize: "0.9rem",
+                  fontWeight: "bold",
+                }}
+              >
+                <NavLink to="/auth/logout">
+                  LOGOUT
+                </NavLink>
+              </div>
+            </div>
           ) : (
-            <NavLink
-              to="/auth/login"
+            <div 
               className="retro-button primary"
               style={{
                 fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                padding: "0.5rem 1rem",
+                padding: "0.25rem 0.5rem",
                 fontSize: "0.9rem",
                 fontWeight: "bold",
               }}
             >
-              LOGIN/SIGNUP
-            </NavLink>
+              <NavLink to="/auth/login">
+                LOGIN/SIGNUP
+              </NavLink>
+            </div>
           )}
         </nav>
       </div>
@@ -139,66 +162,89 @@ export function Header() {
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
         <nav className="md:hidden flex flex-col space-y-4 px-3 py-4 border-t border-dashed border-gray-300">
-          <NavLink
-            to="/instagram-auto-liker-how-it-works"
+          <div
             style={{
               fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
             }}
           >
-            HOW IT WORKS
-          </NavLink>
-          <NavLink
-            to="/install-guide"
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            DOWNLOAD
-          </NavLink>
-          <NavLink
-            to="/social-media-automation-pricing"
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            PRICING
-          </NavLink>
-          <NavLink
-            to="/blog"
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            BLOG
-          </NavLink>
-          {isLoggedIn ? (
-            <NavLink
-              to="/auth/logout"
-              className="retro-button"
-              style={{
-                fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                backgroundColor: "#bb1504",
-                boxShadow: "0 6px 0 #8a1002",
-                padding: "0.5rem 1rem",
-                fontSize: "0.9rem",
-                fontWeight: "bold",
-              }}
-            >
-              LOGOUT
+            <NavLink to="/instagram-auto-liker-how-it-works">
+              HOW IT WORKS
             </NavLink>
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+            }}
+          >
+            <NavLink to="/install-guide">
+              DOWNLOAD
+            </NavLink>
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+            }}
+          >
+            <NavLink to="/social-media-automation-pricing">
+              PRICING
+            </NavLink>
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+            }}
+          >
+            <NavLink to="/blog">
+              BLOG
+            </NavLink>
+          </div>
+          {isLoggedIn ? (
+            <div className="flex flex-col space-y-3">
+              <div 
+                className="retro-button primary"
+                style={{
+                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+                  backgroundColor: "#0fcc45", 
+                  boxShadow: "0 6px 0 #0a8f31",
+                  padding: "0.25rem 0.5rem",
+                  fontSize: "0.9rem",
+                  fontWeight: "bold",
+                }}
+              >
+                <NavLink to="/u/profile">
+                  PROFILE
+                </NavLink>
+              </div>
+              <div 
+                className="retro-button"
+                style={{
+                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+                  backgroundColor: "#bb1504",
+                  boxShadow: "0 6px 0 #8a1002",
+                  padding: "0.25rem 0.5rem",
+                  fontSize: "0.9rem",
+                  fontWeight: "bold",
+                }}
+              >
+                <NavLink to="/auth/logout">
+                  LOGOUT
+                </NavLink>
+              </div>
+            </div>
           ) : (
-            <NavLink
-              to="/auth/login"
+            <div 
               className="retro-button primary"
               style={{
                 fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                padding: "0.5rem 1rem",
+                padding: "0.25rem 0.5rem",
                 fontSize: "0.9rem",
                 fontWeight: "bold",
               }}
             >
-              LOGIN/SIGNUP
-            </NavLink>
+              <NavLink to="/auth/login">
+                LOGIN/SIGNUP
+              </NavLink>
+            </div>
           )}
         </nav>
       )}
