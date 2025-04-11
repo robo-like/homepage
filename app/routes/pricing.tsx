@@ -191,7 +191,7 @@ export default function Pricing() {
           <div className="w-full h-1 my-6 bg-gradient-to-r from-[#ed1e79] via-[#07b0ef] to-[#f7ee2a]"></div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 lg:grid-cols-3 xl:max-w-7xl xl:mx-auto gap-8 md:gap-10">
           <PricingTier
             name="BASIC PLAN"
             price="$19"
@@ -206,16 +206,11 @@ export default function Pricing() {
               "Email support",
               "No rate limiting",
             ]}
-            highlighted={false}
+            highlighted={true}
             ctaText={!isLoggedIn ? "LOGIN & START" : hasSubscription ? "DOWNLOAD" : "START NOW"}
             ctaLink={!isLoggedIn ? "/auth/login?returnTo=/u/profile" : hasSubscription ? "/install-guide" : "/u/profile"}
           />
-          <div className="bg-black bg-opacity-40 p-6 rounded-lg border border-2 border-[#07b0ef] relative">
-            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-              <span className="bg-[#07b0ef] text-black px-3 py-1 rounded-full text-sm font-bold">
-                Most Popular
-              </span>
-            </div>
+          <div className="bg-black bg-opacity-40 p-6 rounded-lg border border-gray-700 relative">
             <div className="mb-6">
               <h2
                 className="text-2xl font-bold mb-2"

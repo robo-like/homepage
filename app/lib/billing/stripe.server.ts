@@ -172,12 +172,20 @@ export async function handleCheckoutSessionCompleted(
       (s) => s.stripeSubscriptionId === subscriptionId
     );
 
+    // Helper function to safely convert timestamps to dates
+    const safelyConvertTimestamp = (timestamp: number | null | undefined) => {
+      if (typeof timestamp !== 'number' || !isFinite(timestamp)) {
+        return new Date(); // Return current date as fallback
+      }
+      return new Date(timestamp * 1000);
+    };
+
     // If the subscription already exists, just update it
     if (existingSubscription) {
       return authQueries.updateSubscription(subscriptionId, {
         status: subscription.status,
-        currentPeriodStart: new Date(subscription.current_period_start * 1000),
-        currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+        currentPeriodStart: safelyConvertTimestamp(subscription.current_period_start),
+        currentPeriodEnd: safelyConvertTimestamp(subscription.current_period_end),
       });
     }
 
@@ -185,10 +193,10 @@ export async function handleCheckoutSessionCompleted(
     return authQueries.createSubscription({
       userId,
       stripeSubscriptionId: subscription.id,
-      priceId: subscription.items.data[0]?.price.id,
+      priceId: subscription.items.data[0]?.price.id || 'unknown',
       status: subscription.status,
-      currentPeriodStart: new Date(subscription.current_period_start * 1000),
-      currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+      currentPeriodStart: safelyConvertTimestamp(subscription.current_period_start),
+      currentPeriodEnd: safelyConvertTimestamp(subscription.current_period_end),
     });
   } catch (error) {
     console.error("Error handling checkout session completed:", error);
@@ -228,15 +236,23 @@ export async function getUserSubscriptionDetails(userId: string) {
       stripeSubscription.id
     );
     
+    // Safely convert timestamps to dates
+    const safelyConvertTimestamp = (timestamp: number | null | undefined) => {
+      if (typeof timestamp !== 'number' || !isFinite(timestamp)) {
+        return new Date(); // Return current date as fallback
+      }
+      return new Date(timestamp * 1000);
+    };
+
     // If not in database, create it to keep local records in sync
     if (!localSubscription) {
       const newSubscription = await authQueries.createSubscription({
         userId,
         stripeSubscriptionId: stripeSubscription.id,
-        priceId: stripeSubscription.items.data[0]?.price.id,
+        priceId: stripeSubscription.items.data[0]?.price.id || 'unknown',
         status: stripeSubscription.status,
-        currentPeriodStart: new Date(stripeSubscription.current_period_start * 1000),
-        currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
+        currentPeriodStart: safelyConvertTimestamp(stripeSubscription.current_period_start),
+        currentPeriodEnd: safelyConvertTimestamp(stripeSubscription.current_period_end),
       });
       
       if (newSubscription && newSubscription.length > 0) {
@@ -246,21 +262,19 @@ export async function getUserSubscriptionDetails(userId: string) {
       // Update local record to stay in sync with Stripe
       await authQueries.updateSubscription(stripeSubscription.id, {
         status: stripeSubscription.status,
-        currentPeriodStart: new Date(stripeSubscription.current_period_start * 1000),
-        currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
+        currentPeriodStart: safelyConvertTimestamp(stripeSubscription.current_period_start),
+        currentPeriodEnd: safelyConvertTimestamp(stripeSubscription.current_period_end),
       });
     }
-    
+
     return {
       subscribed: stripeSubscription.status === "active",
       subscription: {
         id: localSubscription?.id || "unknown",
         stripeSubscriptionId: stripeSubscription.id,
         status: stripeSubscription.status,
-        currentPeriodEnd: new Date(
-          stripeSubscription.current_period_end * 1000
-        ),
-        cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
+        currentPeriodEnd: safelyConvertTimestamp(stripeSubscription.current_period_end),
+        cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end || false,
       },
     };
   } catch (error) {
