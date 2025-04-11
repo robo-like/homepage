@@ -82,7 +82,7 @@ export async function createCheckoutSession(
       mode: "subscription",
       success_url: `${returnUrl}?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${returnUrl}?canceled=true`,
-      automatic_tax: { enabled: true },
+      automatic_tax: { enabled: false },
       allow_promotion_codes: true,
       metadata: {
         userId,
