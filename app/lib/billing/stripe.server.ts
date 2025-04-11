@@ -82,6 +82,8 @@ export async function createCheckoutSession(
       mode: "subscription",
       success_url: `${returnUrl}?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${returnUrl}?canceled=true`,
+      automatic_tax: { enabled: true },
+      allow_promotion_codes: true,
       metadata: {
         userId,
       },
@@ -164,7 +166,22 @@ export async function handleCheckoutSessionCompleted(
       throw new Error("No user ID found in session metadata");
     }
 
-    // Add subscription to our database
+    // First check if this subscription already exists in our database
+    const existingSubscriptions = await authQueries.getAllUserSubscriptions(userId);
+    const existingSubscription = existingSubscriptions.find(
+      (s) => s.stripeSubscriptionId === subscriptionId
+    );
+
+    // If the subscription already exists, just update it
+    if (existingSubscription) {
+      return authQueries.updateSubscription(subscriptionId, {
+        status: subscription.status,
+        currentPeriodStart: new Date(subscription.current_period_start * 1000),
+        currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+      });
+    }
+
+    // Otherwise add a new subscription to our database
     return authQueries.createSubscription({
       userId,
       stripeSubscriptionId: subscription.id,

@@ -22,6 +22,12 @@ export async function loader({ request }: Route.LoaderArgs) {
     // Ensure user is authenticated
     const authData = await requireAuth(request, "/auth/login");
 
+    // Get URL parameters for Stripe callbacks
+    const url = new URL(request.url);
+    const success = url.searchParams.get("success") === "true";
+    const canceled = url.searchParams.get("canceled") === "true";
+    const sessionId = url.searchParams.get("session_id");
+    
     // Get user's subscription details directly
     const subscriptionDetails = await getUserSubscriptionDetails(
       authData.user.id
@@ -36,6 +42,33 @@ export async function loader({ request }: Route.LoaderArgs) {
     const now = new Date();
     const sessionExpiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
+    // Prepare any Stripe-related messages
+    let checkoutMessage = null;
+    
+    if (success && sessionId) {
+      // Verify subscription exists in our database or handle in webhook if not
+      const stripeSubscriptionDetails = await getUserSubscriptionDetails(authData.user.id);
+      
+      // If subscription is active, show success message
+      if (stripeSubscriptionDetails.subscribed) {
+        checkoutMessage = {
+          type: "success",
+          message: "Your subscription has been successfully set up! You now have full access to RoboLike."
+        };
+      } else {
+        // This shouldn't typically happen as the webhook should handle it, but just in case
+        checkoutMessage = {
+          type: "info",
+          message: "Your payment is being processed. You'll have full access once the payment is confirmed."
+        };
+      }
+    } else if (canceled) {
+      checkoutMessage = {
+        type: "info",
+        message: "You canceled the checkout process. You can subscribe anytime to get full access."
+      };
+    }
+
     // Return user and subscription information with the refreshed session cookie
     return {
       headers: {
@@ -44,6 +77,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       user: authData.user,
       subscriptionDetails,
       sessionExpiresAt: sessionExpiresAt.toISOString(),
+      checkoutMessage,
     };
   } catch (error) {
     // requireAuth will throw a redirect if not authenticated

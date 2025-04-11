@@ -25,11 +25,15 @@ interface LoaderData {
   user: User;
   subscriptionDetails: SubscriptionDetails;
   sessionExpiresAt: string;
+  checkoutMessage?: {
+    type: "success" | "error" | "info";
+    message: string;
+  } | null;
 }
 
 // Client component section
 export default function Profile() {
-  const { user, subscriptionDetails, sessionExpiresAt } =
+  const { user, subscriptionDetails, sessionExpiresAt, checkoutMessage } =
     useLoaderData() as LoaderData;
   const actionData = useActionData() as
     | { success?: string; error?: string }
@@ -78,6 +82,21 @@ export default function Profile() {
         </h1>
         <div className="w-full h-1 my-4 bg-gradient-to-r from-[#ed1e79] via-[#07b0ef] to-[#f7ee2a]"></div>
       </div>
+      
+      {/* Checkout Message Display */}
+      {checkoutMessage && (
+        <div 
+          className={`p-4 mb-6 rounded-lg ${
+            checkoutMessage.type === 'success' 
+              ? 'bg-green-100 border border-green-400 text-green-700' 
+              : checkoutMessage.type === 'error'
+                ? 'bg-red-100 border border-red-400 text-red-700'
+                : 'bg-blue-100 border border-blue-400 text-blue-700'
+          }`}
+        >
+          <p>{checkoutMessage.message}</p>
+        </div>
+      )}
 
       {/* Profile Information */}
       <div className="mb-8">
