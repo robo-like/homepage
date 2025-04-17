@@ -6,7 +6,7 @@ CREATE TABLE `access_tokens` (
 	`updated_at` integer NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `support_tickets` (
+CREATE TABLE IF NOT EXISTS `support_tickets` (
 	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text NOT NULL,
 	`subject` text NOT NULL,
@@ -16,5 +16,5 @@ CREATE TABLE `support_tickets` (
 	`updated_at` integer NOT NULL
 );
 --> statement-breakpoint
-CREATE INDEX `idx_support_tickets_user_id` ON `support_tickets` (`user_id`);--> statement-breakpoint
-CREATE INDEX `idx_support_tickets_status` ON `support_tickets` (`status`);
+CREATE INDEX IF NOT EXISTS `idx_support_tickets_user_id` ON `support_tickets` (`user_id`);--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS `idx_support_tickets_status` ON `support_tickets` (`status`);

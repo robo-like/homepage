@@ -43,6 +43,13 @@
       "when": 1744913175309,
       "tag": "0005_watery_runaways",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1744921886425,
+      "tag": "0006_right_boomer",
+      "breakpoints": true
     }
   ]
 }
