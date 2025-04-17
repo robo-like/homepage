@@ -27,6 +27,7 @@ export default [
       route("logout", "routes/auth/logout.tsx"),
     ]),
     ...prefix("u", [
+      route("access-token", "routes/user/access-token.tsx"),
       route("profile", "routes/user/profile.tsx"),
       route("me", "routes/user/me.tsx"),
     ]),
