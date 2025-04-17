@@ -52,7 +52,7 @@ export default function Profile() {
   const trialEnd = createdAt
     ? new Date(createdAt.getTime() + 3 * 24 * 60 * 60 * 1000)
     : null;
-  const isInTrial = createdAt && now < trialEnd;
+  const isInTrial = createdAt && trialEnd && now < trialEnd;
   const trialDaysLeft =
     isInTrial && trialEnd
       ? Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
@@ -70,20 +70,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mt-16 mb-16">
-      <div className="text-center mb-8">
-        <h1
-          className="text-2xl font-bold mb-2"
-          style={{
-            fontFamily: 'var(--heading-font, "Press Start 2P", cursive)',
-          }}
-        >
-          YOUR PROFILE
-        </h1>
-        <div className="w-full h-1 my-4 bg-gradient-to-r from-[#ed1e79] via-[#07b0ef] to-[#f7ee2a]"></div>
-      </div>
-      
-      {/* Checkout Message Display */}
+           <>
       {checkoutMessage && (
         <div 
           className={`p-4 mb-6 rounded-lg ${
@@ -317,7 +304,7 @@ export default function Profile() {
           </a>
         </div>
       </div>
-    </div>
+      </>
   );
 }
 

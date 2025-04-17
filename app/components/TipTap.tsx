@@ -28,7 +28,7 @@ const Tiptap = ({
     content: initialContent,
     editorProps: {
       attributes: {
-        class: className,
+        class: className ?? "",
       },
     },
     immediatelyRender: false,

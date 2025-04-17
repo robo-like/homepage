@@ -1,5 +1,4 @@
-import { useRef, useEffect } from "react";
-import type { Route } from "./+types/downloads";
+import type { Route } from "./+types/terms-and-conditions";
 import logoDark from "../home/heart.png";
 
 export function meta({}: Route.MetaArgs) {
@@ -28,74 +27,8 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function TermsAndConditions() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  // Add grid background effect
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = Math.max(document.body.scrollHeight, window.innerHeight);
-    };
-
-    const drawGrid = () => {
-      if (!ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw grid lines for retro effect
-      const gridSize = 40;
-      ctx.strokeStyle = "rgba(7, 176, 239, 0.1)";
-      ctx.lineWidth = 1;
-
-      // Draw vertical lines
-      for (let x = 0; x <= canvas.width; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-      }
-
-      // Draw horizontal lines
-      for (let y = 0; y <= canvas.height; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-      }
-    };
-
-    resizeCanvas();
-    drawGrid();
-
-    window.addEventListener("resize", () => {
-      resizeCanvas();
-      drawGrid();
-    });
-
-    // Redraw on scroll to ensure grid covers full scrollable area
-    window.addEventListener("scroll", () => {
-      resizeCanvas();
-      drawGrid();
-    });
-
-    return () => {
-      window.removeEventListener("resize", resizeCanvas);
-      window.removeEventListener("scroll", drawGrid);
-    };
-  }, []);
-
   return (
-    <div className="font-set-1 min-h-screen bg-[#0A0A0A] text-white relative pb-16">
-      {/* Canvas Background */}
-      <canvas
-        ref={canvasRef}
-        className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"
-      />
-
+    <div className="font-set-1 min-h-screen text-white relative pb-16">
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 pt-16">
         {/* Hero Section */}
@@ -325,6 +258,11 @@ export default function TermsAndConditions() {
               </p>
               <p className="text-center text-gray-300 mt-2">
                 Last updated: 17/03/2025
+              </p>
+              <p className="text-center text-gray-300 mt-4">
+                <a href="/privacy-policy" className="text-[#07b0ef] hover:underline">
+                  View our Privacy Policy
+                </a>
               </p>
             </div>
           </div>

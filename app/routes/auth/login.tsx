@@ -1,5 +1,6 @@
 import { Form, useActionData, useLoaderData, useLocation } from "react-router";
 import { useState } from "react";
+import { AuthCard } from "~/components/AuthCard";
 
 // Client-side email validation (duplicated from server for safety)
 function validateEmail(email: string) {
@@ -64,18 +65,7 @@ export default function Login() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mt-16">
-      <div className="text-center mb-8">
-        <h1
-          className="text-2xl font-bold mb-2"
-          style={{
-            fontFamily: 'var(--heading-font, "Press Start 2P", cursive)',
-          }}
-        >
-          ROBOLIKE ACCOUNT
-        </h1>
-        <div className="w-full h-1 my-4 bg-gradient-to-r from-[#ed1e79] via-[#07b0ef] to-[#f7ee2a]"></div>
-      </div>
+    <AuthCard title="ROBOLIKE ACCOUNT">
 
       {submitted && actionData?.success ? (
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
@@ -152,6 +142,6 @@ export default function Login() {
           </button>
         </Form>
       )}
-    </div>
+    </AuthCard>
   );
 }

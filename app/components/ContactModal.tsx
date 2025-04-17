@@ -255,6 +255,7 @@ export function ContactModal({
               </label>
               <TextArea
                 id="message"
+                label="Message"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 required

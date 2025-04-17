@@ -89,7 +89,7 @@ export default function HowItWorks() {
   }, []);
 
   return (
-    <div className="font-set-1 min-h-screen bg-[#0A0A0A] text-white relative pb-16">
+    <div className="font-set-1 min-h-screen text-white relative pb-16">
       {/* Canvas Background */}
       <canvas
         ref={canvasRef}

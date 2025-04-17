@@ -2,6 +2,7 @@ import { redirect, useLoaderData, useNavigate } from "react-router";
 import { auth } from "~/lib/auth";
 import { useEffect, useState } from "react";
 import type { Route } from "../+types/auth-common";
+import { AuthCard } from "~/components/AuthCard";
 
 // Loader to verify authentication and get user info
 export async function loader({ request }: Route.LoaderArgs) {
@@ -53,18 +54,7 @@ export default function Success() {
   }, [timeLeft]);
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mt-16">
-      <div className="text-center mb-8">
-        <h1
-          className="text-2xl font-bold mb-2"
-          style={{
-            fontFamily: 'var(--heading-font, "Press Start 2P", cursive)',
-          }}
-        >
-          LOGIN SUCCESSFUL
-        </h1>
-        <div className="w-full h-1 my-4 bg-gradient-to-r from-[#ed1e79] via-[#07b0ef] to-[#f7ee2a]"></div>
-      </div>
+    <AuthCard title="LOGIN SUCCESSFUL">
 
       <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
         <p className="text-lg mb-2 font-semibold">You're logged in!</p>
@@ -105,6 +95,6 @@ export default function Success() {
           HOMEPAGE
         </a>
       </div>
-    </div>
+    </AuthCard>
   );
 }

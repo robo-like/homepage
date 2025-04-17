@@ -3,6 +3,7 @@ import { useLoaderData } from "react-router";
 import type { Route } from "./+types/install-guide";
 import logoDark from "../home/heart.png";
 import { cn } from "~/lib/utils";
+import { FeatureRequestButton } from "~/components/FeatureRequestButton";
 
 export async function loader({ request }: Route.LoaderArgs) {
   try {
@@ -75,6 +76,7 @@ export default function InstallGuide() {
   const [macArchitecture, setMacArchitecture] = useState<
     "arm64" | "x64" | null
   >(null);
+  const [intelRequested, setIntelRequested] = useState(false);
 
   // Get the download URL for the selected platform
   const getDownloadUrl = () => {
@@ -235,6 +237,42 @@ export default function InstallGuide() {
             </div>
           </div>
         </div>
+
+        {/* Mac Architecture Selector */}
+        {selectedPlatform === "macos" && (
+          <div className="mb-8">
+            <div className="inline-flex rounded-md overflow-hidden border border-[#07b0ef] mx-auto">
+              <div
+                onClick={() => setMacArchitecture("arm64")}
+                className={cn(
+                  "px-6 py-3 font-medium text-lg cursor-pointer",
+                  macArchitecture === "arm64"
+                    ? "bg-[#07b0ef] text-black"
+                    : "hover:bg-[rgba(7,176,239,0.2)]"
+                )}
+                style={{
+                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+                }}
+              >
+                APPLE SILICON (M1/M2/M3)
+              </div>
+              <div
+                onClick={() => setMacArchitecture("x64")}
+                className={cn(
+                  "px-6 py-3 font-medium text-lg cursor-pointer border-l border-[#07b0ef]",
+                  macArchitecture === "x64"
+                    ? "bg-[#07b0ef] text-black"
+                    : "hover:bg-[rgba(7,176,239,0.2)]"
+                )}
+                style={{
+                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+                }}
+              >
+                INTEL
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Installation Steps */}
         <div className="bg-[#1c1c1c] rounded-xl p-8 mb-12 border-2 border-[#07b0ef]">
@@ -659,15 +697,22 @@ export default function InstallGuide() {
         {/* Download CTA Button with Animation */}
         <div className="relative mb-4">
           <div className="absolute inset-0 bg-[#FA8E10] blur-lg opacity-30 animate-pulse"></div>
-          <a
-            href={getDownloadUrl()}
-            className="relative inline-block py-4 px-8 retro-button primary"
-            download
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            DOWNLOAD FOR {selectedPlatform.toUpperCase()}
-          </a>
+          {selectedPlatform === "macos" && macArchitecture === "x64" ? (
+            <FeatureRequestButton
+              featureName="Intel Mac download"
+              featureType="macos-intel-request"
+            />
+          ) : (
+            <a
+              href={getDownloadUrl()}
+              className="relative inline-block py-4 px-8 retro-button primary"
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              DOWNLOAD FOR {selectedPlatform.toUpperCase()}
+            </a>
+          )}
         </div>
 
         {/* Release Info */}
