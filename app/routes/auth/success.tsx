@@ -1,7 +1,7 @@
-import { redirect, useLoaderData, useNavigate } from "react-router";
+import { redirect, useLoaderData } from "react-router";
 import { auth } from "~/lib/auth";
 import { useEffect, useState } from "react";
-import type { Route } from "../+types/auth-common";
+import type { Route } from "./+types/success";
 import { AuthCard } from "~/components/AuthCard";
 
 // Loader to verify authentication and get user info
@@ -34,7 +34,6 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Success() {
   const { userEmail } = useLoaderData<typeof loader>();
-  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(5);
 
   // Set up auto-redirect after 5 seconds using window.location

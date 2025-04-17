@@ -1,7 +1,7 @@
 import { data } from "react-router";
 import { auth, commitSession, getSession } from "~/lib/auth";
 import { getUserSubscriptionDetails } from "~/lib/billing/stripe.server";
-import type { Route } from "../+types/auth-common";
+import type { Route } from "./+types/me";
 
 /**
  * Enhanced API endpoint to get the current user's information

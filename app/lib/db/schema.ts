@@ -121,46 +121,14 @@ export const expiringEmailKeys = sqliteTable("expiring_email_keys", {
 
   // The key sent in the email
   key: text("key").notNull(),
-
   // The user this key is for
   userId: text("user_id").notNull(),
-
   // Expiration (5 minutes from creation)
   expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
-
   // Whether this key has been used
   utilized: integer("utilized", { mode: "boolean" }).notNull().default(false),
-
   // When the key was created
   createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
-});
-
-// Subscriptions table for Stripe integration
-export const subscriptions = sqliteTable("subscriptions", {
-  // Unique identifier
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-
-  // User this subscription belongs to
-  userId: text("user_id").notNull(),
-
-  // Stripe subscription information
-  stripeSubscriptionId: text("stripe_subscription_id").notNull(),
-  status: text("status").notNull().default("active"), // active, canceled, etc.
-
-  // Subscription details
-  priceId: text("price_id"), // Stripe price ID
-  currentPeriodStart: integer("current_period_start", { mode: "timestamp" }),
-  currentPeriodEnd: integer("current_period_end", { mode: "timestamp" }),
-
-  // Timestamps
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
     .notNull()
     .$defaultFn(() => new Date()),
 });
@@ -181,7 +149,7 @@ export const supportTickets = sqliteTable(
     // Ticket content
     subject: text("subject").notNull(),
     message: text("message").notNull(),
-    
+
     // Status tracking: OPEN, CLOSED, IN_PROGRESS
     status: text("status").notNull().default("OPEN"),
 

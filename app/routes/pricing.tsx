@@ -6,18 +6,24 @@ import { cn } from "~/lib/utils";
 import { ContactModal } from "~/components/ContactModal";
 import { requireAuth } from "~/lib/auth";
 import { useLoaderData } from "react-router";
+import { getUserSubscriptionDetails } from "~/lib/billing/stripe.server";
 
 export async function loader({ request }: Route.LoaderArgs) {
   try {
     const authData = await requireAuth(request, "/auth/login");
-    return {  user: authData.user };
+    if (!authData?.user) {
+      return { user: null, subscriptionDetails: null };
+    }
+    const subscriptionDetails = await getUserSubscriptionDetails(
+      authData.user.id
+    );
+    return { user: authData.user, subscriptionDetails };
   } catch (error) {
-    // If not authenticated, return null subscription details
-    return { user: null };
+    return { user: null, subscriptionDetails: null };
   }
 }
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     { title: "RoboLike Pricing - Automate Your Instagram Growth" },
     {
@@ -137,7 +143,7 @@ export default function Pricing() {
   const loaderData = useLoaderData<typeof loader>();
   const userData = loaderData?.user;
   const isLoggedIn = !!userData;
-  const hasSubscription = userData?.subscription?.subscribed;
+  const hasSubscription = loaderData?.subscriptionDetails?.subscribed;
 
   const handleEnterpriseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -493,10 +499,10 @@ export default function Pricing() {
           </div>
         </div>
       </Container>
-      
+
       {/* Contact modal for Creator Plan */}
-      <ContactModal 
-        isOpen={contactModalOpen} 
+      <ContactModal
+        isOpen={contactModalOpen}
         onClose={() => setContactModalOpen(false)}
         defaultSubject="Creator Plan Inquiry"
         showHistory={isLoggedIn}

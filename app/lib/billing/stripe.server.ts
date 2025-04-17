@@ -131,9 +131,6 @@ export async function cancelSubscription(subscriptionId: string) {
       cancel_at_period_end: true,
     });
 
-    // Update subscription in our database
-    await authQueries.cancelSubscription(subscriptionId);
-
     return subscription;
   } catch (error) {
     console.error("Error canceling subscription:", error);
@@ -148,56 +145,22 @@ export async function handleCheckoutSessionCompleted(
   session: Stripe.Checkout.Session
 ) {
   try {
-    // Get subscription from Stripe
     if (!session.subscription) {
       throw new Error("No subscription found in session");
     }
-
-    const subscriptionId =
-      typeof session.subscription === "string"
-        ? session.subscription
-        : session.subscription.id;
-
-    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-
     // Get user ID from metadata
     const userId = session.metadata?.userId;
     if (!userId) {
       throw new Error("No user ID found in session metadata");
     }
 
-    // First check if this subscription already exists in our database
-    const existingSubscriptions = await authQueries.getAllUserSubscriptions(userId);
-    const existingSubscription = existingSubscriptions.find(
-      (s) => s.stripeSubscriptionId === subscriptionId
-    );
+    // const subscriptionId =
+    //   typeof session.subscription === "string"
+    //     ? session.subscription
+    //     : session.subscription.id;
 
-    // Helper function to safely convert timestamps to dates
-    const safelyConvertTimestamp = (timestamp: number | null | undefined) => {
-      if (typeof timestamp !== 'number' || !isFinite(timestamp)) {
-        return new Date(); // Return current date as fallback
-      }
-      return new Date(timestamp * 1000);
-    };
+    // const subscription = await stripe.subscriptions.retrieve(subscriptionId);
 
-    // If the subscription already exists, just update it
-    if (existingSubscription) {
-      return authQueries.updateSubscription(subscriptionId, {
-        status: subscription.status,
-        currentPeriodStart: safelyConvertTimestamp(subscription.current_period_start),
-        currentPeriodEnd: safelyConvertTimestamp(subscription.current_period_end),
-      });
-    }
-
-    // Otherwise add a new subscription to our database
-    return authQueries.createSubscription({
-      userId,
-      stripeSubscriptionId: subscription.id,
-      priceId: subscription.items.data[0]?.price.id || 'unknown',
-      status: subscription.status,
-      currentPeriodStart: safelyConvertTimestamp(subscription.current_period_start),
-      currentPeriodEnd: safelyConvertTimestamp(subscription.current_period_end),
-    });
   } catch (error) {
     console.error("Error handling checkout session completed:", error);
     throw error;
@@ -211,70 +174,30 @@ export async function getUserSubscriptionDetails(userId: string) {
   try {
     // Get user from database to find Stripe customer ID
     const user = await authQueries.getUserById(userId);
-    
+
     if (!user || !user.stripeCustomerId) {
       return { subscribed: false };
     }
-    
+
     // Get all subscriptions for this customer directly from Stripe
     const subscriptions = await stripe.subscriptions.list({
       customer: user.stripeCustomerId,
       status: 'active',
       limit: 1
     });
-    
+
     // If no active subscriptions found
     if (subscriptions.data.length === 0) {
       return { subscribed: false };
     }
-    
+
     // Use the most recent active subscription
     const stripeSubscription = subscriptions.data[0];
-    
-    // Check if we have this subscription in our database
-    let localSubscription = await authQueries.getSubscriptionByStripeId(
-      stripeSubscription.id
-    );
-    
-    // Safely convert timestamps to dates
-    const safelyConvertTimestamp = (timestamp: number | null | undefined) => {
-      if (typeof timestamp !== 'number' || !isFinite(timestamp)) {
-        return new Date(); // Return current date as fallback
-      }
-      return new Date(timestamp * 1000);
-    };
-
-    // If not in database, create it to keep local records in sync
-    if (!localSubscription) {
-      const newSubscription = await authQueries.createSubscription({
-        userId,
-        stripeSubscriptionId: stripeSubscription.id,
-        priceId: stripeSubscription.items.data[0]?.price.id || 'unknown',
-        status: stripeSubscription.status,
-        currentPeriodStart: safelyConvertTimestamp(stripeSubscription.current_period_start),
-        currentPeriodEnd: safelyConvertTimestamp(stripeSubscription.current_period_end),
-      });
-      
-      if (newSubscription && newSubscription.length > 0) {
-        localSubscription = newSubscription[0];
-      }
-    } else {
-      // Update local record to stay in sync with Stripe
-      await authQueries.updateSubscription(stripeSubscription.id, {
-        status: stripeSubscription.status,
-        currentPeriodStart: safelyConvertTimestamp(stripeSubscription.current_period_start),
-        currentPeriodEnd: safelyConvertTimestamp(stripeSubscription.current_period_end),
-      });
-    }
 
     return {
       subscribed: stripeSubscription.status === "active",
       subscription: {
-        id: localSubscription?.id || "unknown",
-        stripeSubscriptionId: stripeSubscription.id,
-        status: stripeSubscription.status,
-        currentPeriodEnd: safelyConvertTimestamp(stripeSubscription.current_period_end),
-        cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end || false,
+        ...stripeSubscription
       },
     };
   } catch (error) {

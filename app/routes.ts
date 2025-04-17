@@ -31,11 +31,9 @@ export default [
       route("me", "routes/user/me.tsx"),
       //the actual user interface side of things
 
-      layout("./routes/user/layout.tsx",[
-        ...prefix("profile",[
-          index("routes/user/profile.tsx"),
-          route("billing", "routes/user/profile/billing.tsx"), 
-        ]),
+      layout("./routes/user/layout.tsx", [
+        route("billing", "routes/user/billing.tsx"),
+        route("profile", "routes/user/profile.tsx"),
       ]),
     ]),
     layout("./routes/admin/layout.tsx", [

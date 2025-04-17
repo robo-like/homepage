@@ -7,7 +7,7 @@ import {
 import { handleEmailConfirmation } from "~/lib/billing/confirmEmail.server";
 import { trackAuthEvent, EVENT_TYPES } from "~/lib/analytics/events.server";
 import { authQueries } from "~/lib/db";
-import type { Route } from "../+types/auth-common";
+import type { Route } from "./+types/confirm";
 
 // Primary loader for handling magic link confirmation
 // This is the endpoint that gets hit when users click the link in their email

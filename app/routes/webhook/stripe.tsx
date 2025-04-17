@@ -1,6 +1,5 @@
 import Stripe from "stripe";
 import { handleCheckoutSessionCompleted } from "~/lib/billing/stripe.server";
-import { authQueries } from "~/lib/db";
 import { trackSubscriptionEvent, EVENT_TYPES } from "~/lib/analytics/events.server";
 
 /**
@@ -17,7 +16,7 @@ const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY || "", {
 async function handleCheckoutSessionCompletedEvent(session: Stripe.Checkout.Session) {
   // Only handle subscription checkout sessions
   if (session.mode !== "subscription") return;
-  
+
   // Verify we have user ID in the metadata
   if (!session.metadata?.userId) {
     throw new Error("Missing userId in session metadata");
@@ -30,9 +29,9 @@ async function handleCheckoutSessionCompletedEvent(session: Stripe.Checkout.Sess
   await trackSubscriptionEvent({
     eventType: EVENT_TYPES.SUBSCRIPTION_STARTED,
     userId: session.metadata.userId,
-    subscriptionId: 
-      typeof session.subscription === "string" 
-        ? session.subscription 
+    subscriptionId:
+      typeof session.subscription === "string"
+        ? session.subscription
         : session.subscription?.id || "unknown",
     sessionId: session.id,
   });
@@ -66,19 +65,12 @@ async function handleSubscriptionUpdatedEvent(subscription: Stripe.Subscription 
   const customer = await stripe.customers.retrieve(
     subscription.customer as string
   );
-  
+
   if (customer.deleted) return;
-  
+
   // Get user ID from metadata
   const userId = customer.metadata?.userId;
   if (!userId) return;
-  
-  // Update subscription in the database
-  await authQueries.updateSubscription(subscription.id, {
-    status: subscription.status,
-    currentPeriodStart: new Date(subscription.current_period_start * 1000),
-    currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-  });
 
   // Track subscription update
   await trackSubscriptionEvent({
@@ -98,15 +90,12 @@ async function handleSubscriptionDeletedEvent(subscription: Stripe.Subscription)
   const customer = await stripe.customers.retrieve(
     subscription.customer as string
   );
-  
+
   if (customer.deleted) return;
-  
+
   // Get user ID from metadata
   const userId = customer.metadata?.userId;
   if (!userId) return;
-  
-  // Mark subscription as canceled
-  await authQueries.cancelSubscription(subscription.id);
 
   // Track subscription cancellation
   await trackSubscriptionEvent({
@@ -168,10 +157,10 @@ export async function action({ request }: { request: Request }) {
     return new Response("Webhook processed successfully", { status: 200 });
   } catch (error) {
     console.error("Error processing Stripe webhook:", error);
-    
+
     // Return a proper error response
     return new Response(
-      `Webhook error: ${error instanceof Error ? error.message : "Unknown error"}`, 
+      `Webhook error: ${error instanceof Error ? error.message : "Unknown error"}`,
       { status: 400 }
     );
   }

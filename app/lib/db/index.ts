@@ -6,7 +6,6 @@ import {
   users,
   activeSessions,
   expiringEmailKeys,
-  subscriptions,
   supportTickets,
 } from "./schema";
 import { eq, desc, asc, and, lte, gte, gt, isNull } from "drizzle-orm";
@@ -320,89 +319,9 @@ export const authQueries = {
       .where(eq(expiringEmailKeys.id, id));
   },
 
-  // Subscription operations
-  async getActiveSubscription(userId: string) {
-    return db
-      .select()
-      .from(subscriptions)
-      .where(
-        and(
-          eq(subscriptions.userId, userId),
-          eq(subscriptions.status, "active")
-        )
-      )
-      .get();
-  },
-  
-  async getSubscriptionByStripeId(stripeSubscriptionId: string) {
-    return db
-      .select()
-      .from(subscriptions)
-      .where(eq(subscriptions.stripeSubscriptionId, stripeSubscriptionId))
-      .get();
-  },
 
-  async getAllUserSubscriptions(userId: string) {
-    return db
-      .select()
-      .from(subscriptions)
-      .where(eq(subscriptions.userId, userId))
-      .orderBy(desc(subscriptions.createdAt));
-  },
 
-  async createSubscription(data: {
-    userId: string;
-    stripeSubscriptionId: string;
-    priceId?: string;
-    status?: string;
-    currentPeriodStart?: Date;
-    currentPeriodEnd?: Date;
-  }) {
-    return db
-      .insert(subscriptions)
-      .values({
-        userId: data.userId,
-        stripeSubscriptionId: data.stripeSubscriptionId,
-        priceId: data.priceId,
-        status: data.status || "active",
-        currentPeriodStart: data.currentPeriodStart,
-        currentPeriodEnd: data.currentPeriodEnd,
-      })
-      .returning();
-  },
 
-  async updateSubscription(
-    stripeSubscriptionId: string,
-    data: {
-      status?: string;
-      currentPeriodStart?: Date;
-      currentPeriodEnd?: Date;
-    }
-  ) {
-    return db
-      .update(subscriptions)
-      .set({
-        ...data,
-        updatedAt: new Date(),
-      })
-      .where(eq(subscriptions.stripeSubscriptionId, stripeSubscriptionId))
-      .returning();
-  },
-
-  async cancelSubscription(stripeSubscriptionId: string) {
-    return db
-      .update(subscriptions)
-      .set({
-        status: "canceled",
-        updatedAt: new Date(),
-      })
-      .where(eq(subscriptions.stripeSubscriptionId, stripeSubscriptionId))
-      .returning();
-  },
-
-  async getUsersWithoutStripeCustomer() {
-    return db.select().from(users).where(isNull(users.stripeCustomerId));
-  },
 };
 
 // Support ticket queries
@@ -466,11 +385,11 @@ export const supportQueries = {
     status?: string;
   } = {}) {
     let query = db.select().from(supportTickets);
-    
+
     if (status) {
       query = query.where(eq(supportTickets.status, status));
     }
-    
+
     return query
       .orderBy(desc(supportTickets.createdAt))
       .limit(limit)

@@ -11,7 +11,7 @@ import {
   trackUserCreated,
   EVENT_TYPES,
 } from "~/lib/analytics/events.server";
-import type { Route } from "../+types/auth-common";
+import type { Route } from "./+types/login";
 
 // Check for valid email format and constraints from prompts
 function isValidEmail(email: string) {
