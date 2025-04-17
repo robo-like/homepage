@@ -1,4 +1,4 @@
-import { json } from "react-router";
+import { data } from "react-router";
 import { db } from "~/lib/db";
 import { supportTickets } from "~/lib/db/schema";
 import { auth } from "~/lib/auth";
@@ -10,7 +10,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     // Check if user is authenticated
     const authData = await auth(request);
     if (!authData.user) {
-      return json(
+      return data(
         { error: "You must be logged in to view your support tickets" },
         { status: 401 }
       );
@@ -23,10 +23,10 @@ export async function loader({ request }: Route.LoaderArgs) {
       .where(eq(supportTickets.userId, authData.user.id))
       .orderBy(desc(supportTickets.createdAt));
 
-    return json({ tickets });
+    return { tickets };
   } catch (error) {
     console.error("Error fetching support tickets:", error);
-    return json(
+    return data(
       { error: "Failed to fetch support tickets" },
       { status: 500 }
     );

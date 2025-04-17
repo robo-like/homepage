@@ -31,10 +31,8 @@ export default function Layout() {
           <Outlet />
         </main>
         {/* <Footer /> */}
-        
-        {/* Floating contact button only for logged in users */}
-        {isLoggedIn && <FloatingContactButton />}
       </div>
+      {isLoggedIn && <FloatingContactButton />}
     </>
   );
 }

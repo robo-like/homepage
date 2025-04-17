@@ -1,4 +1,4 @@
-import { json } from "react-router";
+import { data } from "react-router";
 import { db } from "~/lib/db";
 import { supportTickets } from "~/lib/db/schema";
 import { auth } from "~/lib/auth";
@@ -9,19 +9,16 @@ export async function action({ request }: Route.ActionArgs) {
     // Check if user is authenticated
     const authData = await auth(request);
     if (!authData.user) {
-      return json(
+      return data(
         { error: "You must be logged in to submit a support ticket" },
         { status: 401 }
       );
     }
-
-    // Get request data
-    const data = await request.json();
-    const { subject, message } = data;
+    const { subject, message } = await request.json();
 
     // Validate inputs
     if (!subject || !message) {
-      return json(
+      return data(
         { error: "Subject and message are required" },
         { status: 400 }
       );
@@ -41,10 +38,10 @@ export async function action({ request }: Route.ActionArgs) {
       .returning()
       .get();
 
-    return json({ success: true, ticket });
+    return data({ success: true, ticket });
   } catch (error) {
     console.error("Error creating support ticket:", error);
-    return json(
+    return data(
       { error: "Failed to create support ticket" },
       { status: 500 }
     );
