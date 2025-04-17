@@ -82,14 +82,18 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
                 </p>
                 {subscriptionDetails.subscribed && (
                     <>
-                        <div className="mb-2">
-                            <span className="font-semibold">Current Plan:</span>{" "}
-                            <span>${(subscription.items.data[0].price.unit_amount || 0) / 100}/month</span>
-                        </div>
-                        <div className="mb-2">
-                            <span className="font-semibold">Next Charge is in </span>{" "}
-                            <span>{subscription.days_until_due} days</span>
-                        </div>
+                        {isActive && (
+                            <>
+                                <div className="mb-2">
+                                    <span className="font-semibold">Current Plan:</span>{" "}
+                                    <span>${(subscription.items.data[0].price.unit_amount || 0) / 100}/month</span>
+                                </div>
+                                <div className="mb-2">
+                                    <span className="font-semibold">Next Charge is: </span>{" "}
+                                    <span>{new Date(subscription.items.data[0].current_period_end * 1000).toLocaleDateString()}</span>
+                                </div>
+                            </>
+                        )}
                         {subscription.cancel_at_period_end && subscription.cancel_at && (
                             <div className="mb-2">
                                 <span className="font-semibold">Cancellation Date:</span>{" "}

@@ -17,6 +17,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     const subscriptionDetails = await getUserSubscriptionDetails(
       authData.user.id
     );
+    console.log(subscriptionDetails);
     return { user: authData.user, subscriptionDetails };
   } catch (error) {
     return { user: null, subscriptionDetails: null };
