@@ -143,8 +143,8 @@ export default function Profile() {
                     <span>${(subscriptionDetails.subscription.items.data[0].price.unit_amount || 0) / 100}/month</span>
                   </div>
                   <div className="mb-2">
-                    <span className="font-semibold">Next Billing Date:</span>{" "}
-                    <span>{new Date(subscriptionDetails.subscription.}</span>
+                    <span className="font-semibold">Next Charge is in </span>{" "}
+                    <span>{subscriptionDetails.subscription.days_until_due} days</span>
                   </div>
                   {subscriptionDetails.subscription.cancel_at_period_end && subscriptionDetails.subscription.cancel_at && (
                     <div className="mb-2">
