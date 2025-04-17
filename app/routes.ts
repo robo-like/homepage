@@ -29,7 +29,7 @@ export default [
     ...prefix("u", [
       //special route to grab the current user as a payload
       route("access-token", "routes/user/access-token.tsx"),
-      route("me", "routes/user/me.tsx"),
+      // route("me", "routes/user/me.tsx"),
       //the actual user interface side of things
       layout("./routes/user/layout.tsx", [
         route("billing", "routes/user/billing.tsx"),

@@ -1,5 +1,5 @@
 import { logout } from "~/lib/auth";
-import type { Route } from "../+types/auth-common";
+import type { Route } from "./+types/logout";
 
 // Simple loader that logs out the user
 export async function loader({ request }: Route.LoaderArgs) {

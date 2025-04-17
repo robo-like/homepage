@@ -10,6 +10,12 @@ import {
     EVENT_TYPES,
 } from "~/lib/analytics/events.server";
 import type { Route } from './+types/billing'
+import Stripe from "stripe";
+
+// Initialize Stripe with the API key from environment variables
+const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY || "", {
+    apiVersion: "2025-03-31.basil",
+});
 
 export async function action({ request }: Route.ActionArgs) {
     // Ensure user is authenticated
@@ -26,6 +32,10 @@ export async function action({ request }: Route.ActionArgs) {
     // Get session for analytics tracking
     const session = await getSession(request.headers.get("Cookie"));
     const sessionId = session?.id || "unknown";
+
+    if (!action) {
+        return { error: "Action is required" };
+    }
 
     try {
         switch (action) {
@@ -88,6 +98,31 @@ export async function action({ request }: Route.ActionArgs) {
                 return {
                     success:
                         "Your subscription has been canceled. You will have access until the end of your billing period.",
+                };
+            }
+            case "restart": {
+                // Get subscription ID from form data
+                const subscriptionId = formData.get("subscriptionId")?.toString();
+
+                if (!subscriptionId) {
+                    return { error: "Subscription ID is required" };
+                }
+
+                // Restart subscription by removing cancel_at_period_end
+                const subscription = await stripe.subscriptions.update(subscriptionId, {
+                    cancel_at_period_end: false,
+                });
+
+                // Track subscription restart
+                await trackSubscriptionEvent({
+                    eventType: EVENT_TYPES.SUBSCRIPTION_UPDATED_IN_APP,
+                    userId: user.id,
+                    subscriptionId,
+                    sessionId,
+                });
+
+                return {
+                    success: "Your subscription has been restarted successfully!",
                 };
             }
             default:

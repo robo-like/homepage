@@ -3,7 +3,7 @@ import { auth, requireAuth } from "~/lib/auth";
 import { db } from "~/lib/db";
 import { accessTokens } from "~/lib/db/schema";
 import { eq } from "drizzle-orm";
-import type { Route } from "../+types/auth-common";
+import type { Route } from "./+types/access-token";
 
 export async function loader({ request }: Route.LoaderArgs) {
   // Ensure user is authenticated

@@ -172,19 +172,19 @@ export default function EditPost() {
               <TextInput
                 label="SEO Title"
                 name="seoTitle"
-                defaultValue={post.seoTitle}
+                defaultValue={post.seoTitle || ""}
                 placeholder="Optional custom SEO title"
               />
               <TextArea
                 label="SEO Description"
                 name="seoDescription"
-                defaultValue={post.seoDescription}
+                defaultValue={post.seoDescription || ""}
                 placeholder="Optional custom SEO description"
               />
               <TextInput
                 label="SEO Image URL"
                 name="seoImage"
-                defaultValue={post.seoImage}
+                defaultValue={post.seoImage || ""}
                 placeholder="Optional custom SEO image URL"
               />
             </div>

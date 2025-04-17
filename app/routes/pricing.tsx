@@ -361,6 +361,7 @@ export default function Pricing() {
               <form onSubmit={handleEnterpriseSubmit} className="space-y-4">
                 <div>
                   <TextInput
+                    label="Email"
                     type="email"
                     placeholder="Enter your email"
                     required

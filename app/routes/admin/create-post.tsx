@@ -44,11 +44,11 @@ export const action = async ({ request }: Route.ActionArgs) => {
     return { errors };
   }
   await postQueries.create({
-    title,
-    slug,
-    summary,
-    body,
-    author,
+    title: title || "",
+    slug: slug || "",
+    summary: summary || "",
+    body: body || "",
+    author: author || "",
     seoTitle,
     seoDescription,
     seoImage,
