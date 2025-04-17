@@ -163,6 +163,20 @@ export const supportTickets = sqliteTable(
   },
   (table) => [
     index("idx_support_tickets_user_id").on(table.userId),
-    index("idx_support_tickets_status").on(table.status)
+    index("idx_support_tickets_status").on(table.status),
   ]
 );
+
+export const accessTokens = sqliteTable("access_tokens", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id").notNull(),
+  token: text("token").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+});

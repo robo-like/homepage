@@ -234,7 +234,7 @@ export async function sendMagicLinkEmail(
       body: JSON.stringify({
         sender: {
           name: "RoboLike",
-          email: "self@robolike.com",
+          email: process.env.BREVO_SENDER_EMAIL || "self@robolike.com",
         },
         to: [
           {
