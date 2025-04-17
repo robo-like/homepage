@@ -17,7 +17,6 @@ export async function loader({ request }: Route.LoaderArgs) {
     const subscriptionDetails = await getUserSubscriptionDetails(
       authData.user.id
     );
-    console.log(subscriptionDetails);
     return { user: authData.user, subscriptionDetails };
   } catch (error) {
     return { user: null, subscriptionDetails: null };
@@ -198,7 +197,7 @@ export default function Pricing() {
           <div className="w-full h-1 my-6 bg-gradient-to-r from-[#ed1e79] via-[#07b0ef] to-[#f7ee2a]"></div>
         </div>
 
-        <div className="grid md:grid-cols-3 lg:grid-cols-3 xl:max-w-7xl xl:mx-auto gap-8 md:gap-10">
+        <div className="grid md:grid-cols-3 lg:grid-cols-3 max-w-6xl mx-auto xl:max-w-7xl gap-8 md:gap-10">
           <PricingTier
             name="BASIC PLAN"
             price="$19"

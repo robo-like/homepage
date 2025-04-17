@@ -52,7 +52,7 @@ export default function Post() {
         <p className="text-[#07b0ef] mb-4 font-[var(--subheading-font)]">{post.summary}</p>
       </div>
 
-      <Card className="border-2 border-[#07b0ef] grid-lines">
+      <Card className="border-2 border-[#07b0ef] bg-[#1c1c1c]">
         <div className="flex items-center gap-2 text-sm text-[#fa8e10] mb-4">
           <span>{post.author}</span>
           <span>•</span>
