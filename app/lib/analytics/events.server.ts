@@ -22,6 +22,7 @@ export const EVENT_TYPES = {
   SUBSCRIPTION_STARTED: "subscriptionStarted",
   SUBSCRIPTION_CANCELED: "subscriptionCanceled",
   SUBSCRIPTION_UPDATED: "subscriptionUpdated",
+  SUBSCRIPTION_UPDATED_IN_APP: "subscriptionUpdatedInApp",
   SUBSCRIPTION_ABANDONED: "subscriptionAbandoned",
   SUBSCRIPTION_CHECKOUT_ERROR: "subscriptionCheckoutError",
 

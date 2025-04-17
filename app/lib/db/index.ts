@@ -182,12 +182,18 @@ export const analyticsQueries = {
   }) {
     let query = db.select().from(analytics);
 
-    if (path) query = query.where(eq(analytics.path, path));
-    if (eventType) query = query.where(eq(analytics.eventType, eventType));
-    if (startDate) query = query.where(gte(analytics.createdAt, startDate));
-    if (endDate) query = query.where(lte(analytics.createdAt, endDate));
+    let conditions = [];
+    if (path) conditions.push(eq(analytics.path, path));
+    if (eventType) conditions.push(eq(analytics.eventType, eventType));
+    if (startDate) conditions.push(gte(analytics.createdAt, startDate));
+    if (endDate) conditions.push(lte(analytics.createdAt, endDate));
+    
+    // Create a proper query with conditions
+    const finalQuery = conditions.length > 0
+      ? query.where(and(...conditions))
+      : query;
 
-    return query.limit(limit).orderBy(desc(analytics.createdAt));
+    return finalQuery.limit(limit).orderBy(desc(analytics.createdAt));
   },
 };
 
@@ -386,11 +392,12 @@ export const supportQueries = {
   } = {}) {
     let query = db.select().from(supportTickets);
 
-    if (status) {
-      query = query.where(eq(supportTickets.status, status));
-    }
+    // Create a proper query with conditions
+    const finalQuery = status
+      ? query.where(and(eq(supportTickets.status, status)))
+      : query;
 
-    return query
+    return finalQuery
       .orderBy(desc(supportTickets.createdAt))
       .limit(limit)
       .offset(offset);

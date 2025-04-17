@@ -1,6 +1,6 @@
 import { getSession } from "~/lib/auth";
 import { trackDownload } from "~/lib/analytics/events.server";
-import type { Route } from "../+types/metrics";
+import type { Route } from "./+types/download-tracking";
 
 /**
  * API endpoint to track download events
@@ -41,8 +41,8 @@ export async function action({ request }: Route.ActionArgs) {
     const ipAddress =
       request.headers.get("x-forwarded-for") ||
       request.headers.get("x-real-ip") ||
-      // @ts-expect-error - socket exists on request in development
-      request.socket?.remoteAddress ||
+      // Socket property might be available in some environments
+      (request as any).socket?.remoteAddress ||
       "localhost";
 
     // Get user agent
@@ -70,8 +70,7 @@ export async function action({ request }: Route.ActionArgs) {
       throw error;
     }
     throw new Response(
-      `Internal server error: ${
-        error instanceof Error ? error.message : "Unknown error"
+      `Internal server error: ${error instanceof Error ? error.message : "Unknown error"
       }`,
       { status: 500 }
     );

@@ -59,13 +59,12 @@ export type ProfileLayoutContext = {
   sessionExpiresAt: string;
   subscriptionDetails: {
     subscribed: boolean;
-    subscription: Stripe.Subscription;
+    subscription: Stripe.Subscription | undefined;
   };
 };
 
 export default function ProfileLayout() {
   const data = useLoaderData<typeof loader>();
-  console.log(data.subscriptionDetails)
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {data.checkoutMessage && (

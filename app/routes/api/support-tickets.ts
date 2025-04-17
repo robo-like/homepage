@@ -3,7 +3,7 @@ import { db } from "~/lib/db";
 import { supportTickets } from "~/lib/db/schema";
 import { auth } from "~/lib/auth";
 import { desc, eq } from "drizzle-orm";
-import type { Route } from "../+types/auth-common";
+import type { Route } from "./+types/support-tickets";
 
 export async function loader({ request }: Route.LoaderArgs) {
   try {

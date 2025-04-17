@@ -2,7 +2,7 @@ import { data } from "react-router";
 import { db } from "~/lib/db";
 import { supportTickets } from "~/lib/db/schema";
 import { auth } from "~/lib/auth";
-import type { Route } from "../+types/auth-common";
+import type { Route } from "./+types/support-ticket";
 
 export async function action({ request }: Route.ActionArgs) {
   try {
