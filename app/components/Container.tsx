@@ -16,7 +16,7 @@ const Container = ({
       <section className="flex flex-col justify-center items-center w-full">
         <section
           className={cn(
-            "max-w-[850px] flex flex-col gap-6 w-full px-4",
+            "max-w-[1000px] flex flex-col gap-6 w-full px-4",
             className
           )}
         >

@@ -83,9 +83,9 @@ export default function Blog() {
     <Container className="mt-10 gap-6 font-set-1">
       <H1 className="gradient-text">Blog</H1>
 
-      <div className="space-y-6 grid-lines p-4">
+      <div className="space-y-6 p-4">
         {posts.map((post) => (
-          <Card key={post.id} className="border-2 border-[#07b0ef] hover:border-[#fa8e10] transition-colors">
+          <Card key={post.id} className="border-2 border-[#07b0ef] hover:border-[#fa8e10] transition-colors bg-[#1c1c1c]">
             <Link to={`/blog/${post.slug}`}>
               <H5 className="font-[var(--subheading-font)] text-[#07b0ef]">{post.title}</H5>
               <p className="text-gray-300 mb-2 font-[var(--body-font)]">{post.summary}</p>

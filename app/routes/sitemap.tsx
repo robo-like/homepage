@@ -14,10 +14,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Define static routes (excluding admin and api routes)
   const staticRoutes = [
     "",
-    "/downloads",
+    "/install-guide",
     "/instagram-auto-liker-how-it-works",
     "/social-media-automation-pricing",
     "/blog",
+    "/terms-and-conditions",
+    "/auth/login",
+    "/auth/logout",
+    "/auth/success",
+    "/auth/confirm",
+    "/privacy-policy",
     "/terms-and-conditions",
     "/install-guide",
   ];
@@ -26,26 +32,26 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${staticRoutes
-    .map(
-      (route) => `
+      .map(
+        (route) => `
   <url>
     <loc>${baseUrl}${route}</loc>
     <changefreq>weekly</changefreq>
     <priority>${route === "" ? "1.0" : "0.8"}</priority>
   </url>`
-    )
-    .join("")}
+      )
+      .join("")}
   ${posts
-    .map(
-      (post) => `
+      .map(
+        (post) => `
   <url>
     <loc>${baseUrl}/blog/${post.slug}</loc>
     <lastmod>${new Date(post.createdAt).toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>`
-    )
-    .join("")}
+      )
+      .join("")}
 </urlset>`;
 
   // Return XML with proper content type
