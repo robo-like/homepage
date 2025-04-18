@@ -66,15 +66,6 @@ export default function generateEmailTemplate(
           <table role="presentation" width="600" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: 0 auto;">
             <tr>
               <td style="padding: 20px;">
-                <!-- Logo -->
-                <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
-                  <tr>
-                    <td>
-                      <img src="${origin}/heart.png" alt="RoboLike Logo" width="150" height="auto" style="display: block; max-width: 150px;">
-                    </td>
-                  </tr>
-                </table>
-                
                 <!-- Heading -->
                 <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
