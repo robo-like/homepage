@@ -144,6 +144,7 @@ export async function action({ request }: Route.ActionArgs) {
     await trackAuthEvent({
       eventType: isNewUser ? EVENT_TYPES.SIGNUP : EVENT_TYPES.LOGIN_SUCCESS,
       userId: user.id,
+      successMessage: `IP additional info: ${ipCheck.message}`,
       email,
       sessionId,
       ipAddress: ipAddress.split(",")[0].trim(),
