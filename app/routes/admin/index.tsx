@@ -6,7 +6,7 @@ import type { Route } from "./+types/index";
 import { analyticsQueries, postQueries } from "~/lib/db";
 import { useLoaderData } from "react-router";
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     { title: "Admin Dashboard | RoboLike" },
     {

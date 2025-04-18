@@ -211,6 +211,52 @@ export async function logout(request: Request) {
 }
 
 /**
+ * Add a user to Brevo contact list
+ */
+export async function addUserToBrevoList(
+  email: string,
+  listId: number = 7, // Default to "User Signups" list ID
+  userName?: string
+): Promise<boolean> {
+  try {
+    const apiKey = process.env.BREVO_API_KEY;
+    if (!apiKey) {
+      console.error("BREVO_API_KEY not set in environment");
+      return false;
+    }
+
+    // First, create or update the contact
+    const createContactResponse = await fetch("https://api.brevo.com/v3/contacts", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "api-key": apiKey,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        attributes: {
+          FIRSTNAME: userName || email.split("@")[0],
+          SOURCE: "Website Signup"
+        },
+        listIds: [listId],
+        updateEnabled: true // Update if contact already exists
+      }),
+    });
+
+    if (!createContactResponse.ok) {
+      console.error("Error adding contact to Brevo:", await createContactResponse.text());
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error adding user to Brevo list:", error);
+    return false;
+  }
+}
+
+/**
  * Send magic link email using Brevo API
  */
 export async function sendMagicLinkEmail(

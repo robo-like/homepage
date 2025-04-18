@@ -1,4 +1,4 @@
-import { createStripeCustomer } from "./stripe.server";
+import { createStripeCustomer } from "./stripe";
 import { authQueries } from "../db";
 
 /**

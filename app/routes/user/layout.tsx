@@ -1,7 +1,7 @@
-import { commitSession, getSession, requireAuth, type User } from "~/lib/auth";
+import { commitSession, getSession, requireAuth, type User } from "~/lib/auth.js";
 import type { Route } from './+types/layout.ts'
 import { Outlet, useLoaderData } from "react-router";
-import { getUserSubscriptionDetails } from "~/lib/billing/stripe.server.js";
+import { getUserSubscriptionDetails } from "~/lib/billing/stripe.js";
 import { cn } from "~/lib/utils";
 import type Stripe from "stripe";
 

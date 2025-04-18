@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { handleCheckoutSessionCompleted } from "~/lib/billing/stripe.server";
+import { handleCheckoutSessionCompleted } from "~/lib/billing/stripe";
 import { trackSubscriptionEvent, EVENT_TYPES } from "~/lib/analytics/events.server";
 
 /**

@@ -4,6 +4,7 @@ import {
   createMagicLinkKey,
   sendMagicLinkEmail,
   getSession,
+  addUserToBrevoList,
 } from "~/lib/auth";
 import { authQueries } from "~/lib/db";
 import {
@@ -80,17 +81,15 @@ export async function action({ request }: Route.ActionArgs) {
 
     // First check if user already exists
     let user = await authQueries.getUserByEmail(email);
-    let isNewUser = false;
+    const isNewUser = !user;
 
-    // If no user exists, create a new one
-    if (!user) {
-      isNewUser = true;
+    if (isNewUser) {
       // Determine role based on admin email
       const isAdmin = email === process.env.ADMIN_EMAIL?.toLowerCase();
 
       user = await authQueries.createUser({
         email,
-        role: isAdmin ? "admin" : "user",
+        role: isAdmin ? "admin" : "user"
       });
 
       // Track new user sign up
@@ -101,6 +100,12 @@ export async function action({ request }: Route.ActionArgs) {
         ipAddress: ipAddress.split(",")[0].trim(),
         userAgent,
       });
+
+      // Add the new user to Brevo "User Signups" list
+      await addUserToBrevoList(email, 7);
+    }
+    if (!user) {
+      return { success: false, error: "User not found and was not able to create a new one." };
     }
 
     // Generate magic link key for authentication

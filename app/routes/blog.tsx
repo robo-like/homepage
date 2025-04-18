@@ -29,7 +29,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   };
 }
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     { title: 'const page = new RoboLike("Blog"); //@todo' },
     {
