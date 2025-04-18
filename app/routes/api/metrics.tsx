@@ -1,4 +1,4 @@
-import { analyticsQueries } from "~/lib/db";
+import { analyticsQueries } from "~/lib/db/index.server";
 import { getSession } from "~/lib/auth";
 import type { Route } from "./+types/metrics";
 
@@ -59,8 +59,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
   } catch (error) {
     console.error("Error tracking page view:", error);
     throw new Response(
-      `Internal server error: ${
-        error instanceof Error ? error.message : "Unknown error"
+      `Internal server error: ${error instanceof Error ? error.message : "Unknown error"
       }`,
       { status: 500 }
     );

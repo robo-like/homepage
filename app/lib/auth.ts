@@ -1,5 +1,5 @@
 import { redirect, createSessionStorage } from "react-router";
-import { authQueries } from "./db";
+import { authQueries } from "./db/index.server";
 import emailTemplate from "./email-template";
 
 // Define user type
@@ -214,7 +214,7 @@ export async function logout(request: Request) {
  * Add a user to Brevo contact list
  */
 export async function addUserToBrevoList(
-  email: string, 
+  email: string,
   listId: number = 7, // Default to "User Signups" list ID
   userName?: string
 ): Promise<boolean> {
@@ -224,7 +224,7 @@ export async function addUserToBrevoList(
       console.error("BREVO_API_KEY not set in environment");
       return false;
     }
-    
+
     // First, create or update the contact
     const createContactResponse = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",

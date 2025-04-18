@@ -3,10 +3,10 @@ import { Card } from "~/components/Card";
 import { H1, H2 } from "~/components/H1";
 import { Link } from "react-router";
 import type { Route } from "./+types/index";
-import { analyticsQueries, postQueries } from "~/lib/db";
+import { analyticsQueries, postQueries } from "~/lib/db/index.server";
 import { useLoaderData } from "react-router";
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     { title: "Admin Dashboard | RoboLike" },
     {

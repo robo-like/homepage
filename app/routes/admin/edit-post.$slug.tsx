@@ -9,7 +9,7 @@ import { TextInput } from "~/components/TextInput";
 import { Card } from "~/components/Card";
 import Container from "~/components/Container";
 import { H1 } from "~/components/H1";
-import { postQueries } from "~/lib/db";
+import { postQueries } from "~/lib/db/index.server";
 import type { Route } from "./+types/edit-post.$slug";
 import { useState, useEffect } from "react";
 import { redirect } from "react-router";

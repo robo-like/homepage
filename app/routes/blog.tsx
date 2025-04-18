@@ -2,7 +2,7 @@ import Container from "~/components/Container";
 import type { Route } from "./+types/blog";
 import { Card } from "~/components/Card";
 import { H1, H5 } from "~/components/H1";
-import { postQueries } from "~/lib/db";
+import { postQueries } from "~/lib/db/index.server";
 import { Link, useLoaderData } from "react-router";
 import "~/retro-fonts.css";
 
@@ -29,7 +29,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   };
 }
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     { title: 'const page = new RoboLike("Blog"); //@todo' },
     {

@@ -1,5 +1,5 @@
 import { type LoaderFunctionArgs } from "react-router";
-import { postQueries } from "~/lib/db";
+import { postQueries } from "~/lib/db/index.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Get the base URL from the request

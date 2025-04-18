@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { authQueries } from "../db";
+import { authQueries } from "../db/index.server";
 
 // Initialize Stripe with the API key from environment variables
 const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY || "", {

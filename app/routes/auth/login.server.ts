@@ -6,7 +6,7 @@ import {
   getSession,
   addUserToBrevoList,
 } from "~/lib/auth";
-import { authQueries } from "~/lib/db";
+import { authQueries } from "~/lib/db/index.server";
 import {
   trackAuthEvent,
   trackUserCreated,
@@ -100,7 +100,7 @@ export async function action({ request }: Route.ActionArgs) {
         ipAddress: ipAddress.split(",")[0].trim(),
         userAgent,
       });
-      
+
       // Add the new user to Brevo "User Signups" list
       await addUserToBrevoList(email, 7);
     }

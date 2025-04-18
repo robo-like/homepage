@@ -1,6 +1,6 @@
 import { useLoaderData } from "react-router";
 import type { Route } from "./+types/post";
-import { db } from "~/lib/db";
+import { db } from "~/lib/db/index.server";
 import { posts } from "~/lib/db/schema";
 import { eq } from "drizzle-orm";
 import Container from "~/components/Container";
