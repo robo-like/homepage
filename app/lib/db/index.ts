@@ -9,6 +9,7 @@ import {
   supportTickets,
 } from "./schema";
 import { eq, desc, asc, and, lte, gte, gt, isNull } from "drizzle-orm";
+import { createStripeCustomer } from "../billing/stripe.server";
 
 // Initialize Turso database connection
 const turso = createClient({
@@ -187,7 +188,7 @@ export const analyticsQueries = {
     if (eventType) conditions.push(eq(analytics.eventType, eventType));
     if (startDate) conditions.push(gte(analytics.createdAt, startDate));
     if (endDate) conditions.push(lte(analytics.createdAt, endDate));
-    
+
     // Create a proper query with conditions
     const finalQuery = conditions.length > 0
       ? query.where(and(...conditions))
@@ -216,7 +217,6 @@ export const authQueries = {
     email: string;
     name?: string;
     role?: "user" | "admin";
-    stripeCustomerId?: string;
   }) {
     const existingUser = await db
       .select()
@@ -233,12 +233,14 @@ export const authQueries = {
       .values({
         email: data.email.toLowerCase(),
         name: data.name,
-        role: data.role || "user",
-        stripeCustomerId: data.stripeCustomerId,
+        role: data.role || "user"
       })
       .returning();
 
-    return result[0];
+    const user = result[0];
+    const { id } = await createStripeCustomer(user.email, user.id);
+    await this.updateUser(user.id, { stripeCustomerId: id })
+    return { ...user, stripeCustomerId: id };
   },
 
   async updateUser(

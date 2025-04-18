@@ -24,11 +24,6 @@ export async function createStripeCustomer(email: string, userId: string) {
       },
     });
 
-    // Update user with Stripe customer ID
-    await authQueries.updateUser(userId, {
-      stripeCustomerId: customer.id,
-    });
-
     return customer;
   } catch (error) {
     console.error("Error creating Stripe customer:", error);
