@@ -4,7 +4,7 @@ import {
     createBillingPortalSession,
     createCheckoutSession,
     cancelSubscription,
-} from "~/lib/billing/stripe.server";
+} from "~/lib/billing/stripe";
 import {
     trackSubscriptionEvent,
     EVENT_TYPES,

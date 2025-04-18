@@ -1,5 +1,5 @@
 import { redirect, createSessionStorage } from "react-router";
-import { authQueries } from "./db/index.server";
+import { authQueries } from "./db";
 import emailTemplate from "./email-template";
 
 // Define user type

@@ -2,7 +2,7 @@ import Container from "~/components/Container";
 import type { Route } from "./+types/blog";
 import { Card } from "~/components/Card";
 import { H1, H5 } from "~/components/H1";
-import { postQueries } from "~/lib/db/index.server";
+import { postQueries } from "~/lib/db";
 import { Link, useLoaderData } from "react-router";
 import "~/retro-fonts.css";
 

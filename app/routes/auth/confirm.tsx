@@ -6,7 +6,7 @@ import {
 } from "~/lib/auth";
 import { handleEmailConfirmation } from "~/lib/billing/confirmEmail.server";
 import { trackAuthEvent, EVENT_TYPES } from "~/lib/analytics/events.server";
-import { authQueries } from "~/lib/db/index.server";
+import { authQueries } from "~/lib/db";
 import type { Route } from "./+types/confirm";
 
 // Primary loader for handling magic link confirmation

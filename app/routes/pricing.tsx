@@ -6,7 +6,7 @@ import { cn } from "~/lib/utils";
 import { ContactModal } from "~/components/ContactModal";
 import { requireAuth } from "~/lib/auth";
 import { useLoaderData } from "react-router";
-import { getUserSubscriptionDetails } from "~/lib/billing/stripe.server";
+import { getUserSubscriptionDetails } from "~/lib/billing/stripe";
 
 export async function loader({ request }: Route.LoaderArgs) {
   try {

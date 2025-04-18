@@ -22,7 +22,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { userEmail: authData.user.email };
 }
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     { title: "Login Successful - RoboLike" },
     {

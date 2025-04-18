@@ -1,5 +1,5 @@
-import { createStripeCustomer } from "./stripe.server";
-import { authQueries } from "../db/index.server";
+import { createStripeCustomer } from "./stripe";
+import { authQueries } from "../db";
 
 /**
  * Create a Stripe customer when a user confirms their email for the first time

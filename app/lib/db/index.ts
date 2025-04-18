@@ -9,7 +9,7 @@ import {
   supportTickets,
 } from "./schema";
 import { eq, desc, asc, and, lte, gte, gt, isNull } from "drizzle-orm";
-import { createStripeCustomer } from "../billing/stripe.server";
+import { createStripeCustomer } from "../billing/stripe";
 
 // Initialize Turso database connection
 const turso = createClient({

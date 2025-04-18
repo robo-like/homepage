@@ -1,4 +1,4 @@
-import { analyticsQueries } from "../db/index.server";
+import { analyticsQueries } from "../db";
 
 /**
  * Track various user actions in the application.

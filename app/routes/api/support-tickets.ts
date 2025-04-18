@@ -1,5 +1,5 @@
 import { data } from "react-router";
-import { db } from "~/lib/db/index.server";
+import { db } from "~/lib/db";
 import { supportTickets } from "~/lib/db/schema";
 import { auth } from "~/lib/auth";
 import { desc, eq } from "drizzle-orm";

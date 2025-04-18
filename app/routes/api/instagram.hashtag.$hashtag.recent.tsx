@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import type { LoaderFunction } from "react-router";
-import { getUserSubscriptionDetails } from "~/lib/billing/stripe.server";
-import { db } from "~/lib/db/index.server";
+import { getUserSubscriptionDetails } from "~/lib/billing/stripe";
+import { db } from "~/lib/db";
 import { accessTokens, users } from "~/lib/db/schema";
 
 const hashtagToHashtagIdCache: { [key: string]: string } = {};

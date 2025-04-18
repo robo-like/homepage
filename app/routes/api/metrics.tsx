@@ -1,4 +1,4 @@
-import { analyticsQueries } from "~/lib/db/index.server";
+import { analyticsQueries } from "~/lib/db";
 import { getSession } from "~/lib/auth";
 import type { Route } from "./+types/metrics";
 

@@ -6,7 +6,7 @@ import {
   getSession,
   addUserToBrevoList,
 } from "~/lib/auth";
-import { authQueries } from "~/lib/db/index.server";
+import { authQueries } from "~/lib/db";
 import {
   trackAuthEvent,
   trackUserCreated,
