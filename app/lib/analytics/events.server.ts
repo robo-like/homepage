@@ -42,6 +42,7 @@ export async function trackAuthEvent({
   userAgent,
   success = true,
   errorMessage = "",
+  successMessage = "",
 }: {
   eventType: string;
   userId?: string;
@@ -51,16 +52,19 @@ export async function trackAuthEvent({
   userAgent?: string;
   success?: boolean;
   errorMessage?: string;
+  successMessage?: string;
 }) {
   try {
     return analyticsQueries.createPageView({
       sessionId,
       path: "/auth",
       eventType,
+
       eventValue: success ? "success" : "failed",
+
       description: success
-        ? `Auth event for ${email}`
-        : `Auth event failed for ${email}${errorMessage ? `: ${errorMessage}` : ""}`,
+        ? `Auth event for ${email}${successMessage}`
+        : `Auth event failed for ${email}${errorMessage}`,
       ipAddress,
       userAgent,
       userId,

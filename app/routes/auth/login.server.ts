@@ -13,6 +13,7 @@ import {
   EVENT_TYPES,
 } from "~/lib/analytics/events.server";
 import type { Route } from "./+types/login";
+import { checkIpAddress } from "~/lib/utils";
 
 // Check for valid email format and constraints from prompts
 function isValidEmail(email: string) {
@@ -73,7 +74,26 @@ export async function action({ request }: Route.ActionArgs) {
       // @ts-expect-error - socket exists on request in development
       request.socket?.remoteAddress ||
       "localhost";
+
     const userAgent = request.headers.get("user-agent") || undefined;
+    const ipCheck = await checkIpAddress(ipAddress);
+    if (!ipCheck.success) {
+      // Track failed login attempt
+      await trackAuthEvent({
+        eventType: EVENT_TYPES.LOGIN_FAILED,
+        email: "unknown",
+        sessionId: "unknown",
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: ipCheck.message,
+      });
+      return {
+        success: false,
+        error: ipCheck.message,
+      };
+    }
+
 
     // Get session for analytics
     const session = await getSession(request.headers.get("Cookie"));
@@ -124,6 +144,7 @@ export async function action({ request }: Route.ActionArgs) {
     await trackAuthEvent({
       eventType: isNewUser ? EVENT_TYPES.SIGNUP : EVENT_TYPES.LOGIN_SUCCESS,
       userId: user.id,
+      successMessage: `IP additional info: ${ipCheck.message}`,
       email,
       sessionId,
       ipAddress: ipAddress.split(",")[0].trim(),
