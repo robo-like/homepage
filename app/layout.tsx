@@ -5,7 +5,7 @@ import React from "react";
 import { FloatingContactButton } from "~/components/FloatingContactButton";
 import type { OutletContext } from "./root";
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     { title: 'const page = new RoboLike("(internal) Layout"); //@todo' },
     {
@@ -23,12 +23,12 @@ export default function Layout() {
     <>
       {/* Background Canvas for Hearts */}
       <FloatingHeartsBackground />
-      
+
       {/* Layout Container */}
       <div className="min-h-screen flex flex-col relative z-10">
         <Header />
         <main className="flex-grow pb-10">
-          <Outlet />
+          <Outlet context={{ user }} />
         </main>
         {/* <Footer /> */}
       </div>
