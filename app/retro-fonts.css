@@ -32,10 +32,29 @@
 }
 
 .gradient-text {
-  background: linear-gradient(90deg, #980e03, #fa8e10, #07b0ef, #9633ac);
+  background: linear-gradient(90deg, #f7ee2a, #ed1e79, #07b0ef, #9633ac);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-size: 300% 100%;
+}
+
+.animated-gradient-text {
+  background: linear-gradient(90deg, #f7ee2a, #ed1e79, #07b0ef, #9633ac);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 300% 100%;
+  animation: gradient-shift 3s ease infinite alternate;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 .retro-button {

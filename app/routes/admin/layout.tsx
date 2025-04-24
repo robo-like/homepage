@@ -38,7 +38,7 @@ export default function Layout() {
       <div className="flex-1 grid-lines">
         <div className="max-w-[1200px] mx-auto px-4">
           <div className="mt-10 mb-8">
-            <H1 className="gradient-text">Admin Dashboard</H1>
+            <H1 className="animated-gradient-text">Admin Dashboard</H1>
             <p className="text-lg font-['Chakra_Petch'] text-[#07b0ef]">
               Internal tools for creating blog posts and viewing user metrics.
             </p>
