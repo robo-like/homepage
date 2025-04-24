@@ -4,23 +4,23 @@ import logoDark from "../home/heart.png";
 
 const futureDate = new Date("2025-05-01");
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
-    { title: "RoboLike, Instagram Auto Liker (Free, 2025)" },
+    { title: "RoboLike, Instagram Auto Liker" },
     {
       name: "description",
       content:
-        "RoboLike is under construction. Coming soon - your entry point to reaching your fans, audience, customers, all at the click of a robot's button.",
+        "Get more Instagram followers effortlessly with RoboLike's powerful auto liker. Grow your audience, increase engagement, and connect with real followers automatically.",
     },
     // Standard OpenGraph Meta Tags
     {
       property: "og:title",
-      content: "RoboLike - Under Construction",
+      content: "RoboLike, Instagram Auto Liker",
     },
     {
       property: "og:description",
       content:
-        "RoboLike is under construction. Coming soon - your entry point to reaching your fans, audience, customers, all at the click of a robot's button.",
+        "Get more Instagram followers effortlessly with RoboLike's powerful auto liker. Grow your audience, increase engagement, and connect with real followers automatically.",
     },
     {
       property: "og:image",
