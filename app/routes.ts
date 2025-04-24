@@ -36,12 +36,16 @@ export default [
         route("profile", "routes/user/profile.tsx"),
       ]),
     ]),
-    layout("./routes/admin/layout.tsx", [
-      ...prefix("admin", [
-        index("routes/admin/index.tsx"),
-        route("create-post", "routes/admin/create-post.tsx"),
-        route("edit-post/:slug", "routes/admin/edit-post.$slug.tsx"),
-      ]),
+  ]),
+  layout("./routes/admin/layout.tsx", [
+    ...prefix("admin", [
+      index("routes/admin/index.tsx"),
+      route("activity", "routes/admin/activity.tsx"),
+      route("posts", "routes/admin/posts.tsx"),
+      route("analytics", "routes/admin/analytics.tsx"),
+      route("email", "routes/admin/email.tsx"),
+      route("create-post", "routes/admin/create-post.tsx"),
+      route("edit-post/:slug", "routes/admin/edit-post.$slug.tsx"),
     ]),
   ]),
   route("webhook/stripe", "routes/webhook/stripe.tsx"),

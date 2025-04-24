@@ -1,9 +1,10 @@
 import { Card } from "~/components/Card";
 import { H2 } from "~/components/H1";
-import { analyticsQueries, db } from "~/lib/db";
+import { db } from "~/lib/db";
 import { useLoaderData, useSearchParams } from "react-router";
 import type { LoaderFunctionArgs } from "react-router";
-import { eq, desc, asc, and, lte, gte, gt, isNull } from "drizzle-orm";
+import { useEffect } from "react";
+import { eq, desc, and, lte, gte, count } from "drizzle-orm";
 import { analytics } from "~/lib/db/schema";
 
 // Define available event types
@@ -31,22 +32,28 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const startDate = url.searchParams.get("startDate");
     const endDate = url.searchParams.get("endDate");
 
-    let query = db.select().from(analytics);
+    let conditions = [];
+    if (eventType) conditions.push(eq(analytics.eventType, eventType));
+    if (startDate) conditions.push(gte(analytics.createdAt, new Date(startDate)));
+    if (endDate) conditions.push(lte(analytics.createdAt, new Date(endDate)));
 
-    if (eventType) {
-        query = query.where(eq(analytics.eventType, eventType));
-    }
+    // Get total count
+    const [{ value: totalCount }] = await db
+        .select({ value: count() })
+        .from(analytics)
+        .where(conditions.length > 0 ? and(...conditions) : undefined);
 
-    // Get events with optional filters
-    const events = await analyticsQueries.queryEvents({
-        eventType: eventType || undefined,
-        startDate: startDate ? new Date(startDate) : undefined,
-        endDate: endDate ? new Date(endDate) : undefined,
-        limit: 15,
-    });
+    // Get paginated events
+    const events = await db
+        .select()
+        .from(analytics)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .limit(25)
+        .orderBy(desc(analytics.createdAt));
 
     return {
         events,
+        totalCount,
         currentEventType: eventType,
         currentStartDate: startDate,
         currentEndDate: endDate
@@ -54,7 +61,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function AdminActivity() {
-    const { events, currentEventType, currentStartDate, currentEndDate } = useLoaderData<typeof loader>();
+    const { events, totalCount, currentEventType, currentStartDate, currentEndDate } = useLoaderData<typeof loader>();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const handleEventTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -106,46 +113,81 @@ export default function AdminActivity() {
 
     return (
         <Card>
-            <div className="flex flex-col space-y-4 mb-4">
+            <div className="flex flex-col space-y-4 mb-6">
                 <div className="flex justify-between items-center">
-                    <H2 className="text-[#07b0ef]">User Activity</H2>
-                    <select
-                        value={currentEventType || ""}
-                        onChange={handleEventTypeChange}
-                        className="bg-[#0A0A0A] border border-[#07b0ef]/30 rounded px-3 py-2 text-sm text-[#FDB95C] focus:border-[#07b0ef] focus:outline-none"
-                    >
-                        <option value="">All Events</option>
-                        {EVENT_TYPES.map((type) => (
-                            <option key={type} value={type}>
-                                {type.charAt(0).toUpperCase() + type.slice(1)}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="flex items-center space-x-4">
-                    <div className="flex items-center space-x-2">
-                        <label htmlFor="startDate" className="text-sm text-[#ed1e79]">
-                            After:
-                        </label>
-                        <input
-                            type="datetime-local"
-                            id="startDate"
-                            value={formatDateForInput(currentStartDate)}
-                            onChange={(e) => handleDateChange('startDate', e.target.value)}
-                            className="bg-[#0A0A0A] border border-[#07b0ef]/30 rounded px-3 py-2 text-sm text-[#FDB95C] focus:border-[#07b0ef] focus:outline-none"
-                        />
+                    <div className="flex items-center gap-4">
+                        <H2 className="text-[#07b0ef]">User Activity</H2>
+                        <span className="text-sm text-[#FA8E10] bg-[rgba(250,142,16,0.1)] px-2 py-1 rounded">
+                            {totalCount} total events
+                        </span>
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <label htmlFor="endDate" className="text-sm text-[#ed1e79]">
-                            Before:
-                        </label>
-                        <input
-                            type="datetime-local"
-                            id="endDate"
-                            value={formatDateForInput(currentEndDate)}
-                            onChange={(e) => handleDateChange('endDate', e.target.value)}
-                            className="bg-[#0A0A0A] border border-[#07b0ef]/30 rounded px-3 py-2 text-sm text-[#FDB95C] focus:border-[#07b0ef] focus:outline-none"
-                        />
+                    <button
+                        className={`flex items-center space-x-2 ${(currentEventType || currentStartDate || currentEndDate) ? 'text-[#FA8E10]' : 'text-[#07b0ef]'} hover:text-[#ed1e79] transition-colors`}
+                        onClick={() => {
+                            const filterSection = document.getElementById('filterSection');
+                            if (filterSection) {
+                                filterSection.classList.toggle('hidden');
+                            }
+                        }}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                            <path fillRule="evenodd" d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-sm font-medium">
+                            {(currentEventType || currentStartDate || currentEndDate) ? 'Filters Applied' : 'Filter Events'}
+                        </span>
+                        {(currentEventType || currentStartDate || currentEndDate) && (
+                            <span className="w-2 h-2 rounded-full bg-[#FA8E10] animate-pulse"></span>
+                        )}
+                    </button>
+                </div>
+
+                <div id="filterSection" className="bg-[#0A0A0A]/50 border border-[#07b0ef]/20 rounded-lg p-4 hidden">
+                    <div className="grid grid-cols-3 gap-6">
+                        <div className="flex flex-col space-y-1">
+                            <label htmlFor="eventType" className="text-sm text-[#ed1e79] mb-1">
+                                Event Type
+                            </label>
+                            <select
+                                id="eventType"
+                                value={currentEventType || ""}
+                                onChange={handleEventTypeChange}
+                                className="bg-[#0A0A0A] border border-[#07b0ef]/30 rounded px-3 py-2 text-sm text-[#FDB95C] focus:border-[#07b0ef] focus:outline-none"
+                            >
+                                <option value="">All Events</option>
+                                {EVENT_TYPES.map((type) => (
+                                    <option key={type} value={type}>
+                                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="flex flex-col space-y-1">
+                            <label htmlFor="startDate" className="text-sm text-[#ed1e79] mb-1">
+                                After Date
+                            </label>
+                            <input
+                                type="datetime-local"
+                                id="startDate"
+                                value={formatDateForInput(currentStartDate)}
+                                onChange={(e) => handleDateChange('startDate', e.target.value)}
+                                className="bg-[#0A0A0A] border border-[#07b0ef]/30 rounded px-3 py-2 text-sm text-[#FDB95C] focus:border-[#07b0ef] focus:outline-none"
+                            />
+                        </div>
+
+                        <div className="flex flex-col space-y-1">
+                            <label htmlFor="endDate" className="text-sm text-[#ed1e79] mb-1">
+                                Before Date
+                            </label>
+                            <input
+                                type="datetime-local"
+                                id="endDate"
+                                value={formatDateForInput(currentEndDate)}
+                                onChange={(e) => handleDateChange('endDate', e.target.value)}
+                                className="bg-[#0A0A0A] border border-[#07b0ef]/30 rounded px-3 py-2 text-sm text-[#FDB95C] focus:border-[#07b0ef] focus:outline-none"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
