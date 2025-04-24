@@ -8,6 +8,7 @@ import "../retro-fonts.css";
 export function Header() {
   const { user } = useOutletContext<OutletContext>();
   const isLoggedIn = !!user;
+  const isAdmin = isLoggedIn && user.role === "admin";
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -110,6 +111,23 @@ export function Header() {
           </div>
           {isLoggedIn ? (
             <div className="flex space-x-3">
+              {isAdmin && (
+                <div 
+                  className="retro-button"
+                  style={{
+                    fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+                    backgroundColor: "#FA8E10", 
+                    boxShadow: "0 6px 0 #C05908",
+                    padding: "0.25rem 0.5rem",
+                    fontSize: "0.9rem",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <NavLink to="/admin">
+                    ADMIN
+                  </NavLink>
+                </div>
+              )}
               <div 
                 className="retro-button primary"
                 style={{
@@ -200,6 +218,23 @@ export function Header() {
           </div>
           {isLoggedIn ? (
             <div className="flex flex-col space-y-3">
+              {isAdmin && (
+                <div 
+                  className="retro-button"
+                  style={{
+                    fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+                    backgroundColor: "#FA8E10", 
+                    boxShadow: "0 6px 0 #C05908",
+                    padding: "0.25rem 0.5rem",
+                    fontSize: "0.9rem",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <NavLink to="/admin">
+                    ADMIN
+                  </NavLink>
+                </div>
+              )}
               <div 
                 className="retro-button primary"
                 style={{
