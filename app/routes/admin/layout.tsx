@@ -6,14 +6,6 @@ import { requireAuth } from "../../lib/auth";
 export async function loader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
 
-  // Local development check
-  if (
-    !url.hostname.includes("localhost") &&
-    process.env.NODE_ENV === "production"
-  ) {
-    throw new Response("Not Found", { status: 404 });
-  }
-
   // Authentication check - only allow admins
   try {
     const authData = await requireAuth(request, "/auth/login", ["admin"]);
