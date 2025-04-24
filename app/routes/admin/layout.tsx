@@ -1,7 +1,9 @@
-import { Outlet, redirect, useLoaderData } from "react-router";
+import { Outlet, useLoaderData } from "react-router";
 import { Header } from "~/components/Header";
 import type { Route } from "./+types/layout";
 import { requireAuth } from "../../lib/auth";
+import { Tabs } from "~/components/Tabs";
+import { H1 } from "~/components/H1";
 
 export async function loader({ request }: Route.ClientLoaderArgs) {
   // Authentication check - only allow admins
@@ -23,14 +25,31 @@ export function meta({ }: Route.MetaArgs) {
 
 export default function Layout() {
   const { user } = useLoaderData<typeof loader>();
+  const tabs = [
+    { label: "User Activity", to: "/admin/activity" },
+    { label: "Posts", to: "/admin/posts" },
+    { label: "Analytics", to: "/admin/analytics" },
+    { label: "Email Marketing", to: "/admin/email", comingSoon: true },
+  ];
+
   return (
-    <>
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-grow pb-15">
-          <Outlet context={{ user }} />
-        </main>
+    <div className="min-h-screen flex flex-col font-set-1">
+      <Header />
+      <div className="flex-1 grid-lines">
+        <div className="max-w-[1200px] mx-auto px-4">
+          <div className="mt-10 mb-8">
+            <H1 className="gradient-text">Admin Dashboard</H1>
+            <p className="text-lg font-['Chakra_Petch'] text-[#07b0ef]">
+              Internal tools for creating blog posts and viewing user metrics.
+            </p>
+          </div>
+
+          <div className="bg-[#0A0A0A] rounded-lg p-6 border border-[#07b0ef]/20 shadow-lg">
+            <Tabs tabs={tabs} className="mb-6" />
+            <Outlet context={{ user }} />
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
