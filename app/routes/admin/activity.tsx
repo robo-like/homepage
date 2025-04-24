@@ -31,6 +31,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const eventType = url.searchParams.get("eventType") as EventType | null;
     const startDate = url.searchParams.get("startDate");
     const endDate = url.searchParams.get("endDate");
+    const page = parseInt(url.searchParams.get("page") || "1", 10);
+    
+    const ITEMS_PER_PAGE = 25;
+    const offset = (page - 1) * ITEMS_PER_PAGE;
 
     let conditions = [];
     if (eventType) conditions.push(eq(analytics.eventType, eventType));
@@ -48,12 +52,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
         .select()
         .from(analytics)
         .where(conditions.length > 0 ? and(...conditions) : undefined)
-        .limit(25)
+        .limit(ITEMS_PER_PAGE)
+        .offset(offset)
         .orderBy(desc(analytics.createdAt));
+
+    // Calculate pagination values
+    const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+    const hasNextPage = page < totalPages;
+    const hasPrevPage = page > 1;
 
     return {
         events,
         totalCount,
+        currentPage: page,
+        totalPages,
+        hasNextPage,
+        hasPrevPage,
         currentEventType: eventType,
         currentStartDate: startDate,
         currentEndDate: endDate
@@ -61,7 +75,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function AdminActivity() {
-    const { events, totalCount, currentEventType, currentStartDate, currentEndDate } = useLoaderData<typeof loader>();
+    const { 
+        events, 
+        totalCount, 
+        currentPage,
+        totalPages,
+        hasNextPage,
+        hasPrevPage,
+        currentEventType, 
+        currentStartDate, 
+        currentEndDate 
+    } = useLoaderData<typeof loader>();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const handleEventTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -71,12 +95,16 @@ export default function AdminActivity() {
         } else {
             searchParams.set("eventType", value);
         }
+        // Reset to page 1 when filter changes
+        searchParams.delete("page");
         setSearchParams(searchParams);
     };
 
     const handleDateChange = (type: 'startDate' | 'endDate', value: string) => {
         if (value === "") {
             searchParams.delete(type);
+            // Reset to page 1 when filter changes
+            searchParams.delete("page");
             setSearchParams(searchParams);
             return;
         }
@@ -99,6 +127,8 @@ export default function AdminActivity() {
         }
 
         searchParams.set(type, newDate);
+        // Reset to page 1 when filter changes
+        searchParams.delete("page");
         setSearchParams(searchParams);
     };
 
@@ -109,6 +139,59 @@ export default function AdminActivity() {
         return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
             .toISOString()
             .slice(0, 16);
+    };
+    
+    // Handle page change
+    const handlePageChange = (newPage: number) => {
+        if (newPage < 1 || newPage > totalPages) return;
+        
+        searchParams.set("page", newPage.toString());
+        setSearchParams(searchParams);
+    };
+    
+    // Generate page numbers to display
+    const getPageNumbers = () => {
+        const pageNumbers: (number | string)[] = [];
+        const maxVisiblePages = 5;
+        
+        if (totalPages <= maxVisiblePages) {
+            // Show all pages if there are 5 or fewer
+            for (let i = 1; i <= totalPages; i++) {
+                pageNumbers.push(i);
+            }
+        } else {
+            // Always show first page
+            pageNumbers.push(1);
+            
+            // Calculate start and end of visible pages
+            let startPage = Math.max(2, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 3);
+            
+            // Adjust if at the edges
+            if (endPage - startPage < maxVisiblePages - 3) {
+                startPage = Math.max(2, endPage - (maxVisiblePages - 3));
+            }
+            
+            // Add ellipsis if needed
+            if (startPage > 2) {
+                pageNumbers.push('...');
+            }
+            
+            // Add middle pages
+            for (let i = startPage; i <= endPage; i++) {
+                pageNumbers.push(i);
+            }
+            
+            // Add ellipsis if needed
+            if (endPage < totalPages - 1) {
+                pageNumbers.push('...');
+            }
+            
+            // Always show last page
+            pageNumbers.push(totalPages);
+        }
+        
+        return pageNumbers;
     };
 
     return (
@@ -221,6 +304,100 @@ export default function AdminActivity() {
                     ))
                 )}
             </div>
+            
+            {/* Pagination */}
+            {totalPages > 1 && (
+                <div className="mt-8 flex justify-center">
+                    <div className="flex items-center space-x-2">
+                        {/* First page button */}
+                        <button
+                            onClick={() => handlePageChange(1)}
+                            disabled={currentPage === 1}
+                            className={`flex items-center justify-center w-9 h-9 rounded-md border ${
+                                currentPage === 1 
+                                    ? 'border-[#07b0ef]/20 text-[#07b0ef]/30 cursor-not-allowed' 
+                                    : 'border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                            } transition-colors`}
+                            aria-label="Go to first page"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                                <path fillRule="evenodd" d="M15.79 14.77a.75.75 0 0 1-1.06.02l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 1 1 1.04 1.08L11.832 10l3.938 3.71a.75.75 0 0 1 .02 1.06Zm-6 0a.75.75 0 0 1-1.06.02l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 1 1 1.04 1.08L5.832 10l3.938 3.71a.75.75 0 0 1 .02 1.06Z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                        
+                        {/* Previous button */}
+                        <button
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={!hasPrevPage}
+                            className={`flex items-center justify-center w-9 h-9 rounded-md border ${
+                                !hasPrevPage
+                                    ? 'border-[#07b0ef]/20 text-[#07b0ef]/30 cursor-not-allowed' 
+                                    : 'border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                            } transition-colors`}
+                            aria-label="Previous page"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                                <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 0 1-.02 1.06L8.832 10l3.938 3.71a.75.75 0 1 1-1.04 1.08l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 0 1 1.06.02Z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                        
+                        {/* Page numbers */}
+                        {getPageNumbers().map((pageNum, index) => (
+                            typeof pageNum === 'number' ? (
+                                <button
+                                    key={index}
+                                    onClick={() => handlePageChange(pageNum)}
+                                    className={`flex items-center justify-center w-9 h-9 rounded-md ${
+                                        currentPage === pageNum
+                                            ? 'bg-[#07b0ef] text-black font-bold'
+                                            : 'border border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                                    } transition-colors`}
+                                    aria-label={`Page ${pageNum}`}
+                                    aria-current={currentPage === pageNum ? 'page' : undefined}
+                                >
+                                    {pageNum}
+                                </button>
+                            ) : (
+                                <span key={index} className="w-6 text-center text-[#07b0ef]">
+                                    {pageNum}
+                                </span>
+                            )
+                        ))}
+                        
+                        {/* Next button */}
+                        <button
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={!hasNextPage}
+                            className={`flex items-center justify-center w-9 h-9 rounded-md border ${
+                                !hasNextPage
+                                    ? 'border-[#07b0ef]/20 text-[#07b0ef]/30 cursor-not-allowed' 
+                                    : 'border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                            } transition-colors`}
+                            aria-label="Next page"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                                <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 0 1 .02-1.06L11.168 10 7.23 6.29a.75.75 0 1 1 1.04-1.08l4.5 4.25a.75.75 0 0 1 0 1.08l-4.5 4.25a.75.75 0 0 1-1.06-.02Z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                        
+                        {/* Last page button */}
+                        <button
+                            onClick={() => handlePageChange(totalPages)}
+                            disabled={currentPage === totalPages}
+                            className={`flex items-center justify-center w-9 h-9 rounded-md border ${
+                                currentPage === totalPages
+                                    ? 'border-[#07b0ef]/20 text-[#07b0ef]/30 cursor-not-allowed' 
+                                    : 'border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                            } transition-colors`}
+                            aria-label="Go to last page"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                                <path fillRule="evenodd" d="M4.21 5.23a.75.75 0 0 1 1.06-.02l4.5 4.25a.75.75 0 0 1 0 1.08l-4.5 4.25a.75.75 0 1 1-1.04-1.08L8.168 10 4.23 6.29a.75.75 0 0 1-.02-1.06Zm6 0a.75.75 0 0 1 1.06-.02l4.5 4.25a.75.75 0 0 1 0 1.08l-4.5 4.25a.75.75 0 1 1-1.04-1.08L14.168 10l-3.938-3.71a.75.75 0 0 1-.02-1.06Z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            )}
         </Card>
     );
 } 
