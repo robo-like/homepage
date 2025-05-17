@@ -8,7 +8,12 @@ interface AuthCardProps {
 
 export function AuthCard({ children, className, title }: AuthCardProps) {
   return (
-    <div className={cn("max-w-md mx-auto p-6 bg-white/95 dark:bg-white/20 rounded-lg shadow-md mt-16", className)}>
+    <div
+      className={cn(
+        "max-w-md mx-auto p-6 text-black dark:text-white bg-white/95 dark:bg-white/20 rounded-lg shadow-md mt-16",
+        className
+      )}
+    >
       {title && (
         <div className="text-center mb-8">
           <h1

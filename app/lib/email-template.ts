@@ -1,7 +1,4 @@
-export default function generateEmailTemplate(
-  origin: string,
-  magicLinkUrl: string
-): string {
+export default function generateEmailTemplate(magicLinkUrl: string): string {
   const colors = ["#D0021B", "#7B001C", "#FF007F", "#3D0070", "#FF4500"];
   const randomColor = colors[Math.floor(Math.random() * colors.length)];
 

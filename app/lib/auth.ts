@@ -203,7 +203,7 @@ export async function createUserSession(userId: string, redirectTo: string) {
 export async function logout(request: Request) {
   const session = await getSession(request.headers.get("Cookie"));
 
-  return redirect("/", {
+  return redirect("/auth/login", {
     headers: {
       "Set-Cookie": await destroySession(session),
     },
@@ -226,26 +226,32 @@ export async function addUserToBrevoList(
     }
 
     // First, create or update the contact
-    const createContactResponse = await fetch("https://api.brevo.com/v3/contacts", {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "api-key": apiKey,
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        attributes: {
-          FIRSTNAME: userName || email.split("@")[0],
-          SOURCE: "Website Signup"
+    const createContactResponse = await fetch(
+      "https://api.brevo.com/v3/contacts",
+      {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "api-key": apiKey,
+          "content-type": "application/json",
         },
-        listIds: [listId],
-        updateEnabled: true // Update if contact already exists
-      }),
-    });
+        body: JSON.stringify({
+          email,
+          attributes: {
+            FIRSTNAME: userName || email.split("@")[0],
+            SOURCE: "Website Signup",
+          },
+          listIds: [listId],
+          updateEnabled: true, // Update if contact already exists
+        }),
+      }
+    );
 
     if (!createContactResponse.ok) {
-      console.error("Error adding contact to Brevo:", await createContactResponse.text());
+      console.error(
+        "Error adding contact to Brevo:",
+        await createContactResponse.text()
+      );
       return false;
     }
 
@@ -261,8 +267,7 @@ export async function addUserToBrevoList(
  */
 export async function sendMagicLinkEmail(
   email: string,
-  magicLinkUrl: string,
-  origin: string
+  magicLinkUrl: string
 ): Promise<boolean> {
   try {
     const apiKey = process.env.BREVO_API_KEY;
@@ -289,7 +294,7 @@ export async function sendMagicLinkEmail(
           },
         ],
         subject: "Your RoboLike Magic Link",
-        htmlContent: emailTemplate(origin, magicLinkUrl),
+        htmlContent: emailTemplate(magicLinkUrl),
       }),
     });
 

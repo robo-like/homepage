@@ -19,21 +19,23 @@ export default [
       route(":pid", "routes/post.tsx"),
     ]),
     route("sitemap.xml", "routes/sitemap.tsx"),
+  ]),
+  layout("./routes/desktop/layout.tsx", [
     ...prefix("auth", [
       index("routes/auth/index.tsx"),
+      route("success", "routes/auth/success.tsx"),
       route("login", "routes/auth/login.tsx"),
       route("confirm", "routes/auth/confirm.tsx"),
-      route("success", "routes/auth/success.tsx"),
       route("logout", "routes/auth/logout.tsx"),
     ]),
     ...prefix("u", [
       //special route to grab the current user as a payload
-      route("access-token", "routes/user/access-token.tsx"),
       // route("me", "routes/user/me.tsx"),
       //the actual user interface side of things
       layout("./routes/user/layout.tsx", [
         route("billing", "routes/user/billing.tsx"),
         route("profile", "routes/user/profile.tsx"),
+        route("trial", "routes/user/trial.tsx"),
       ]),
     ]),
   ]),
