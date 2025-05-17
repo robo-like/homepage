@@ -36,11 +36,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const error = url.searchParams.get("error");
   const authData = await auth(request);
   if (authData.user) {
-    if (authData.user.role === "admin") {
-      return redirect("/admin");
-    } else {
-      return redirect("/auth/success?hideHeader=true");
-    }
+    return redirect("/auth/success");
   }
   return { error: error || undefined };
 }

@@ -98,7 +98,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     }
 
     // Create a session and redirect
-    return createUserSession(validation.userId, "/u/success");
+    return createUserSession(validation.userId, "/auth/success");
   } catch (error) {
     console.error("Error confirming magic link:", error);
 
