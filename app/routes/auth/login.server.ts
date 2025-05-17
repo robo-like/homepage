@@ -39,7 +39,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     if (authData.user.role === "admin") {
       return redirect("/admin");
     } else {
-      return redirect("/auth/success");
+      return redirect("/auth/success?hideHeader=true");
     }
   }
   return { error: error || undefined };
@@ -94,7 +94,6 @@ export async function action({ request }: Route.ActionArgs) {
       };
     }
 
-
     // Get session for analytics
     const session = await getSession(request.headers.get("Cookie"));
     const sessionId = session?.id || "unknown";
@@ -109,7 +108,7 @@ export async function action({ request }: Route.ActionArgs) {
 
       user = await authQueries.createUser({
         email,
-        role: isAdmin ? "admin" : "user"
+        role: isAdmin ? "admin" : "user",
       });
 
       // Track new user sign up
@@ -125,20 +124,16 @@ export async function action({ request }: Route.ActionArgs) {
       await addUserToBrevoList(email, 7);
     }
     if (!user) {
-      return { success: false, error: "User not found and was not able to create a new one." };
+      return {
+        success: false,
+        error: "User not found and was not able to create a new one.",
+      };
     }
 
     // Generate magic link key for authentication
     const key = await createMagicLinkKey(user.id);
 
-    // Construct the magic link URL
-    const url = new URL(request.url);
-    const origin = `${url.protocol}//${url.host}`;
-    let magicLinkUrl = `${origin}/auth/confirm?key=${key}`;
-
-    if (redirectTo) {
-      magicLinkUrl += `&redirectTo=${encodeURIComponent(redirectTo)}`;
-    }
+    let magicLinkUrl = `robolike://auth/confirm?key=${key}&hideHeader=true`;
 
     // Track login attempt event (existing user or signup)
     await trackAuthEvent({
@@ -153,7 +148,7 @@ export async function action({ request }: Route.ActionArgs) {
     });
 
     // Send the magic link email
-    const emailSent = await sendMagicLinkEmail(email, magicLinkUrl, origin);
+    const emailSent = await sendMagicLinkEmail(email, magicLinkUrl);
 
     if (!emailSent) {
       return {

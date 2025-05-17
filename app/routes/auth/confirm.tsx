@@ -14,7 +14,7 @@ import type { Route } from "./+types/confirm";
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const key = url.searchParams.get("key");
-  const redirectTo = url.searchParams.get("redirectTo") || "/auth/success";
+  const redirectTo = url.searchParams.get("redirectTo") || "/u/profile";
 
   // Get IP and user agent for analytics
   const ipAddress =
@@ -29,6 +29,12 @@ export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const sessionId = session?.id || "unknown";
 
+  // Preserve existing query params
+  const existingParams = new URLSearchParams(url.search);
+  existingParams.delete("key"); // Remove key param since we don't want to forward it
+  const queryString = existingParams.toString();
+  const errorQueryString = queryString ? `&${queryString}` : "";
+
   if (!key) {
     // Track failed login attempt
     await trackAuthEvent({
@@ -41,7 +47,9 @@ export async function loader({ request }: Route.LoaderArgs) {
       errorMessage: "Missing key in URL",
     });
 
-    return redirect("/auth/login?error=Invalid+or+expired+link");
+    return redirect(
+      `/auth/login?error=Invalid+or+expired+link${errorQueryString}`
+    );
   }
 
   try {
@@ -60,7 +68,9 @@ export async function loader({ request }: Route.LoaderArgs) {
         errorMessage: "Invalid or expired magic link",
       });
 
-      return redirect("/auth/login?error=Invalid+or+expired+link");
+      return redirect(
+        `/auth/login?error=Invalid+or+expired+link${errorQueryString}`
+      );
     }
 
     // Get user for analytics tracking
@@ -82,12 +92,18 @@ export async function loader({ request }: Route.LoaderArgs) {
       destination = "/admin";
     } else if (redirectTo === "/admin") {
       // Don't allow non-admins to access admin, redirect to success page instead
-      destination = "/auth/success";
+      destination = "/u/profile";
     } else {
       // For regular users, redirect to success page first
       // The success page will then redirect to profile after countdown
-      destination = "/auth/success";
+      destination = "/u/profile";
     }
+
+    // Add existing query params to destination
+    const destinationUrl = new URL(destination, url.origin);
+    existingParams.forEach((value, key) => {
+      destinationUrl.searchParams.append(key, value);
+    });
 
     // Track successful login
     if (user) {
@@ -103,7 +119,10 @@ export async function loader({ request }: Route.LoaderArgs) {
     }
 
     // Create a session and redirect
-    return createUserSession(validation.userId, destination);
+    return createUserSession(
+      validation.userId,
+      destinationUrl.pathname + destinationUrl.search
+    );
   } catch (error) {
     console.error("Error confirming magic link:", error);
 
@@ -118,7 +137,9 @@ export async function loader({ request }: Route.LoaderArgs) {
       errorMessage: error instanceof Error ? error.message : "Unknown error",
     });
 
-    return redirect("/auth/login?error=Authentication+failed");
+    return redirect(
+      `/auth/login?error=Authentication+failed${errorQueryString}`
+    );
   }
 }
 

@@ -4,7 +4,7 @@ import logoDark from "../home/heart.png";
 
 const futureDate = new Date("2025-05-01");
 
-export function meta({ }: Route.MetaArgs) {
+export function meta({}: Route.MetaArgs) {
   return [
     { title: "RoboLike, Instagram Auto Liker" },
     {
@@ -78,28 +78,8 @@ const retro80sColors = [
 ];
 
 export default function Home() {
-  const [countdown, setCountdown] = useState<number>(0);
-
-  // Calculate countdown to a future date (30 days from now)
-  useEffect(() => {
-    futureDate.setDate(futureDate.getDate() + 30);
-
-    const updateCountdown = () => {
-      const now = new Date();
-      const difference = futureDate.getTime() - now.getTime();
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      setCountdown(days);
-    };
-
-    updateCountdown();
-    const timer = setInterval(updateCountdown, 60000); // Update every minute
-
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <div className="font-set-1 min-h-screen overflow-hidden relative">
-
       {/* Content Overlay */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-white p-6">
         <div className="max-w-5xl w-full bg-[#0A0A0A] bg-opacity-70 rounded-lg border-2 border-[#07b0ef] p-8 backdrop-blur-sm">
@@ -211,6 +191,16 @@ export default function Home() {
                 your account.
               </p>
             </div>
+          </div>
+
+          {/* CTA */}
+          <div className="flex flex-col md:flex-row items-center justify-center my-16">
+            <a
+              href="/install-guide"
+              className="relative py-4 px-8 retro-button primary w-full md:w-auto text-center"
+            >
+              GET STARTED
+            </a>
           </div>
 
           {/* Benefits */}
@@ -338,18 +328,12 @@ export default function Home() {
           </div>
 
           {/* CTA */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6 mt-8">
+          <div className="flex flex-col md:flex-row items-center justify-center my-16">
             <a
               href="/install-guide"
               className="relative py-4 px-8 retro-button primary w-full md:w-auto text-center"
             >
-              DOWNLOAD & GET STARTED
-            </a>
-            <a
-              href="/instagram-auto-liker-how-it-works"
-              className="relative py-4 px-8 retro-button w-full md:w-auto text-center"
-            >
-              HOW IT WORKS
+              GET STARTED
             </a>
           </div>
 

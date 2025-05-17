@@ -52,7 +52,8 @@ export default function Login() {
 
   // Get redirectTo from query params
   const params = new URLSearchParams(location.search);
-  const redirectTo = params.get("redirectTo") || params.get("returnTo") || undefined;
+  const redirectTo =
+    params.get("redirectTo") || params.get("returnTo") || undefined;
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
@@ -66,7 +67,6 @@ export default function Login() {
 
   return (
     <AuthCard title="ROBOLIKE ACCOUNT">
-
       {submitted && actionData?.success ? (
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
           <p>Magic link sent! Check your email to log in.</p>

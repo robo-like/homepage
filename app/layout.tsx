@@ -1,11 +1,11 @@
-import { Outlet, useOutletContext } from "react-router";
+import { Outlet, useOutletContext, useLocation } from "react-router";
 import { Header } from "~/components/Header";
 import type { Route } from "./+types/layout";
 import React from "react";
 import { FloatingContactButton } from "~/components/FloatingContactButton";
 import type { OutletContext } from "./root";
 
-export function meta({ }: Route.MetaArgs) {
+export function meta({}: Route.MetaArgs) {
   return [
     { title: 'const page = new RoboLike("(internal) Layout"); //@todo' },
     {
@@ -19,6 +19,11 @@ export default function Layout() {
   const { user } = useOutletContext<OutletContext>();
   const isLoggedIn = !!user;
 
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+
+  const hideHeader = params.get("hideHeader") === "true";
+
   return (
     <>
       {/* Background Canvas for Hearts */}
@@ -26,7 +31,7 @@ export default function Layout() {
 
       {/* Layout Container */}
       <div className="min-h-screen flex flex-col relative z-10">
-        <Header />
+        {!hideHeader && <Header />}
         <main className="flex-grow pb-10">
           <Outlet context={{ user }} />
         </main>
@@ -75,7 +80,8 @@ function FloatingHeartsBackground() {
         hearts.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          color: retro80sColors[Math.floor(Math.random() * retro80sColors.length)],
+          color:
+            retro80sColors[Math.floor(Math.random() * retro80sColors.length)],
           size: 30 + Math.random() * 70,
           speed: 0.5 + Math.random() * 1.5,
         });
@@ -144,7 +150,8 @@ function FloatingHeartsBackground() {
         if (heart.y < -heart.size) {
           heart.y = canvas.height + heart.size;
           heart.x = Math.random() * canvas.width;
-          heart.color = retro80sColors[Math.floor(Math.random() * retro80sColors.length)];
+          heart.color =
+            retro80sColors[Math.floor(Math.random() * retro80sColors.length)];
         }
       });
 
