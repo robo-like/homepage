@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLoaderData } from "react-router";
 import type { Route } from "./+types/install-guide";
-import logoDark from "../home/heart.png";
 import { cn } from "~/lib/utils";
-import { FeatureRequestButton } from "~/components/FeatureRequestButton";
 
 export async function loader({ request }: Route.LoaderArgs) {
   try {
@@ -697,22 +695,16 @@ export default function InstallGuide() {
         {/* Download CTA Button with Animation */}
         <div className="relative mb-4">
           <div className="absolute inset-0 bg-[#FA8E10] blur-lg opacity-30 animate-pulse"></div>
-          {selectedPlatform === "macos" && macArchitecture === "x64" ? (
-            <FeatureRequestButton
-              featureName="Intel Mac download"
-              featureType="macos-intel-request"
-            />
-          ) : (
-            <a
-              href={getDownloadUrl()}
-              className="relative inline-block py-4 px-8 retro-button primary"
-              download
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              DOWNLOAD FOR {selectedPlatform.toUpperCase()}
-            </a>
-          )}
+
+          <a
+            href={getDownloadUrl()}
+            className="relative inline-block py-4 px-8 retro-button primary"
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            DOWNLOAD FOR {selectedPlatform.toUpperCase()}
+          </a>
         </div>
 
         {/* Release Info */}
