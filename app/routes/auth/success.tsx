@@ -15,10 +15,5 @@ export async function loader({ request }: Route.LoaderArgs) {
     return redirect("/u/trial");
   }
 
-  // If admin, redirect to admin dashboard
-  if (authData.user.role === "admin") {
-    return redirect("/admin");
-  }
-
   return redirect("/u/profile");
 }
