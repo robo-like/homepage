@@ -14,7 +14,6 @@ import type { Route } from "./+types/confirm";
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const key = url.searchParams.get("key");
-  const redirectTo = url.searchParams.get("redirectTo") || "/u/profile";
 
   // Get IP and user agent for analytics
   const ipAddress =
@@ -85,26 +84,6 @@ export async function loader({ request }: Route.LoaderArgs) {
       console.error("Stripe customer creation failed:", stripeError);
     }
 
-    // Determine redirect destination based on user role
-    let destination = redirectTo;
-
-    if (validation.role === "admin") {
-      destination = "/admin";
-    } else if (redirectTo === "/admin") {
-      // Don't allow non-admins to access admin, redirect to success page instead
-      destination = "/u/profile";
-    } else {
-      // For regular users, redirect to success page first
-      // The success page will then redirect to profile after countdown
-      destination = "/u/profile";
-    }
-
-    // Add existing query params to destination
-    const destinationUrl = new URL(destination, url.origin);
-    existingParams.forEach((value, key) => {
-      destinationUrl.searchParams.append(key, value);
-    });
-
     // Track successful login
     if (user) {
       await trackAuthEvent({
@@ -119,10 +98,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     }
 
     // Create a session and redirect
-    return createUserSession(
-      validation.userId,
-      destinationUrl.pathname + destinationUrl.search
-    );
+    return createUserSession(validation.userId, "/u/success");
   } catch (error) {
     console.error("Error confirming magic link:", error);
 
