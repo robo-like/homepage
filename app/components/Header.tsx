@@ -87,93 +87,26 @@ export function Header() {
               fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
             }}
           >
-            <NavLink to="/install-guide">
-              DOWNLOAD
-            </NavLink>
+            <NavLink to="/social-media-automation-pricing">PRICING</NavLink>
           </div>
           <div
             style={{
               fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
             }}
           >
-            <NavLink to="/social-media-automation-pricing">
-              PRICING
-            </NavLink>
+            <NavLink to="/blog">BLOG</NavLink>
           </div>
           <div
+            className="retro-button primary"
             style={{
               fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+              padding: "0.25rem 0.5rem",
+              fontSize: "0.9rem",
+              fontWeight: "bold",
             }}
           >
-            <NavLink to="/blog">
-              BLOG
-            </NavLink>
+            <NavLink to="/install-guide">Get Started</NavLink>
           </div>
-          {isLoggedIn ? (
-            <div className="flex space-x-3">
-              {isAdmin && (
-                <div 
-                  className="retro-button"
-                  style={{
-                    fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                    backgroundColor: "#FA8E10", 
-                    boxShadow: "0 6px 0 #C05908",
-                    padding: "0.25rem 0.5rem",
-                    fontSize: "0.9rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  <NavLink to="/admin">
-                    ADMIN
-                  </NavLink>
-                </div>
-              )}
-              <div 
-                className="retro-button primary"
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                  backgroundColor: "#0fcc45", 
-                  boxShadow: "0 6px 0 #0a8f31",
-                  padding: "0.25rem 0.5rem",
-                  fontSize: "0.9rem",
-                  fontWeight: "bold",
-                }}
-              >
-                <NavLink to="/u/profile">
-                  PROFILE
-                </NavLink>
-              </div>
-              <div 
-                className="retro-button"
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                  backgroundColor: "#bb1504",
-                  boxShadow: "0 6px 0 #8a1002",
-                  padding: "0.25rem 0.5rem",
-                  fontSize: "0.9rem",
-                  fontWeight: "bold",
-                }}
-              >
-                <NavLink to="/auth/logout">
-                  LOGOUT
-                </NavLink>
-              </div>
-            </div>
-          ) : (
-            <div 
-              className="retro-button primary"
-              style={{
-                fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                padding: "0.25rem 0.5rem",
-                fontSize: "0.9rem",
-                fontWeight: "bold",
-              }}
-            >
-              <NavLink to="/auth/login">
-                LOGIN/SIGNUP
-              </NavLink>
-            </div>
-          )}
         </nav>
       </div>
 
@@ -194,93 +127,26 @@ export function Header() {
               fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
             }}
           >
-            <NavLink to="/install-guide">
-              DOWNLOAD
-            </NavLink>
+            <NavLink to="/social-media-automation-pricing">PRICING</NavLink>
           </div>
           <div
             style={{
               fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
             }}
           >
-            <NavLink to="/social-media-automation-pricing">
-              PRICING
-            </NavLink>
+            <NavLink to="/blog">BLOG</NavLink>
           </div>
           <div
+            className="retro-button primary"
             style={{
               fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
+              padding: "0.25rem 0.5rem",
+              fontSize: "0.9rem",
+              fontWeight: "bold",
             }}
           >
-            <NavLink to="/blog">
-              BLOG
-            </NavLink>
+            <NavLink to="/auth/login">Get Started</NavLink>
           </div>
-          {isLoggedIn ? (
-            <div className="flex flex-col space-y-3">
-              {isAdmin && (
-                <div 
-                  className="retro-button"
-                  style={{
-                    fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                    backgroundColor: "#FA8E10", 
-                    boxShadow: "0 6px 0 #C05908",
-                    padding: "0.25rem 0.5rem",
-                    fontSize: "0.9rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  <NavLink to="/admin">
-                    ADMIN
-                  </NavLink>
-                </div>
-              )}
-              <div 
-                className="retro-button primary"
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                  backgroundColor: "#0fcc45", 
-                  boxShadow: "0 6px 0 #0a8f31",
-                  padding: "0.25rem 0.5rem",
-                  fontSize: "0.9rem",
-                  fontWeight: "bold",
-                }}
-              >
-                <NavLink to="/u/profile">
-                  PROFILE
-                </NavLink>
-              </div>
-              <div 
-                className="retro-button"
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                  backgroundColor: "#bb1504",
-                  boxShadow: "0 6px 0 #8a1002",
-                  padding: "0.25rem 0.5rem",
-                  fontSize: "0.9rem",
-                  fontWeight: "bold",
-                }}
-              >
-                <NavLink to="/auth/logout">
-                  LOGOUT
-                </NavLink>
-              </div>
-            </div>
-          ) : (
-            <div 
-              className="retro-button primary"
-              style={{
-                fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                padding: "0.25rem 0.5rem",
-                fontSize: "0.9rem",
-                fontWeight: "bold",
-              }}
-            >
-              <NavLink to="/auth/login">
-                LOGIN/SIGNUP
-              </NavLink>
-            </div>
-          )}
         </nav>
       )}
     </main>
