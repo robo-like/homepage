@@ -113,6 +113,20 @@ export default function Profile() {
           </button>
         </Form>
 
+        {user.role === "admin" && (
+          <div className="mt-6">
+            <Link
+              to="/admin"
+              className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+              style={{
+                fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
+              }}
+            >
+              Admin
+            </Link>
+          </div>
+        )}
+
         <div className="mt-6 text-center">
           <Link
             to="/auth/logout"
