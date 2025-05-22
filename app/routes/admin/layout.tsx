@@ -30,6 +30,7 @@ export default function Layout() {
     { label: "Posts", to: "/admin/posts" },
     { label: "Analytics", to: "/admin/analytics" },
     { label: "Email Marketing", to: "/admin/email", comingSoon: true },
+    { label: "Contacts", to: "/admin/contacts" },
   ];
 
   return (
