@@ -1,59 +1,137 @@
-import { Card } from "~/components/Card";
-import { H2 } from "~/components/H1";
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import { AgGridReact } from 'ag-grid-react';
+import { sql } from 'drizzle-orm'; 
+import { useState, useRef } from 'react';
+import { requireAuth } from '~/lib/auth';
+import { db } from '~/lib/db';
+import { contacts } from '~/lib/db/schema';
+import type { Route } from './+types/email';
+import { useLoaderData, Form } from 'react-router';
 
-export default function AdminEmail() {
+ModuleRegistry.registerModules([AllCommunityModule]);
+
+export async function loader({ request }: Route.LoaderArgs) {
+    const authData = await requireAuth(request, "/auth/login?admin=true", ["admin"]);
+    if (authData?.user?.role !== "admin") {
+        return new Response("Unauthorized", { status: 401 });
+    }
+
+    const fetchedContacts = await db
+        .select()
+        .from(contacts)
+        .where(
+            sql`NOT EXISTS (
+                SELECT 1 FROM json_each(${contacts.tags})
+                WHERE value = 'old_robolike:sent'
+            )`
+        );
+
+    return { contacts: fetchedContacts };
+}
+
+export async function action({ request }: Route.ActionArgs) {
+    const formData = await request.formData();
+    const selectedEmails = JSON.parse(formData.get('selectedEmails') as string);
+    
+    for (const email of selectedEmails) {
+        const contact = await db
+            .select()
+            .from(contacts)
+            .where(sql`${contacts.email} = ${email}`)
+            .get();
+
+        if (contact) {
+            const updatedTags = [...contact.tags, 'old_robolike:sent'];
+            await db
+                .update(contacts)
+                .set({ tags: updatedTags })
+                .where(sql`${contacts.email} = ${email}`);
+        }
+    }
+
+    return { success: true };
+}
+
+const TagsRenderer = (props: { value: string[] }) => {
     return (
-        <div className="space-y-6">
-            <Card>
-                <H2 className="mb-4">Email Marketing</H2>
-                <p className="text-gray-300">
-                    A powerful email marketing automation tool designed to scale your outreach efficiently and intelligently.
-                </p>
-
-                <div className="mt-6 space-y-6">
-                    <div>
-                        <h4 className="text-lg font-medium text-[#07b0ef] mb-2">Smart Email Distribution</h4>
-                        <ul className="list-disc pl-5 text-gray-300 space-y-2">
-                            <li>Upload and manage lists of target email addresses</li>
-                            <li>Configurable daily email sending limits (X emails per day)</li>
-                            <li>Automatic scaling of email volume based on delivery success and engagement metrics</li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h4 className="text-lg font-medium text-[#07b0ef] mb-2">Advanced Testing & Analytics</h4>
-                        <ul className="list-disc pl-5 text-gray-300 space-y-2">
-                            <li>A/B testing capabilities for email content and subject lines</li>
-                            <li>Comprehensive tracking of key metrics:
-                                <ul className="list-disc pl-5 mt-2 space-y-1">
-                                    <li>Open rates</li>
-                                    <li>Link click-through rates</li>
-                                    <li>Delivery success rates</li>
-                                    <li>Engagement patterns</li>
-                                </ul>
-                            </li>
-                            <li>Performance analytics stored in local SQLite database</li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h4 className="text-lg font-medium text-[#07b0ef] mb-2">Email Service Provider Integration</h4>
-                        <ul className="list-disc pl-5 text-gray-300 space-y-2">
-                            <li>Compatible with any Transactional Email Service Provider</li>
-                            <li>Direct integration bypassing expensive marketing tiers</li>
-                            <li>Optimized for cost-effective, high-volume email campaigns</li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-[#0A0A0A] border border-[#FA8E10]/30 p-4 rounded-lg mt-8">
-                        <p className="text-sm text-[#FDB95C] italic">
-                            This feature is currently in development. We're building it to help you scale your email marketing efforts
-                            while maintaining high deliverability and engagement rates, all at a fraction of the cost of traditional
-                            email marketing platforms.
-                        </p>
-                    </div>
-                </div>
-            </Card>
+        <div className="flex gap-1 flex-wrap">
+            {props.value.map((tag, i) => (
+                <span 
+                    key={i}
+                    className="px-2 py-1 rounded-full text-xs bg-[#07b0ef]/20 text-[#07b0ef] border border-[#07b0ef]/30"
+                >
+                    {tag}
+                </span>
+            ))}
         </div>
     );
-} 
+};
+
+export default function AdminEmail() {
+    const { contacts } = useLoaderData<typeof loader>();
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+
+    const [colDefs] = useState([
+        { field: "email", filter: true, checkboxSelection: true },
+        { field: "firstName", filter: true },
+        { field: "lastName", filter: true },
+        { 
+            field: "tags",
+            cellRenderer: TagsRenderer,
+            autoHeight: true,
+            width: 400,
+            cellStyle: { padding: '8px' },
+            filter: true
+        }
+    ]);
+
+    const handleSendEmails = () => {
+        if (selectedRows.length === 0) {
+            alert('Please select at least one contact');
+            return;
+        }
+
+        if (confirm(`Are you sure you want to send emails to ${selectedRows.length} contacts?`)) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selectedEmails';
+            input.value = JSON.stringify(selectedRows.map(row => row.email));
+            
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="mb-4">
+                <button
+                    onClick={handleSendEmails}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                    Send Emails ({selectedRows.length} selected)
+                </button>
+            </div>
+
+            <div style={{ height: 800 }}>
+                <AgGridReact
+                    rowData={contacts}
+                    columnDefs={colDefs}
+                    defaultColDef={{
+                        sortable: true,
+                        floatingFilter: true
+                    }}
+                    rowSelection="multiple"
+                    onSelectionChanged={(event) => {
+                        setSelectedRows(event.api.getSelectedRows());
+                    }}
+                />
+            </div>
+        </div>
+    );
+}

@@ -8,7 +8,7 @@ import { H1 } from "~/components/H1";
 export async function loader({ request }: Route.ClientLoaderArgs) {
   // Authentication check - only allow admins
   try {
-    const authData = await requireAuth(request, "/auth/login", ["admin"]);
+    const authData = await requireAuth(request, "/auth/login?admin=true", ["admin"]);
     return { user: authData.user };
   } catch (error) {
     // requireAuth will throw a redirect if not authenticated
@@ -29,7 +29,8 @@ export default function Layout() {
     { label: "User Activity", to: "/admin/activity" },
     { label: "Posts", to: "/admin/posts" },
     { label: "Analytics", to: "/admin/analytics" },
-    { label: "Email Marketing", to: "/admin/email", comingSoon: true },
+    { label: "Email Marketing", to: "/admin/email" },
+    { label: "Contacts", to: "/admin/contacts" },
   ];
 
   return (

@@ -43,6 +43,7 @@ export default [
     ...prefix("admin", [
       index("routes/admin/index.tsx"),
       route("activity", "routes/admin/activity.tsx"),
+      route("contacts", "routes/admin/contacts.tsx"),
       route("posts", "routes/admin/posts.tsx"),
       route("analytics", "routes/admin/analytics.tsx"),
       route("email", "routes/admin/email.tsx"),

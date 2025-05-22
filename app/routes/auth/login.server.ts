@@ -43,11 +43,14 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 // Server-only code
 export async function action({ request }: Route.ActionArgs) {
+  const url = new URL(request.url);
+  const queryParams = new URLSearchParams(url.search);
+  const isAdminLogin = queryParams.get("admin") === "true";
+
   const formData = await request.formData();
   // Normalize email: lowercase and trim whitespace
   const rawEmail = formData.get("email")?.toString() || "";
   const email = rawEmail.toLowerCase().trim();
-  const redirectTo = formData.get("redirectTo")?.toString() || undefined;
 
   // Validate email presence
   if (!email) {
@@ -129,7 +132,11 @@ export async function action({ request }: Route.ActionArgs) {
     // Generate magic link key for authentication
     const key = await createMagicLinkKey(user.id);
 
-    let magicLinkUrl = `robolike://auth/confirm?key=${key}&hideHeader=true`;
+    let magicLinkUrl = `robolike://auth/confirm?key=${key}`;
+    if (isAdminLogin) {
+      // Route admin back to browser instead of app
+      magicLinkUrl = `${process.env.BASE_URL}/auth/confirm?key=${key}`;
+    }
 
     // Track login attempt event (existing user or signup)
     await trackAuthEvent({
