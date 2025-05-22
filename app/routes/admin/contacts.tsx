@@ -1,8 +1,26 @@
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useState } from 'react';
+import { requireAuth } from '~/lib/auth';
+import { db } from '~/lib/db';
+import { contacts } from '~/lib/db/schema';
+import type { Route } from './+types/contacts';
+import { useLoaderData } from 'react-router';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
+
+export async function loader({ request }: Route.LoaderArgs) {
+    const authData = await requireAuth(request, "/auth/login?admin=true", ["admin"]);
+    if (authData?.user?.role !== "admin") {
+        return new Response("Unauthorized", { status: 401 });
+    }
+
+    const fetchedContacts = await db.select().from(contacts);
+
+    console.log(fetchedContacts);
+
+    return { contacts: fetchedContacts };
+}
 
 const TagsRenderer = (props: { value: string[] }) => {
     return (
@@ -20,13 +38,7 @@ const TagsRenderer = (props: { value: string[] }) => {
 };
 
 export default function Contacts() {
-    const [rowData, setRowData] = useState([
-        { email: "test@example.com", firstName: "Test", lastName: "User", tags: [] },
-        { email: "john.doe@example.com", firstName: "John", lastName: "Doe", tags: ["old_robolike"] },
-        { email: "jane.smith@example.com", firstName: "Jane", lastName: "Smith", tags: ["old_robolike", "old_robolike:sent"] },
-        { email: "bob.wilson@example.com", firstName: "Bob", lastName: "Wilson", tags: ["old_robolike", "old_robolike:sent", "old_robolike:viewed"] },
-        { email: "alice.johnson@example.com", firstName: "Alice", lastName: "Johnson", tags: ["old_robolike", "old_robolike:sent", "old_robolike:viewed", "old_robolike:clicked"] }
-    ]);
+    const { contacts } = useLoaderData<typeof loader>();
 
     // Column Definitions: Defines the columns to be displayed.
     const [colDefs, setColDefs] = useState([
@@ -47,7 +59,7 @@ export default function Contacts() {
         <div>
             <div style={{ height: 800 }}>
                 <AgGridReact
-                    rowData={rowData}
+                    rowData={contacts}
                     columnDefs={colDefs}
                     defaultColDef={{
                         sortable: true,
