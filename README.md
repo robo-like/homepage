@@ -95,6 +95,23 @@ Make sure to deploy the output of `npm run build`
 
 This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
 
+## Branching Strategy
+
+We follow a streamlined branching workflow:
+
+- `main` - Production branch, always stable
+- `preview` - Integration branch for testing before production
+
+### Development Workflow
+
+1. Create feature branches from `main` for all new work
+2. When ready to test:
+   - For minor changes: Push directly to `preview`
+   - For major features: Create a PR to `preview`
+3. After testing in `preview`, create a formal PR to `main`
+
+This approach gives us flexibility for rapid development while maintaining stability in production.
+
 ---
 
 Built with ❤️ using React Router.

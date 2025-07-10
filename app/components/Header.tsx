@@ -105,7 +105,7 @@ export function Header() {
               fontWeight: "bold",
             }}
           >
-            <NavLink to="/install-guide">Get Started</NavLink>
+            <NavLink to="/install-guide">DOWNLOAD</NavLink>
           </div>
         </nav>
       </div>
@@ -145,7 +145,7 @@ export function Header() {
               fontWeight: "bold",
             }}
           >
-            <NavLink to="/auth/login">Get Started</NavLink>
+            <NavLink to="/auth/login">DOWNLOAD</NavLink>
           </div>
         </nav>
       )}

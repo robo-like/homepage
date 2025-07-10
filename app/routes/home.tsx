@@ -199,7 +199,7 @@ export default function Home() {
               href="/install-guide"
               className="relative py-4 px-8 retro-button primary w-full md:w-auto text-center"
             >
-              GET STARTED
+              DOWNLOAD
             </a>
           </div>
 
@@ -333,7 +333,7 @@ export default function Home() {
               href="/install-guide"
               className="relative py-4 px-8 retro-button primary w-full md:w-auto text-center"
             >
-              GET STARTED
+              DOWNLOAD
             </a>
           </div>
 

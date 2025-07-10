@@ -204,4 +204,76 @@ This document outlines the conventions and best practices for working with this 
 - `npx drizzle-kit generate` - Generate migration files
 - `npx drizzle-kit migrate` - Apply migrations
 
+## Blog Post System
+
+### Content Structure
+- Blog posts are stored in the database using the `posts` table
+- Required fields for blog posts:
+  - `title` - Main title of the post
+  - `slug` - URL-friendly identifier (must be unique)
+  - `author` - Post author name
+  - `summary` - Brief description/excerpt
+  - `body` - Main content (HTML from rich text editor)
+- Optional SEO fields:
+  - `seoTitle` - Custom SEO title
+  - `seoDescription` - SEO meta description
+  - `seoImage` - URL for social media image
+
+### Content Directory
+- `.content/` directory is used for markdown drafts and content planning
+- Markdown files should include frontmatter with all required fields
+- These serve as drafts before being added to the database via admin interface
+
+## Theming System Analysis
+
+### Current Implementation
+The application uses a hybrid theming approach:
+- **CSS Variables** in `app.css` for core colors
+- **Tailwind CSS** with dark mode support (`dark:` prefix)
+- **Hardcoded dark theme** via `color-scheme: dark`
+- **Inline styles** for component-specific styling
+
+### Current Color Palette
+```css
+--color-darkGrey: #1d1616    /* Main background */
+--color-darkRed: #8e1616     /* Accent color */
+--color-darkPurple: #6a1e55  /* Primary purple */
+--color-lightPurple: #cf0798 /* Light purple accent */
+--color-lightGrey: #eeeeee   /* Light text/elements */
+```
+
+Retro accent colors used throughout:
+- `#f7ee2a` - Vibrant Yellow
+- `#ed1e79` - Hot Pink
+- `#07b0ef` - Electric Blue
+- `#9633ac` - Purple
+- `#FA8E10` - Orange
+
+### Light Mode Implementation Strategy
+**Complexity: Medium** - Requires systematic updates across ~21 components
+
+#### Recommended Approach:
+1. **CSS Variable Foundation**
+   - Extend CSS variables to support both themes
+   - Use `[data-theme="light"]` and `[data-theme="dark"]` selectors
+   - Create semantic color variables (e.g., `--color-bg-primary`)
+
+2. **Theme Toggle System**
+   - Implement theme context/provider
+   - Add localStorage persistence
+   - Support system preference detection
+   - Create toggle component
+
+3. **Component Updates**
+   - Replace hardcoded colors with CSS variables
+   - Update `dark:` classes to use semantic colors
+   - Test retro effects (neon glows) on light backgrounds
+   - Update canvas-based components (floating hearts)
+
+4. **Key Considerations**
+   - Maintain retro aesthetic in both themes
+   - Ensure proper contrast ratios
+   - Test neon/glow effects on light backgrounds
+   - Update the hardcoded `color-scheme: dark` to be dynamic
+
 Follow these conventions strictly when working with routes, database schema, and queries to maintain code consistency and quality.
