@@ -11,21 +11,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     orderBy: "desc",
   });
 
-  // Define static routes (excluding admin and api routes)
+  // Define static routes with their priorities
   const staticRoutes = [
-    "",
-    "/install-guide",
-    "/instagram-auto-liker-how-it-works",
-    "/social-media-automation-pricing",
-    "/blog",
-    "/terms-and-conditions",
-    "/auth/login",
-    "/auth/logout",
-    "/auth/success",
-    "/auth/confirm",
-    "/privacy-policy",
-    "/terms-and-conditions",
-    "/install-guide",
+    { path: "", priority: "1.0" }, // Homepage
+    { path: "/install-guide", priority: "0.8" }, // High priority - main conversion page
+    { path: "/instagram-auto-liker-how-it-works", priority: "0.8" }, // High priority - product education
+    { path: "/social-media-automation-pricing", priority: "0.8" }, // High priority - pricing/conversion
+    { path: "/blog", priority: "0.7" }, // Medium-high priority - content hub
+    { path: "/privacy-policy", priority: "0.3" }, // Low priority - legal page
+    { path: "/terms-and-conditions", priority: "0.3" }, // Low priority - legal page
   ];
 
   // Generate XML
@@ -35,9 +29,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       .map(
         (route) => `
   <url>
-    <loc>${baseUrl}${route}</loc>
+    <loc>${baseUrl}${route.path}</loc>
     <changefreq>weekly</changefreq>
-    <priority>${route === "" ? "1.0" : "0.8"}</priority>
+    <priority>${route.priority}</priority>
   </url>`
       )
       .join("")}
@@ -48,7 +42,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     <loc>${baseUrl}/blog/${post.slug}</loc>
     <lastmod>${new Date(post.createdAt).toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.9</priority>
   </url>`
       )
       .join("")}
