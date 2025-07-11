@@ -86,16 +86,16 @@
 }
 
 .retro-button.primary {
-  background-color: #fa8e10;
-  box-shadow: 0 6px 0 #c05908;
+  background-color: #10B981;
+  box-shadow: 0 6px 0 #047857;
 }
 
 .retro-button.primary:hover {
-  box-shadow: 0 9px 0 #c05908;
+  box-shadow: 0 9px 0 #047857;
 }
 
 .retro-button.primary:active {
-  box-shadow: 0 3px 0 #c05908;
+  box-shadow: 0 3px 0 #047857;
 }
 
 .platform-tab {

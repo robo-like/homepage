@@ -76,6 +76,31 @@ export type OutletContext = {
 
 export default function App() {
   const { user } = useLoaderData<typeof loader>();
+  
+  useEffect(() => {
+    // Set up Brevo visitor ID if user is logged in
+    if (user?.id) {
+      // Generate a consistent visitor ID from user ID
+      // Using a simple hash-like approach to create a consistent string
+      const visitorId = btoa(user.id).replace(/[^a-zA-Z0-9]/g, '').substring(0, 32);
+      (window as any).BrevoConversationsSetup = {
+        visitorId: visitorId
+      };
+    }
+    
+    // Initialize Brevo Conversations
+    (function(d, w, c) {
+      (w as any).BrevoConversationsID = '67ef041f7f0d6b20440aab59';
+      (w as any)[c] = (w as any)[c] || function() {
+        ((w as any)[c].q = (w as any)[c].q || []).push(arguments);
+      };
+      const s = d.createElement('script');
+      s.async = true;
+      s.src = 'https://conversations-widget.brevo.com/brevo-conversations.js';
+      if (d.head) d.head.appendChild(s);
+    })(document, window, 'BrevoConversations');
+  }, [user]);
+  
   return <Outlet context={{ user }} />;
 }
 

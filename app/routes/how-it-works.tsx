@@ -543,7 +543,7 @@ export default function HowItWorks() {
           </p>
 
           <div className="relative inline-block">
-            <div className="absolute inset-0 bg-[#FA8E10] blur-lg opacity-30 animate-pulse rounded-lg"></div>
+            <div className="absolute inset-0 bg-[#10B981] blur-lg opacity-30 animate-pulse rounded-lg"></div>
             <a
               href="/install-guide"
               className="relative inline-block py-4 px-12 retro-button primary text-xl"

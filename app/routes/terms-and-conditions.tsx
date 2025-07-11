@@ -194,7 +194,7 @@ export default function TermsAndConditions() {
 
             <section>
               <h2
-                className="text-2xl mb-4 text-[#FA8E10]"
+                className="text-2xl mb-4 text-[#10B981]"
                 style={{
                   fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
                 }}
@@ -281,7 +281,7 @@ export default function TermsAndConditions() {
               </a>
             </div>
             <div className="relative inline-block mx-auto w-full">
-              <div className="absolute inset-0 bg-[#FA8E10] blur-lg opacity-30 animate-pulse rounded-lg"></div>
+              <div className="absolute inset-0 bg-[#10B981] blur-lg opacity-30 animate-pulse rounded-lg"></div>
               <a
                 href="/install-guide"
                 className="relative inline-block py-4 px-8 retro-button primary w-full"

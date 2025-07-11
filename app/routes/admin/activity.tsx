@@ -200,12 +200,12 @@ export default function AdminActivity() {
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-4">
                         <H2 className="text-[#07b0ef]">User Activity</H2>
-                        <span className="text-sm text-[#FA8E10] bg-[rgba(250,142,16,0.1)] px-2 py-1 rounded">
+                        <span className="text-sm text-[#10B981] bg-[rgba(16,185,129,0.1)] px-2 py-1 rounded">
                             {totalCount} total events
                         </span>
                     </div>
                     <button
-                        className={`flex items-center space-x-2 ${(currentEventType || currentStartDate || currentEndDate) ? 'text-[#FA8E10]' : 'text-[#07b0ef]'} hover:text-[#ed1e79] transition-colors`}
+                        className={`flex items-center space-x-2 ${(currentEventType || currentStartDate || currentEndDate) ? 'text-[#10B981]' : 'text-[#07b0ef]'} hover:text-[#ed1e79] transition-colors`}
                         onClick={() => {
                             const filterSection = document.getElementById('filterSection');
                             if (filterSection) {
@@ -220,7 +220,7 @@ export default function AdminActivity() {
                             {(currentEventType || currentStartDate || currentEndDate) ? 'Filters Applied' : 'Filter Events'}
                         </span>
                         {(currentEventType || currentStartDate || currentEndDate) && (
-                            <span className="w-2 h-2 rounded-full bg-[#FA8E10] animate-pulse"></span>
+                            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
                         )}
                     </button>
                 </div>
@@ -276,7 +276,7 @@ export default function AdminActivity() {
             </div>
             <div className="space-y-2">
                 {events.length === 0 ? (
-                    <p className="text-[#FA8E10] italic">No events found for the selected criteria</p>
+                    <p className="text-[#10B981] italic">No events found for the selected criteria</p>
                 ) : (
                     events.map((event) => (
                         <div
@@ -297,7 +297,7 @@ export default function AdminActivity() {
                                     </p>
                                 </div>
                             </div>
-                            <time className="text-sm text-[#FA8E10] bg-[rgba(250,142,16,0.1)] px-2 py-1 rounded whitespace-nowrap">
+                            <time className="text-sm text-[#10B981] bg-[rgba(16,185,129,0.1)] px-2 py-1 rounded whitespace-nowrap">
                                 {new Date(event.createdAt).toLocaleString()}
                             </time>
                         </div>

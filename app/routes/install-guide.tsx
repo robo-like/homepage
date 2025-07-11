@@ -403,11 +403,11 @@ export default function InstallGuide() {
 
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#FA8E10]">5</div>
+                    <div className="instruction-circle bg-[#10B981]">5</div>
                   </div>
                   <div>
                     <h3
-                      className="text-xl mb-2 text-[#FA8E10]"
+                      className="text-xl mb-2 text-[#10B981]"
                       style={{
                         fontFamily:
                           'var(--subheading-font, "Orbitron", sans-serif)',
@@ -556,11 +556,11 @@ export default function InstallGuide() {
 
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#FA8E10]">5</div>
+                    <div className="instruction-circle bg-[#10B981]">5</div>
                   </div>
                   <div>
                     <h3
-                      className="text-xl mb-2 text-[#FA8E10]"
+                      className="text-xl mb-2 text-[#10B981]"
                       style={{
                         fontFamily:
                           'var(--subheading-font, "Orbitron", sans-serif)',
@@ -694,7 +694,7 @@ export default function InstallGuide() {
 
         {/* Download CTA Button with Animation */}
         <div className="relative mb-4">
-          <div className="absolute inset-0 bg-[#FA8E10] blur-lg opacity-30 animate-pulse"></div>
+          <div className="absolute inset-0 bg-[#10B981] blur-lg opacity-30 animate-pulse"></div>
 
           <a
             href={getDownloadUrl()}

@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet, useOutletContext } from "react-router";
 import type { Route } from "../../+types/layout";
-import { FloatingContactButton } from "~/components/FloatingContactButton";
 import type { OutletContext } from "../../root";
 
 export function meta({}: Route.MetaArgs) {
@@ -27,7 +26,6 @@ export default function Layout() {
         </main>
         {/* <Footer /> */}
       </div>
-      {isLoggedIn && <FloatingContactButton />}
     </>
   );
 }

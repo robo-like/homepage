@@ -239,10 +239,10 @@ export default function Home() {
               </div>
 
               <div className="flex items-start">
-                <div className="text-[#FA8E10] text-2xl mr-3">🚀</div>
+                <div className="text-[#10B981] text-2xl mr-3">🚀</div>
                 <div>
                   <h4
-                    className="text-xl text-[#FA8E10] mb-1"
+                    className="text-xl text-[#10B981] mb-1"
                     style={{
                       fontFamily:
                         'var(--subheading-font, "Orbitron", sans-serif)',

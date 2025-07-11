@@ -3,7 +3,6 @@ import type { Route } from "./+types/pricing";
 import { TextInput } from "~/components/TextInput";
 import { useState } from "react";
 import { cn } from "~/lib/utils";
-import { ContactModal } from "~/components/ContactModal";
 import { requireAuth } from "~/lib/auth";
 import { useLoaderData } from "react-router";
 import { getUserSubscriptionDetails } from "~/lib/billing/stripe";
@@ -139,7 +138,6 @@ function PricingTier({
 export default function Pricing() {
   const [enterpriseEmail, setEnterpriseEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [contactModalOpen, setContactModalOpen] = useState(false);
   const loaderData = useLoaderData<typeof loader>();
   const userData = loaderData?.user;
   const isLoggedIn = !!userData;
@@ -293,7 +291,12 @@ export default function Pricing() {
               </li>
             </ul>
             <button
-              onClick={() => setContactModalOpen(true)}
+              onClick={() => {
+                // Brevo chat will handle enterprise inquiries
+                if ((window as any).BrevoConversations) {
+                  (window as any).BrevoConversations('openChat');
+                }
+              }}
               className="w-full py-3 px-4 text-center rounded-lg transition-colors relative retro-button primary"
               style={{ fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)' }}
             >
@@ -501,13 +504,6 @@ export default function Pricing() {
         </div>
       </Container>
 
-      {/* Contact modal for Creator Plan */}
-      <ContactModal
-        isOpen={contactModalOpen}
-        onClose={() => setContactModalOpen(false)}
-        defaultSubject="Creator Plan Inquiry"
-        showHistory={isLoggedIn}
-      />
     </div>
   );
 }
