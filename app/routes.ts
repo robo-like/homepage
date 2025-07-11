@@ -56,11 +56,12 @@ export default [
     route("metrics", "routes/api/metrics.tsx"),
     route("enterprise-lead", "routes/api/enterprise-lead.ts"),
     route("download-tracking", "routes/api/download-tracking.tsx"),
-    route("support-ticket", "routes/api/support-ticket.ts"),
-    route("support-tickets", "routes/api/support-tickets.ts"),
     route(
       "instagram/hashtag/:hashtag/recent",
       "routes/api/instagram.hashtag.$hashtag.recent.tsx"
     ),
+  ]),
+  layout("./routes/landing/layout.tsx", [
+    route("landing/:slug", "routes/landing.$slug.tsx"),
   ]),
 ] satisfies RouteConfig;
