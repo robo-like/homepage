@@ -236,7 +236,41 @@ The application uses a hybrid theming approach:
 - **Hardcoded dark theme** via `color-scheme: dark`
 - **Inline styles** for component-specific styling
 
-### Current Color Palette
+### Current Color Palette (starting 2025-07-30)
+```css
+--color-charcoal: #2a2a2a        /* Deep charcoal background */
+--color-slate: #3d4043           /* Mid-tone slate */
+--color-steel: #5a6169           /* Steel blue-grey */
+--color-platinum: #e8e9ea        /* Clean platinum text */
+--color-white: #ffffff           /* Pure white accents */
+
+Primary Brand Colors
+```
+
+```css
+--color-primaryOrange: #e85a0d    /* Deep burnt orange (logo match) */
+--color-secondaryOrange: #ff7625  /* Lighter orange for hovers */
+--color-accent: #1a365d          /* Deep navy blue for trust */
+```
+
+Strategic Accent Colors
+```css
+--color-successGreen: #2d7d32    /* Forest green for growth/success */
+--color-warningAmber: #f57c00    /* Amber for alerts/highlights */
+--color-infoBlue: #1565c0        /* Professional blue for info */
+--color-metallic: #8d9db6        /* Metallic blue-grey for subtle accents */
+```
+
+Usage Strategy
+
+Backgrounds: Charcoal primary, slate for cards/sections
+Text: Platinum for body, white for headings
+CTAs: Primary orange with secondary orange hovers
+Trust elements: Deep navy for security badges, testimonials
+Success metrics: Forest green for growth stats, follower counts
+Interactive elements: Metallic accents for borders, dividers
+
+### OLD Current Color Palette (for reference only)
 ```css
 --color-darkGrey: #1d1616    /* Main background */
 --color-darkRed: #8e1616     /* Accent color */
