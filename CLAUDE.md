@@ -2,6 +2,9 @@
 
 This document outlines the conventions and best practices for working with this project. Claude should follow these guidelines when assisting with development tasks.
 
+## Jake's rules
+- don't add watermarks to commit messages (thank you)
+
 ## React Router Framework Conventions
 
 ### Route Configuration

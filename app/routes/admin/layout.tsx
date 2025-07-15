@@ -29,8 +29,6 @@ export default function Layout() {
     { label: "User Activity", to: "/admin/activity" },
     { label: "Posts", to: "/admin/posts" },
     { label: "Analytics", to: "/admin/analytics" },
-    { label: "Email Marketing", to: "/admin/email" },
-    { label: "Contacts", to: "/admin/contacts" },
   ];
 
   return (

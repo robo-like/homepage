@@ -181,16 +181,4 @@ export const accessTokens = sqliteTable("access_tokens", {
     .$defaultFn(() => new Date()),
 });
 
-export const contacts = sqliteTable("contacts", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  email: text("email").notNull(),
-  firstName: text("first_name"),
-  lastName: text("last_name"),
-  tags: text("tags", { mode: "json" }).$type<string[]>().notNull().default([]),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
-});
 
