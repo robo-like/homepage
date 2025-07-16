@@ -1,8 +1,24 @@
-import { Outlet, useOutletContext, useLocation } from "react-router";
+import { Outlet, useOutletContext, useLocation, useLoaderData } from "react-router";
 import { Header } from "~/components/Header";
+import { Footer } from "~/components/Footer";
 import type { Route } from "./+types/layout";
 import React from "react";
 import type { OutletContext } from "./root";
+import { postQueries } from "~/lib/db";
+
+export async function loader() {
+  try {
+    // Fetch the latest 3 blog posts for the footer
+    const latestPosts = await postQueries.getPosts({
+      limit: 3,
+      offset: 0,
+      orderBy: "desc",
+    });
+    return { latestPosts };
+  } catch (error) {
+    return { latestPosts: [] };
+  }
+}
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -16,6 +32,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Layout() {
   const { user } = useOutletContext<OutletContext>();
+  const { latestPosts } = useLoaderData<typeof loader>();
   const isLoggedIn = !!user;
 
   const location = useLocation();
@@ -29,7 +46,7 @@ export default function Layout() {
       <main className="flex-grow">
         <Outlet context={{ user }} />
       </main>
-      {/* <Footer /> */}
+      <Footer latestPosts={latestPosts} />
     </div>
   );
 }
