@@ -12,6 +12,7 @@ export default [
     route("install-guide", "routes/install-guide.tsx"),
     route("instagram-auto-liker-how-it-works", "routes/how-it-works.tsx"),
     route("social-media-automation-pricing", "routes/pricing.tsx"),
+    route("faq", "routes/faq.tsx"),
     route("terms-and-conditions", "routes/terms-and-conditions.tsx"),
     route("privacy-policy", "routes/privacy-policy.tsx"),
     ...prefix("blog", [

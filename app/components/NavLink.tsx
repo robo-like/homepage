@@ -13,8 +13,10 @@ const NavLink = ({ to, children, active: forcedActive }: NavLinkProps) => {
   return (
     <Link
       to={to}
-      className={`leading-6 text-gray-700 dark:text-gray-200 text-center ${
-        isActive ? "font-bold" : "font-normal"
+      className={`leading-6 text-center transition-all hover:text-black ${
+        isActive 
+          ? "font-bold text-black" 
+          : "font-medium text-gray-900"
       }`}
     >
       {children}

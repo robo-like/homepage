@@ -6,21 +6,21 @@ const futureDate = new Date("2025-05-01");
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "RoboLike, Instagram Auto Liker" },
+    { title: "Free Instagram Auto Liker - RoboLike" },
     {
       name: "description",
       content:
-        "Get more Instagram followers effortlessly with RoboLike's powerful auto liker. Grow your audience, increase engagement, and connect with real followers automatically.",
+        "Free Instagram auto liker to boost followers instantly. RoboLike's powerful automation tool helps you grow your audience, increase engagement, and connect with real followers automatically.",
     },
     // Standard OpenGraph Meta Tags
     {
       property: "og:title",
-      content: "RoboLike, Instagram Auto Liker",
+      content: "Free Instagram Auto Liker - RoboLike",
     },
     {
       property: "og:description",
       content:
-        "Get more Instagram followers effortlessly with RoboLike's powerful auto liker. Grow your audience, increase engagement, and connect with real followers automatically.",
+        "Free Instagram auto liker to boost followers instantly. RoboLike's powerful automation tool helps you grow your audience, increase engagement, and connect with real followers automatically.",
     },
     {
       property: "og:image",

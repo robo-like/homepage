@@ -44,21 +44,21 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "RoboLike Installation Guide - Power Up Your Social Media" },
+    { title: "Free Instagram Auto Liker Installation - RoboLike" },
     {
       name: "description",
       content:
-        "Download and install RoboLike to supercharge your social media presence. Easy setup for Windows, MacOS, and Linux.",
+        "Download free Instagram auto liker RoboLike. Easy installation guide for Windows, MacOS, and Linux. Start growing your Instagram followers today.",
     },
     // OpenGraph tags
     {
       property: "og:title",
-      content: "RoboLike Installation Guide - Power Up Your Social Media",
+      content: "Free Instagram Auto Liker Installation - RoboLike",
     },
     {
       property: "og:description",
       content:
-        "Download and install RoboLike to supercharge your social media presence. Easy setup for Windows, MacOS, and Linux.",
+        "Download free Instagram auto liker RoboLike. Easy installation guide for Windows, MacOS, and Linux. Start growing your Instagram followers today.",
     },
     {
       property: "og:type",

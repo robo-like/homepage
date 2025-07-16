@@ -17,6 +17,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     { path: "/install-guide", priority: "0.8" }, // High priority - main conversion page
     { path: "/instagram-auto-liker-how-it-works", priority: "0.8" }, // High priority - product education
     { path: "/social-media-automation-pricing", priority: "0.8" }, // High priority - pricing/conversion
+    { path: "/faq", priority: "0.7" }, // Medium-high priority - FAQ for SEO
     { path: "/blog", priority: "0.7" }, // Medium-high priority - content hub
     { path: "/privacy-policy", priority: "0.3" }, // Low priority - legal page
     { path: "/terms-and-conditions", priority: "0.3" }, // Low priority - legal page

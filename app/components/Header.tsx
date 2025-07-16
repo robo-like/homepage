@@ -16,33 +16,25 @@ export function Header() {
   };
 
   return (
-    <main className="border-b border-dashed border-gray-300 px-2 font-set-4 relative z-10">
-      <div className="flex flex-row justify-between items-center">
+    <main className="bg-white shadow-sm border-b border-gray-200 px-4 relative z-10">
+      <div className="flex flex-row justify-between items-center max-w-6xl mx-auto">
         {/* LOGO */}
-        <header className="flex flex-row items-center px-3 py-3">
-          <a href="/" className="flex flex-row items-center cursor-pointer">
-            <div className="w-[35px] mr-2">
-              <img
-                src={logoDark}
-                alt="RoboLike Heart Logo"
-                className="w-full"
-              />
-            </div>
-            <h1
-              className="text-2xl font-bold"
-              style={{
-                fontFamily: 'var(--heading-font, "Syncopate", sans-serif)',
-                textRendering: "optimizeLegibility",
-              }}
-            >
-              ROBO<span style={{ color: "#07b0ef" }}>LIKE</span>
+        <header className="flex flex-row items-center py-4">
+          <a href="/" className="flex flex-row items-center cursor-pointer gap-0">
+            <img
+              src="/robolike-orange-robot-heart.png"
+              alt="RoboLike"
+              className="w-auto h-12 mr-[-8px]"
+            />
+            <h1 className="text-3xl font-black text-gray-900">
+              RoboLike
             </h1>
           </a>
         </header>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden px-3 py-2"
+          className="md:hidden px-3 py-2 text-gray-600 hover:text-gray-900"
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
@@ -72,81 +64,49 @@ export function Header() {
         </button>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex flex-1 justify-end items-center space-x-4 px-3 py-2">
-          <div
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
+        <nav className="hidden md:flex flex-1 justify-end items-center space-x-6">
+          <NavLink to="/instagram-auto-liker-how-it-works">
+            How It Works
+          </NavLink>
+          <NavLink to="/social-media-automation-pricing">
+            Pricing
+          </NavLink>
+          <NavLink to="/faq">
+            FAQ
+          </NavLink>
+          <NavLink to="/blog">
+            Blog
+          </NavLink>
+          <a
+            href="/install-guide"
+            className="inline-flex items-center justify-center px-6 py-2 text-sm font-semibold text-white bg-orange-600 rounded-lg hover:bg-orange-700 transition-colors"
           >
-            <NavLink to="/instagram-auto-liker-how-it-works">
-              HOW IT WORKS
-            </NavLink>
-          </div>
-          <div
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            <NavLink to="/social-media-automation-pricing">PRICING</NavLink>
-          </div>
-          <div
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            <NavLink to="/blog">BLOG</NavLink>
-          </div>
-          <div
-            className="retro-button primary"
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-              padding: "0.25rem 0.5rem",
-              fontSize: "0.9rem",
-              fontWeight: "bold",
-            }}
-          >
-            <NavLink to="/install-guide">DOWNLOAD</NavLink>
-          </div>
+            Download
+          </a>
         </nav>
       </div>
 
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
-        <nav className="md:hidden flex flex-col space-y-4 px-3 py-4 border-t border-dashed border-gray-300">
-          <div
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
+        <nav className="md:hidden flex flex-col space-y-4 px-4 py-4 border-t border-gray-200 bg-gray-50">
+          <NavLink to="/instagram-auto-liker-how-it-works">
+            How It Works
+          </NavLink>
+          <NavLink to="/social-media-automation-pricing">
+            Pricing
+          </NavLink>
+          <NavLink to="/faq">
+            FAQ
+          </NavLink>
+          <NavLink to="/blog">
+            Blog
+          </NavLink>
+          <a
+            href="/install-guide"
+            className="inline-flex items-center justify-center px-6 py-2 text-sm font-semibold text-white bg-orange-600 rounded-lg hover:bg-orange-700 transition-colors mt-2"
           >
-            <NavLink to="/instagram-auto-liker-how-it-works">
-              HOW IT WORKS
-            </NavLink>
-          </div>
-          <div
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            <NavLink to="/social-media-automation-pricing">PRICING</NavLink>
-          </div>
-          <div
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            <NavLink to="/blog">BLOG</NavLink>
-          </div>
-          <div
-            className="retro-button primary"
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-              padding: "0.25rem 0.5rem",
-              fontSize: "0.9rem",
-              fontWeight: "bold",
-            }}
-          >
-            <NavLink to="/auth/login">DOWNLOAD</NavLink>
-          </div>
+            Download
+          </a>
         </nav>
       )}
     </main>

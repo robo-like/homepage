@@ -4,21 +4,21 @@ import { useRef, useEffect } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "How RoboLike Works - Level Up Your Instagram Game" },
+    { title: "How Free Instagram Auto Liker Works - RoboLike" },
     {
       name: "description",
       content:
-        "Discover how RoboLike powers up your Instagram presence by engaging with your target audience, driving real followers, and boosting your social credibility.",
+        "Learn how RoboLike's free Instagram auto liker works. Discover how our automated engagement tool drives real followers and boosts your Instagram growth safely.",
     },
     // OpenGraph tags
     {
       property: "og:title",
-      content: "How RoboLike Works - Level Up Your Instagram Game",
+      content: "How Free Instagram Auto Liker Works - RoboLike",
     },
     {
       property: "og:description",
       content:
-        "Discover how RoboLike powers up your Instagram presence by engaging with your target audience, driving real followers, and boosting your social credibility.",
+        "Learn how RoboLike's free Instagram auto liker works. Discover how our automated engagement tool drives real followers and boosts your Instagram growth safely.",
     },
     {
       property: "og:type",
