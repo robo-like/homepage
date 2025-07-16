@@ -185,7 +185,7 @@ export default function Landing({ params }: Route.ComponentProps) {
       </div>
 
       {/* CTA Section */}
-      <div className="py-16 bg-orange-600">
+      <div className="py-16" style={{ backgroundColor: '#e85a0d' }}>
         <div className="max-w-4xl mx-auto px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-white mb-4">
             Ready to Grow Your Instagram?
@@ -196,13 +196,13 @@ export default function Landing({ params }: Route.ComponentProps) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/install-guide"
-              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-orange-600 bg-white rounded-lg hover:bg-gray-100 transition-colors"
+              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-orange-700 bg-white rounded-lg hover:bg-gray-100 transition-colors"
             >
               Download Free Trial
             </a>
             <a
               href="/social-media-automation-pricing"
-              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-transparent border-2 border-white rounded-lg hover:bg-orange-700 transition-colors"
+              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-transparent border-2 border-white rounded-lg hover:bg-white hover:text-orange-700 transition-colors"
             >
               View Pricing
             </a>
