@@ -93,6 +93,15 @@ export async function action({ request }: Route.ActionArgs) {
       };
     }
 
+    // Check email rate limit
+    const rateLimitCheck = await authQueries.checkEmailRateLimit(email, ipAddress.split(",")[0].trim());
+    if (!rateLimitCheck.canSend) {
+      return {
+        success: false,
+        error: `Please wait ${rateLimitCheck.timeUntilReset} seconds before requesting another code.`,
+      };
+    }
+
     // Get session for analytics
     const session = await getSession(request.headers.get("Cookie"));
     const sessionId = session?.id || "unknown";
@@ -159,6 +168,9 @@ export async function action({ request }: Route.ActionArgs) {
         error: "Failed to send magic link email. Please try again.",
       };
     }
+
+    // Update rate limit after successful email send
+    await authQueries.updateEmailRateLimit(email, ipAddress.split(",")[0].trim());
 
     return { success: true };
   } catch (error) {

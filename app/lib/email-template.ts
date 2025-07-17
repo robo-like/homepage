@@ -1,6 +1,10 @@
 export default function generateEmailTemplate(magicLinkUrl: string): string {
   const colors = ["#D0021B", "#7B001C", "#FF007F", "#3D0070", "#FF4500"];
   const randomColor = colors[Math.floor(Math.random() * colors.length)];
+  
+  // Extract the code from the magic link URL
+  const urlParams = new URLSearchParams(magicLinkUrl.split('?')[1]);
+  const code = urlParams.get('key') || 'N/A';
 
   return `<!DOCTYPE html>
 <html>
@@ -67,7 +71,7 @@ export default function generateEmailTemplate(magicLinkUrl: string): string {
                 <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
                     <td style="padding: 20px 0 10px 0; font-size: 24px; font-weight: bold;">
-                      Your Magic Link
+                      Your Login Code
                     </td>
                   </tr>
                 </table>
@@ -76,7 +80,24 @@ export default function generateEmailTemplate(magicLinkUrl: string): string {
                 <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
                     <td style="padding: 0 0 20px 0;">
-                      Click the button below to log in to your RoboLike account. This link will expire in 5 minutes.
+                      You can log in to your RoboLike account in two ways:
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0 0 20px 0;">
+                      <strong>Option 1:</strong> Copy and paste this code into the login form:
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0 0 20px 0; text-align: center;">
+                      <div style="display: inline-block; background-color: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 16px 24px; font-size: 24px; font-weight: bold; font-family: monospace; color: #495057; letter-spacing: 2px;">
+                        ${code.toUpperCase()}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0 0 20px 0;">
+                      <strong>Option 2:</strong> Or click the button below to log in automatically:
                     </td>
                   </tr>
                 </table>
@@ -111,8 +132,13 @@ export default function generateEmailTemplate(magicLinkUrl: string): string {
                 <!-- Footer Content -->
                 <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
+                    <td style="padding: 0 0 10px 0; font-size: 14px; color: #6c757d;">
+                      This code and link will expire in 5 minutes for security.
+                    </td>
+                  </tr>
+                  <tr>
                     <td style="padding: 0 0 10px 0;">
-                      If you did not request this link, you can safely ignore this email.
+                      If you did not request this login code, you can safely ignore this email.
                     </td>
                   </tr>
                   <tr>

@@ -28,6 +28,7 @@ export default [
       route("login", "routes/auth/login.tsx"),
       route("confirm", "routes/auth/confirm.tsx"),
       route("logout", "routes/auth/logout.tsx"),
+      route("verify-code", "routes/auth/verify-code.tsx"),
     ]),
     ...prefix("u", [
       //special route to grab the current user as a payload
@@ -59,6 +60,9 @@ export default [
       "instagram/hashtag/:hashtag/recent",
       "routes/api/instagram.hashtag.$hashtag.recent.tsx"
     ),
+    ...prefix("auth", [
+      route("status", "routes/api/auth/status.tsx"),
+    ]),
   ]),
   layout("./routes/landing/layout.tsx", [
     route("landing/:slug", "routes/landing.$slug.tsx"),

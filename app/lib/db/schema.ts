@@ -181,4 +181,69 @@ export const accessTokens = sqliteTable("access_tokens", {
     .$defaultFn(() => new Date()),
 });
 
+// Email rate limiting table to prevent spam
+export const emailRateLimits = sqliteTable(
+  "email_rate_limits",
+  {
+    // Unique identifier
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    // Email address being rate limited
+    email: text("email").notNull(),
+
+    // IP address for additional protection
+    ipAddress: text("ip_address").notNull(),
+
+    // When the last email was sent
+    lastSentAt: integer("last_sent_at", { mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+
+    // Count of emails sent in current window
+    attemptCount: integer("attempt_count").notNull().default(1),
+
+    // Timestamp
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (table) => [
+    uniqueIndex("email_ip_idx").on(table.email, table.ipAddress),
+    index("last_sent_idx").on(table.lastSentAt),
+  ]
+);
+
+// Code verification rate limiting table to prevent brute force attacks
+export const codeVerificationRateLimits = sqliteTable(
+  "code_verification_rate_limits",
+  {
+    // Unique identifier
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    // IP address for protection
+    ipAddress: text("ip_address").notNull(),
+
+    // When the last verification attempt was made
+    lastAttemptAt: integer("last_attempt_at", { mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+
+    // Count of verification attempts in current window
+    attemptCount: integer("attempt_count").notNull().default(1),
+
+    // Timestamp
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (table) => [
+    uniqueIndex("ip_verification_idx").on(table.ipAddress),
+    index("last_attempt_idx").on(table.lastAttemptAt),
+  ]
+);
+
 

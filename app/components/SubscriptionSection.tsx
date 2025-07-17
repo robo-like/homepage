@@ -74,8 +74,8 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
 
         return (
             <div className="mb-4">
-                <p className="mb-2">
-                    <span className="font-semibold">Status:</span>{" "}
+                <p className="mb-2 text-gray-700">
+                    <span className="font-semibold text-gray-900">Status:</span>{" "}
                     {renderStatusBadge(
                         isActive ? "active" : isCanceling ? "canceling" : "inactive"
                     )}
@@ -84,20 +84,20 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
                     <>
                         {isActive && (
                             <>
-                                <div className="mb-2">
-                                    <span className="font-semibold">Current Plan:</span>{" "}
-                                    <span>${(subscription.items.data[0].price.unit_amount || 0) / 100}/month</span>
+                                <div className="mb-2 text-gray-700">
+                                    <span className="font-semibold text-gray-900">Current Plan:</span>{" "}
+                                    <span className="text-gray-800">${(subscription.items.data[0].price.unit_amount || 0) / 100}/month</span>
                                 </div>
-                                <div className="mb-2">
-                                    <span className="font-semibold">Next Charge is: </span>{" "}
-                                    <span>{new Date(subscription.items.data[0].current_period_end * 1000).toLocaleDateString()}</span>
+                                <div className="mb-2 text-gray-700">
+                                    <span className="font-semibold text-gray-900">Next Charge is: </span>{" "}
+                                    <span className="text-gray-800">{new Date(subscription.items.data[0].current_period_end * 1000).toLocaleDateString()}</span>
                                 </div>
                             </>
                         )}
                         {subscription.cancel_at_period_end && subscription.cancel_at && (
-                            <div className="mb-2">
-                                <span className="font-semibold">Cancellation Date:</span>{" "}
-                                <span>{new Date(subscription.cancel_at * 1000).toLocaleDateString()}</span>
+                            <div className="mb-2 text-gray-700">
+                                <span className="font-semibold text-gray-900">Cancellation Date:</span>{" "}
+                                <span className="text-gray-800">{new Date(subscription.cancel_at * 1000).toLocaleDateString()}</span>
                             </div>
                         )}
                     </>
