@@ -145,93 +145,64 @@ export default function InstallGuide() {
   }, []);
 
   return (
-    <div className="font-set-1 min-h-screen flex flex-col text-white mt-[5px] pt-[73px]">
-      {/* Grid Lines Background */}
-      <div className="fixed inset-0 grid-lines opacity-70 z-[-1]"></div>
-
+    <div className="min-h-screen flex flex-col bg-[var(--color-charcoal)] text-[var(--color-platinum)] mt-[5px] pt-[73px]">
       {/* Hero Section */}
       <div className="max-w-4xl mx-auto px-6 text-center flex-1 z-2">
-        <h1
-          className="text-3xl md:text-4xl mb-6 gradient-text"
-          style={{
-            fontFamily: 'var(--heading-font, "Press Start 2P", cursive)',
-            lineHeight: "1.4",
-          }}
-        >
-          POWER UP YOUR SOCIAL MEDIA
+        <h1 className="text-3xl md:text-4xl mb-6 text-white font-bold">
+          Install RoboLike
         </h1>
 
-        <div className="w-full h-1 my-4 bg-gradient-to-r from-[#ed1e79] via-[#07b0ef] to-[#f7ee2a]"></div>
+        <div className="w-full h-1 my-4 bg-gradient-to-r from-[var(--color-primaryOrange)] to-[var(--color-secondaryOrange)]"></div>
 
-        <p
-          className="text-xl mb-12 max-w-2xl mx-auto"
-          style={{
-            fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-          }}
-        >
-          Follow our arcade-simple installation guide to install RoboLike and
-          start your journey to social media domination.
+        <p className="text-xl mb-12 max-w-2xl mx-auto text-[var(--color-platinum)]">
+          Follow our simple installation guide to install RoboLike and
+          start growing your Instagram presence.
         </p>
 
         {/* Platform Selector */}
         <div className="mb-16">
           {detectedOS && (
             <div className="mb-2 text-center">
-              <span
-                className="inline-block px-4 mb-3 py-1 text-xs bg-[#07b0ef] text-black rounded-md"
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                }}
-              >
-                🎮 WE DETECTED YOUR OS: {detectedOS.toUpperCase()}
+              <span className="inline-block px-4 mb-3 py-1 text-xs bg-[var(--color-primaryOrange)] text-white rounded-md font-medium">
+                Detected OS: {detectedOS.toUpperCase()}
                 {macArchitecture && ` (${macArchitecture.toUpperCase()})`}
-                🎮
               </span>
             </div>
           )}
 
-          <div className="inline-flex rounded-md overflow-hidden border border-[#07b0ef] mx-auto">
+          <div className="inline-flex rounded-md overflow-hidden border border-[var(--color-steel)] mx-auto">
             <div
               onClick={() => setSelectedPlatform("macos")}
               className={cn(
-                "px-6 py-3 font-medium text-lg cursor-pointer",
+                "px-6 py-3 font-medium text-lg cursor-pointer transition-colors",
                 selectedPlatform === "macos"
-                  ? "bg-[#07b0ef] text-black"
-                  : "hover:bg-[rgba(7,176,239,0.2)]"
+                  ? "bg-[var(--color-primaryOrange)] text-white"
+                  : "hover:bg-[var(--color-slate)] text-[var(--color-platinum)]"
               )}
-              style={{
-                fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-              }}
             >
-              MACOS
+              macOS
             </div>
             <div
               onClick={() => setSelectedPlatform("windows")}
               className={cn(
-                "px-6 py-3 font-medium text-lg cursor-pointer border-l border-r border-[#07b0ef]",
+                "px-6 py-3 font-medium text-lg cursor-pointer border-l border-r border-[var(--color-steel)] transition-colors",
                 selectedPlatform === "windows"
-                  ? "bg-[#07b0ef] text-black"
-                  : "hover:bg-[rgba(7,176,239,0.2)]"
+                  ? "bg-[var(--color-primaryOrange)] text-white"
+                  : "hover:bg-[var(--color-slate)] text-[var(--color-platinum)]"
               )}
-              style={{
-                fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-              }}
             >
-              WINDOWS
+              Windows
             </div>
             <div
               onClick={() => setSelectedPlatform("linux")}
               className={cn(
-                "px-6 py-3 font-medium text-lg cursor-pointer",
+                "px-6 py-3 font-medium text-lg cursor-pointer transition-colors",
                 selectedPlatform === "linux"
-                  ? "bg-[#07b0ef] text-black"
-                  : "hover:bg-[rgba(7,176,239,0.2)]"
+                  ? "bg-[var(--color-primaryOrange)] text-white"
+                  : "hover:bg-[var(--color-slate)] text-[var(--color-platinum)]"
               )}
-              style={{
-                fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-              }}
             >
-              LINUX
+              Linux
             </div>
           </div>
         </div>
@@ -239,76 +210,53 @@ export default function InstallGuide() {
         {/* Mac Architecture Selector */}
         {selectedPlatform === "macos" && (
           <div className="mb-8">
-            <div className="inline-flex rounded-md overflow-hidden border border-[#07b0ef] mx-auto">
+            <div className="inline-flex rounded-md overflow-hidden border border-[var(--color-steel)] mx-auto">
               <div
                 onClick={() => setMacArchitecture("arm64")}
                 className={cn(
-                  "px-6 py-3 font-medium text-lg cursor-pointer",
+                  "px-6 py-3 font-medium text-lg cursor-pointer transition-colors",
                   macArchitecture === "arm64"
-                    ? "bg-[#07b0ef] text-black"
-                    : "hover:bg-[rgba(7,176,239,0.2)]"
+                    ? "bg-[var(--color-primaryOrange)] text-white"
+                    : "hover:bg-[var(--color-slate)] text-[var(--color-platinum)]"
                 )}
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                }}
               >
-                APPLE SILICON (M1/M2/M3)
+                Apple Silicon (M1/M2/M3)
               </div>
               <div
                 onClick={() => setMacArchitecture("x64")}
                 className={cn(
-                  "px-6 py-3 font-medium text-lg cursor-pointer border-l border-[#07b0ef]",
+                  "px-6 py-3 font-medium text-lg cursor-pointer border-l border-[var(--color-steel)] transition-colors",
                   macArchitecture === "x64"
-                    ? "bg-[#07b0ef] text-black"
-                    : "hover:bg-[rgba(7,176,239,0.2)]"
+                    ? "bg-[var(--color-primaryOrange)] text-white"
+                    : "hover:bg-[var(--color-slate)] text-[var(--color-platinum)]"
                 )}
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                }}
               >
-                INTEL
+                Intel
               </div>
             </div>
           </div>
         )}
 
         {/* Installation Steps */}
-        <div className="bg-[#1c1c1c] rounded-xl p-8 mb-12 border-2 border-[#07b0ef]">
+        <div className="bg-[var(--color-slate)] rounded-xl p-8 mb-12 border border-[var(--color-steel)]">
           {selectedPlatform === "macos" && (
             <div className="text-left">
-              <h2
-                className="text-2xl mb-6 text-[#f7ee2a] text-center neon-glow"
-                style={{
-                  fontFamily: 'var(--heading-font, "Press Start 2P", cursive)',
-                }}
-              >
-                INSTALLING ON MACOS
+              <h2 className="text-2xl mb-6 text-white text-center font-semibold">
+                Installing on macOS
               </h2>
 
               <div className="space-y-8">
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#ed1e79]">1</div>
+                    <div className="w-8 h-8 bg-[var(--color-primaryOrange)] text-white rounded-full flex items-center justify-center font-semibold">1</div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#ed1e79]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      DOWNLOAD THE INSTALLER
+                    <h3 className="text-xl mb-2 text-[var(--color-primaryOrange)] font-semibold">
+                      Download the Installer
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       Click the download button at the bottom to get the latest
-                      version of RoboLike for MacOS. You may need to click
+                      version of RoboLike for macOS. You may need to click
                       "Accept" or "Keep" in your browser since this is a zip
                       file.
                     </p>
@@ -317,25 +265,13 @@ export default function InstallGuide() {
 
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#07b0ef]">2</div>
+                    <div className="w-8 h-8 bg-[var(--color-infoBlue)] text-white rounded-full flex items-center justify-center font-semibold">2</div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#07b0ef]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      OPEN THE ZIP FILE
+                    <h3 className="text-xl mb-2 text-[var(--color-infoBlue)] font-semibold">
+                      Open the Zip File
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       Locate the downloaded zip file and double-click to extract
                       it. This will create the RoboLike application file.
                     </p>
@@ -344,27 +280,15 @@ export default function InstallGuide() {
 
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#f7ee2a] text-black">
+                    <div className="w-8 h-8 bg-[var(--color-warningAmber)] text-white rounded-full flex items-center justify-center font-semibold">
                       3
                     </div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#f7ee2a]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      DRAG TO APPLICATIONS
+                    <h3 className="text-xl mb-2 text-[var(--color-warningAmber)] font-semibold">
+                      Drag to Applications
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       Drag the RoboLike application to your Applications folder
                       to install it. This ensures the app is properly registered
                       with your system.
@@ -374,25 +298,13 @@ export default function InstallGuide() {
 
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#9633ac]">4</div>
+                    <div className="w-8 h-8 bg-[var(--color-accent)] text-white rounded-full flex items-center justify-center font-semibold">4</div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#9633ac]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      RIGHT-CLICK AND OPEN
+                    <h3 className="text-xl mb-2 text-[var(--color-accent)] font-semibold">
+                      Right-click and Open
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       Navigate to your Applications folder, right-click (or
                       Control-click) on the RoboLike app and select "Open" from
                       the menu. This is important for first-time launch on
@@ -403,25 +315,13 @@ export default function InstallGuide() {
 
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#10B981]">5</div>
+                    <div className="w-8 h-8 bg-[var(--color-successGreen)] text-white rounded-full flex items-center justify-center font-semibold">5</div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#10B981]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      CONFIRM PERMISSIONS
+                    <h3 className="text-xl mb-2 text-[var(--color-successGreen)] font-semibold">
+                      Confirm Permissions
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       When prompted by macOS security dialog, click "Open" to
                       confirm you want to run the app. After doing this once,
                       you'll be able to open the app normally in the future.
@@ -434,37 +334,20 @@ export default function InstallGuide() {
 
           {selectedPlatform === "windows" && (
             <div className="text-left">
-              <h2
-                className="text-2xl mb-6 text-[#f7ee2a] text-center neon-glow"
-                style={{
-                  fontFamily: 'var(--heading-font, "Press Start 2P", cursive)',
-                }}
-              >
-                INSTALLING ON WINDOWS
+              <h2 className="text-2xl mb-6 text-white text-center font-semibold">
+                Installing on Windows
               </h2>
 
               <div className="space-y-8">
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#ed1e79]">1</div>
+                    <div className="w-8 h-8 bg-[var(--color-primaryOrange)] text-white rounded-full flex items-center justify-center font-semibold">1</div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#ed1e79]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      DOWNLOAD THE INSTALLER
+                    <h3 className="text-xl mb-2 text-[var(--color-primaryOrange)] font-semibold">
+                      Download the Installer
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       Click the download button at the bottom to get the latest
                       version of RoboLike for Windows (.exe file).
                     </p>
@@ -473,25 +356,13 @@ export default function InstallGuide() {
 
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#07b0ef]">2</div>
+                    <div className="w-8 h-8 bg-[var(--color-infoBlue)] text-white rounded-full flex items-center justify-center font-semibold">2</div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#07b0ef]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      RUN THE INSTALLER
+                    <h3 className="text-xl mb-2 text-[var(--color-infoBlue)] font-semibold">
+                      Run the Installer
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       Locate the downloaded .exe file and double-click to run
                       it.
                     </p>
@@ -500,27 +371,15 @@ export default function InstallGuide() {
 
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#f7ee2a] text-black">
+                    <div className="w-8 h-8 bg-[var(--color-warningAmber)] text-white rounded-full flex items-center justify-center font-semibold">
                       3
                     </div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#f7ee2a]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      ACCEPT SECURITY PROMPTS
+                    <h3 className="text-xl mb-2 text-[var(--color-warningAmber)] font-semibold">
+                      Accept Security Prompts
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       If Windows SmartScreen appears, click "More info" and then
                       "Run anyway" to proceed.
                     </p>
@@ -529,25 +388,13 @@ export default function InstallGuide() {
 
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#9633ac]">4</div>
+                    <div className="w-8 h-8 bg-[var(--color-accent)] text-white rounded-full flex items-center justify-center font-semibold">4</div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#9633ac]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      FOLLOW INSTALLATION WIZARD
+                    <h3 className="text-xl mb-2 text-[var(--color-accent)] font-semibold">
+                      Follow Installation Wizard
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       Follow the prompts in the installation wizard, choosing
                       your preferred installation location.
                     </p>
@@ -556,25 +403,13 @@ export default function InstallGuide() {
 
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#10B981]">5</div>
+                    <div className="w-8 h-8 bg-[var(--color-successGreen)] text-white rounded-full flex items-center justify-center font-semibold">5</div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#10B981]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      LAUNCH ROBOLIKE
+                    <h3 className="text-xl mb-2 text-[var(--color-successGreen)] font-semibold">
+                      Launch RoboLike
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       Once installation is complete, launch RoboLike from your
                       desktop shortcut or Start menu.
                     </p>
@@ -586,37 +421,20 @@ export default function InstallGuide() {
 
           {selectedPlatform === "linux" && (
             <div className="text-left">
-              <h2
-                className="text-2xl mb-6 text-[#f7ee2a] text-center neon-glow"
-                style={{
-                  fontFamily: 'var(--heading-font, "Press Start 2P", cursive)',
-                }}
-              >
-                INSTALLING ON LINUX
+              <h2 className="text-2xl mb-6 text-white text-center font-semibold">
+                Installing on Linux
               </h2>
 
               <div className="space-y-8">
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#ed1e79]">1</div>
+                    <div className="w-8 h-8 bg-[var(--color-primaryOrange)] text-white rounded-full flex items-center justify-center font-semibold">1</div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#ed1e79]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      DOWNLOAD THE DEB PACKAGE
+                    <h3 className="text-xl mb-2 text-[var(--color-primaryOrange)] font-semibold">
+                      Download the DEB Package
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       Click the download button at the bottom to get the latest
                       version of RoboLike for Linux (.deb file).
                     </p>
@@ -625,30 +443,18 @@ export default function InstallGuide() {
 
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#07b0ef]">2</div>
+                    <div className="w-8 h-8 bg-[var(--color-infoBlue)] text-white rounded-full flex items-center justify-center font-semibold">2</div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#07b0ef]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      INSTALL WITH DPKG
+                    <h3 className="text-xl mb-2 text-[var(--color-infoBlue)] font-semibold">
+                      Install with DPKG
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       Open a terminal, navigate to the download location, and
                       run:
                     </p>
                     <p className="mt-2">
-                      <code className="bg-[#0A0A0A] px-2 py-1 rounded border border-[#07b0ef]">
+                      <code className="bg-[var(--color-charcoal)] px-2 py-1 rounded border border-[var(--color-steel)]">
                         sudo dpkg -i robolike_0.0.1_amd64.deb
                       </code>
                     </p>
@@ -657,30 +463,18 @@ export default function InstallGuide() {
 
                 <div className="flex">
                   <div className="flex-shrink-0 mr-4">
-                    <div className="instruction-circle bg-[#f7ee2a] text-black">
+                    <div className="w-8 h-8 bg-[var(--color-successGreen)] text-white rounded-full flex items-center justify-center font-semibold">
                       3
                     </div>
                   </div>
                   <div>
-                    <h3
-                      className="text-xl mb-2 text-[#f7ee2a]"
-                      style={{
-                        fontFamily:
-                          'var(--subheading-font, "Orbitron", sans-serif)',
-                      }}
-                    >
-                      LAUNCH ROBOLIKE
+                    <h3 className="text-xl mb-2 text-[var(--color-successGreen)] font-semibold">
+                      Launch RoboLike
                     </h3>
-                    <p
-                      className="text-gray-300"
-                      style={{
-                        fontFamily:
-                          'var(--body-font, "Chakra Petch", sans-serif)',
-                      }}
-                    >
+                    <p className="text-[var(--color-platinum)]">
                       After installation, you can launch RoboLike from your
                       application menu or by running{" "}
-                      <code className="bg-[#0A0A0A] px-2 py-1 rounded border border-[#f7ee2a]">
+                      <code className="bg-[var(--color-charcoal)] px-2 py-1 rounded border border-[var(--color-steel)]">
                         robolike
                       </code>{" "}
                       in the terminal.
@@ -692,28 +486,21 @@ export default function InstallGuide() {
           )}
         </div>
 
-        {/* Download CTA Button with Animation */}
+        {/* Download CTA Button */}
         <div className="relative mb-4">
-          <div className="absolute inset-0 bg-[#10B981] blur-lg opacity-30 animate-pulse"></div>
-
           <a
             href={getDownloadUrl()}
-            className="relative inline-block py-4 px-8 retro-button primary"
+            className="inline-block py-4 px-8 bg-[var(--color-primaryOrange)] hover:bg-[var(--color-secondaryOrange)] text-white font-semibold rounded-lg transition-colors"
             download
             target="_blank"
             rel="noopener noreferrer"
           >
-            DOWNLOAD FOR {selectedPlatform.toUpperCase()}
+            Download for {selectedPlatform.charAt(0).toUpperCase() + selectedPlatform.slice(1)}
           </a>
         </div>
 
         {/* Release Info */}
-        <div
-          className="text-sm text-[#07b0ef] mb-6"
-          style={{
-            fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-          }}
-        >
+        <div className="text-sm text-[var(--color-metallic)] mb-6">
           {releaseData.releaseDate !== "Coming Soon" ? (
             <>
               Latest version: {releaseData.releaseVersion} (Released:{" "}
@@ -732,17 +519,12 @@ export default function InstallGuide() {
         </div>
 
         <div className="mt-12 relative">
-          <div className="w-full h-1 bg-gradient-to-r from-[#f7ee2a] via-[#ed1e79] to-[#07b0ef]"></div>
-          <p
-            className="mt-6 text-gray-400 text-sm"
-            style={{
-              fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-            }}
-          >
+          <div className="w-full h-1 bg-gradient-to-r from-[var(--color-primaryOrange)] to-[var(--color-secondaryOrange)]"></div>
+          <p className="mt-6 text-[var(--color-metallic)] text-sm">
             By downloading, you agree to our{" "}
             <a
               href="/terms-and-conditions"
-              className="text-[#07b0ef] hover:underline"
+              className="text-[var(--color-primaryOrange)] hover:underline"
             >
               Terms and Conditions
             </a>
@@ -751,12 +533,7 @@ export default function InstallGuide() {
       </div>
 
       {/* Footer */}
-      <div
-        className="py-6 border-t border-[#1c1c1c] text-center text-gray-500 text-sm z-10"
-        style={{
-          fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-        }}
-      >
+      <div className="py-6 border-t border-[var(--color-steel)] text-center text-[var(--color-metallic)] text-sm z-10">
         <p>© {new Date().getFullYear()} RoboLike. All rights reserved.</p>
       </div>
     </div>

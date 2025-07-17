@@ -1,8 +1,6 @@
 import type { Route } from "./+types/home";
 import React, { useEffect, useRef, useState } from "react";
-import logoDark from "../home/heart.png";
-
-const futureDate = new Date("2025-05-01");
+import { Link } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -42,303 +40,318 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-function drawHeart(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  color: string,
-  size = 80
-) {
-  const scale = size / 16; // Scale factor for smooth resolution
+// Floating heart animation component
+function ParallaxHeartsBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-  for (let t = 0; t <= Math.PI * 2; t += 0.01) {
-    const heartX = 16 * Math.sin(t) ** 3;
-    const heartY =
-      13 * Math.cos(t) -
-      5 * Math.cos(2 * t) -
-      2 * Math.cos(3 * t) -
-      Math.cos(4 * t);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    ctx.lineTo(x + heartX * scale, y - heartY * scale);
-  }
+    // Set canvas size
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
 
-  ctx.stroke();
+    resizeCanvas();
+
+    // Heart drawing function
+    const drawHeart = (x: number, y: number, size: number, opacity: number) => {
+      ctx.save();
+      ctx.globalAlpha = opacity;
+      ctx.strokeStyle = '#f97316'; // Orange-500
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+
+      const scale = size / 16;
+      for (let t = 0; t <= Math.PI * 2; t += 0.1) {
+        const heartX = 16 * Math.sin(t) ** 3;
+        const heartY = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+        ctx.lineTo(x + heartX * scale, y - heartY * scale);
+      }
+
+      ctx.stroke();
+      ctx.restore();
+    };
+
+    // Create hearts
+    const hearts: Array<{x: number, y: number, size: number, speed: number, opacity: number}> = [];
+    
+    for (let i = 0; i < 15; i++) {
+      hearts.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 30 + 10,
+        speed: Math.random() * 0.5 + 0.1,
+        opacity: Math.random() * 0.1 + 0.05
+      });
+    }
+
+    let scrollY = 0;
+
+    // Animation loop
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      hearts.forEach((heart) => {
+        // Parallax effect based on scroll
+        const parallaxY = heart.y + scrollY * heart.speed * 0.1;
+        drawHeart(heart.x, parallaxY, heart.size, heart.opacity);
+        
+        // Float hearts slowly
+        heart.y -= heart.speed;
+        if (heart.y < -50) {
+          heart.y = canvas.height + 50;
+          heart.x = Math.random() * canvas.width;
+        }
+      });
+
+      requestAnimationFrame(animate);
+    };
+
+    // Listen for scroll
+    const handleScroll = () => {
+      scrollY = window.scrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', resizeCanvas);
+    animate();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed top-0 left-0 w-full h-full pointer-events-none z-0"
+      style={{ opacity: 0.3 }}
+    />
+  );
 }
-
-const retro80sColors = [
-  "#f7ee2a", // Vibrant Yellow
-  "#ed1e79", // Hot Pink
-  "#07b0ef", // Electric Blue
-  "#9633ac", // Purple
-  "#FA8E10", // Orange
-];
 
 export default function Home() {
   return (
-    <div className="font-set-1 min-h-screen overflow-hidden relative">
-      {/* Content Overlay */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-white p-6">
-        <div className="max-w-5xl w-full bg-[#0A0A0A] bg-opacity-70 rounded-lg border-2 border-[#07b0ef] p-8 backdrop-blur-sm">
+    <div className="min-h-screen bg-white">
+      <ParallaxHeartsBackground />
+      
+      {/* Hero Section */}
+      <div className="relative z-10 bg-gradient-to-br from-gray-50 to-white py-20">
+        <div className="max-w-7xl mx-auto px-6 text-center">
           {/* Logo */}
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-8">
             <img
-              src={logoDark}
-              alt="RoboLike Logo"
-              className="w-24 animate-pulse"
+              src="/robolike-orange-robot-heart.png"
+              alt="RoboLike"
+              className="h-20 w-auto"
             />
           </div>
 
-          {/* Main Title */}
-          <h1
-            className="text-center text-4xl md:text-5xl lg:text-6xl mb-4 gradient-text"
-            style={{
-              fontFamily: 'var(--heading-font, "Press Start 2P", cursive)',
-            }}
-          >
-            BOOST YOUR INSTAGRAM
+          {/* Main Hero Content */}
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6">
+            <span className="bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
+              Grow Your Instagram
+            </span>
+            <br />
+            <span className="text-gray-900">On Autopilot</span>
           </h1>
-
-          {/* Subtitle */}
-          <p
-            className="text-center text-xl md:text-2xl mb-6 text-[#f7ee2a]"
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            CONNECT WITH FANS. FIND NEW CLIENTS. GROW YOUR PRESENCE.
+          
+          <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto leading-relaxed">
+            The safe, local Instagram automation tool that helps you connect with real followers 
+            while you focus on creating amazing content.
           </p>
 
-          {/* Divider */}
-          <div className="w-full h-1 my-4 bg-gradient-to-r from-[#ed1e79] via-[#07b0ef] to-[#f7ee2a]"></div>
-
-          {/* Feature Boxes */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-            <div className="bg-black bg-opacity-40 p-6 rounded-lg border border-[#ed1e79] text-center">
-              <div className="flex justify-center mb-4">
-                <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#ed1e79] text-2xl font-bold">
-                  1
-                </div>
-              </div>
-              <h3
-                className="text-xl mb-2 text-[#ed1e79]"
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                }}
-              >
-                PICK A HASHTAG
-              </h3>
-              <p
-                className="text-gray-300"
-                style={{
-                  fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-                }}
-              >
-                Target your audience with relevant hashtags for your niche or
-                industry.
-              </p>
-            </div>
-
-            <div className="bg-black bg-opacity-40 p-6 rounded-lg border border-[#07b0ef] text-center">
-              <div className="flex justify-center mb-4">
-                <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#07b0ef] text-2xl font-bold">
-                  2
-                </div>
-              </div>
-              <h3
-                className="text-xl mb-2 text-[#07b0ef]"
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                }}
-              >
-                LOG IN & START
-              </h3>
-              <p
-                className="text-gray-300"
-                style={{
-                  fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-                }}
-              >
-                Connect your Instagram account and let RoboLike do the work
-                while you focus on creating content.
-              </p>
-            </div>
-
-            <div className="bg-black bg-opacity-40 p-6 rounded-lg border border-[#f7ee2a] text-center">
-              <div className="flex justify-center mb-4">
-                <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#f7ee2a] text-black text-2xl font-bold">
-                  3
-                </div>
-              </div>
-              <h3
-                className="text-xl mb-2 text-[#f7ee2a]"
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                }}
-              >
-                GROW FOLLOWERS
-              </h3>
-              <p
-                className="text-gray-300"
-                style={{
-                  fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-                }}
-              >
-                Watch as new followers, likes, and comments start flowing to
-                your account.
-              </p>
-            </div>
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <Link
+              to="/install-guide"
+              className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-colors shadow-lg hover:shadow-xl transform hover:scale-105"
+            >
+              Download Free
+            </Link>
+            <Link
+              to="/instagram-auto-liker-how-it-works"
+              className="bg-white hover:bg-gray-50 text-gray-900 px-8 py-4 rounded-lg font-bold text-lg border-2 border-gray-200 transition-colors"
+            >
+              How It Works
+            </Link>
           </div>
 
-          {/* CTA */}
-          <div className="flex flex-col md:flex-row items-center justify-center my-16">
-            <a
-              href="/install-guide"
-              className="relative py-4 px-8 retro-button primary w-full md:w-auto text-center"
-            >
-              DOWNLOAD
-            </a>
+          {/* Trust Indicators */}
+          <div className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>100% Local & Secure</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>No Passwords Stored</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>Real Engagement</span>
+            </div>
           </div>
+        </div>
+      </div>
 
-          {/* Benefits */}
-          <div className="mb-8">
-            <h2
-              className="text-2xl md:text-3xl mb-4 text-center neon-glow"
-              style={{
-                fontFamily: 'var(--heading-font, "Press Start 2P", cursive)',
-              }}
-            >
-              LEVEL UP YOUR SOCIAL GAME
+      {/* How It Works Section */}
+      <div className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+              How It Works
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-              <div className="flex items-start">
-                <div className="text-[#9633ac] text-2xl mr-3">⚡</div>
-                <div>
-                  <h4
-                    className="text-xl text-[#9633ac] mb-1"
-                    style={{
-                      fontFamily:
-                        'var(--subheading-font, "Orbitron", sans-serif)',
-                    }}
-                  >
-                    More Engagement
-                  </h4>
-                  <p
-                    className="text-gray-300"
-                    style={{
-                      fontFamily:
-                        'var(--body-font, "Chakra Petch", sans-serif)',
-                    }}
-                  >
-                    Increase likes, comments, and follows on your content
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="text-[#10B981] text-2xl mr-3">🚀</div>
-                <div>
-                  <h4
-                    className="text-xl text-[#10B981] mb-1"
-                    style={{
-                      fontFamily:
-                        'var(--subheading-font, "Orbitron", sans-serif)',
-                    }}
-                  >
-                    Grow Your Audience
-                  </h4>
-                  <p
-                    className="text-gray-300"
-                    style={{
-                      fontFamily:
-                        'var(--body-font, "Chakra Petch", sans-serif)',
-                    }}
-                  >
-                    Connect with potential followers who share your interests
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="text-[#ed1e79] text-2xl mr-3">💰</div>
-                <div>
-                  <h4
-                    className="text-xl text-[#ed1e79] mb-1"
-                    style={{
-                      fontFamily:
-                        'var(--subheading-font, "Orbitron", sans-serif)',
-                    }}
-                  >
-                    Find New Clients
-                  </h4>
-                  <p
-                    className="text-gray-300"
-                    style={{
-                      fontFamily:
-                        'var(--body-font, "Chakra Petch", sans-serif)',
-                    }}
-                  >
-                    Turn followers into customers with increased visibility
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="text-[#07b0ef] text-2xl mr-3">⚙️</div>
-                <div>
-                  <h4
-                    className="text-xl text-[#07b0ef] mb-1"
-                    style={{
-                      fontFamily:
-                        'var(--subheading-font, "Orbitron", sans-serif)',
-                    }}
-                  >
-                    Run On Your Machine
-                  </h4>
-                  <p
-                    className="text-gray-300"
-                    style={{
-                      fontFamily:
-                        'var(--body-font, "Chakra Petch", sans-serif)',
-                    }}
-                  >
-                    Keep your account secure by running locally (just keep your
-                    computer on)
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Important Note */}
-          <div className="bg-black bg-opacity-50 p-4 rounded-lg border border-[#f7ee2a] mb-8">
-            <p
-              className="text-[#f7ee2a] text-sm"
-              style={{
-                fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-              }}
-            >
-              <strong>NOTE:</strong> Your computer must remain on while RoboLike
-              is running. It will work with your screen locked, but not in sleep
-              mode or with the lid closed.
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Get started with RoboLike in just 3 simple steps
             </p>
           </div>
 
-          {/* CTA */}
-          <div className="flex flex-col md:flex-row items-center justify-center my-16">
-            <a
-              href="/install-guide"
-              className="relative py-4 px-8 retro-button primary w-full md:w-auto text-center"
-            >
-              DOWNLOAD
-            </a>
+          <div className="grid md:grid-cols-3 gap-12">
+            <div className="text-center">
+              <div className="bg-orange-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-orange-600 text-3xl font-bold">1</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Pick Your Hashtags</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Target your ideal audience by selecting hashtags relevant to your niche or industry.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-pink-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-pink-600 text-3xl font-bold">2</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Connect & Start</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Securely connect your Instagram account and let RoboLike handle the engagement automatically.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-purple-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-purple-600 text-3xl font-bold">3</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Watch Growth</h3>
+              <p className="text-gray-600 leading-relaxed">
+                See real followers, likes, and engagement flowing to your account while you create content.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Benefits Section */}
+      <div className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+              Why Choose RoboLike?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Built for creators who want real growth without compromising security
+            </p>
           </div>
 
-          {/* Divider */}
-          <div className="w-full h-1 my-6 bg-gradient-to-r from-[#f7ee2a] via-[#ed1e79] to-[#07b0ef]"></div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm text-center">
+              <div className="text-orange-500 text-4xl mb-4">🚀</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Real Growth</h3>
+              <p className="text-gray-600">
+                Connect with genuine followers who are actually interested in your content
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm text-center">
+              <div className="text-green-500 text-4xl mb-4">🔒</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">100% Secure</h3>
+              <p className="text-gray-600">
+                Runs locally on your machine - your credentials never leave your computer
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm text-center">
+              <div className="text-blue-500 text-4xl mb-4">⚙️</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Easy Setup</h3>
+              <p className="text-gray-600">
+                Get started in minutes with our simple, user-friendly interface
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm text-center">
+              <div className="text-purple-500 text-4xl mb-4">⏰</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Save Time</h3>
+              <p className="text-gray-600">
+                Focus on creating while RoboLike handles the time-consuming engagement work
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Social Proof Section */}
+      <div className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-8">
+            Join Thousands of Happy Users
+          </h2>
+          
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="p-6">
+              <div className="text-4xl font-bold text-orange-600 mb-2">100K+</div>
+              <div className="text-gray-600">Users Served</div>
+            </div>
+            <div className="p-6">
+              <div className="text-4xl font-bold text-pink-600 mb-2">10B+</div>
+              <div className="text-gray-600">Likes Delivered</div>
+            </div>
+            <div className="p-6">
+              <div className="text-4xl font-bold text-purple-600 mb-2">500K+</div>
+              <div className="text-gray-600">New Followers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Final CTA Section */}
+      <div className="py-20 bg-gradient-to-br from-orange-50 to-pink-50">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6">
+            Ready to Grow Your Instagram?
+          </h2>
+          <p className="text-xl text-gray-700 mb-8 leading-relaxed">
+            Download RoboLike today and start connecting with your ideal audience. 
+            It's free to get started!
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <Link
+              to="/install-guide"
+              className="bg-orange-600 hover:bg-orange-700 text-white px-10 py-4 rounded-lg font-bold text-xl transition-colors shadow-lg hover:shadow-xl transform hover:scale-105"
+            >
+              Download Free Now
+            </Link>
+            <Link
+              to="/social-media-automation-pricing"
+              className="text-orange-600 hover:text-orange-700 font-medium text-lg"
+            >
+              View Pricing →
+            </Link>
+          </div>
+
+          <div className="bg-orange-50 p-6 rounded-lg border border-orange-200 max-w-2xl mx-auto">
+            <p className="text-orange-800 text-sm leading-relaxed">
+              <strong>Note:</strong> Your computer must remain on while RoboLike is running. 
+              It works with your screen locked, but not in sleep mode.
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,27 @@
+User-agent: *
+
+# Block admin routes
+Disallow: /admin/
+Disallow: /admin
+
+# Block user account routes  
+Disallow: /u/
+Disallow: /u
+
+# Block auth routes
+Disallow: /auth/
+Disallow: /auth
+
+# Block API routes
+Disallow: /api/
+Disallow: /api
+
+# Block webhook routes
+Disallow: /webhook/
+Disallow: /webhook
+
+# Allow all other pages
+Allow: /
+
+# Sitemap location
+Sitemap: https://robolike.com/sitemap.xml

@@ -66,26 +66,24 @@ export default function Login() {
   };
 
   return (
-    <AuthCard title="ROBOLIKE ACCOUNT">
+    <AuthCard title="Welcome to RoboLike">
       {submitted && actionData?.success ? (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-          <p>Magic link sent! Check your email to log in.</p>
+        <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6">
+          <p className="font-medium">Magic link sent!</p>
+          <p className="text-sm mt-1">Check your email to log in securely.</p>
         </div>
       ) : (
         <Form method="post" onSubmit={handleSubmit}>
           {(loaderData?.error || actionData?.error) && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-              <p>{loaderData?.error || actionData?.error}</p>
+            <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
+              <p className="font-medium">{loaderData?.error || actionData?.error}</p>
             </div>
           )}
 
-          <div className="mb-4">
+          <div className="mb-6">
             <label
               htmlFor="email"
-              className="block text-gray-700 dark:text-gray-300 font-medium mb-2"
-              style={{
-                fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-              }}
+              className="block text-gray-700 font-medium mb-2"
             >
               Email Address
             </label>
@@ -93,7 +91,8 @@ export default function Login() {
               type="email"
               id="email"
               name="email"
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -106,10 +105,7 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-[#07b0ef] text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 disabled:opacity-70"
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
+            className="w-full py-3 px-4 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             disabled={isSubmitting}
           >
             {isSubmitting ? (
@@ -134,12 +130,19 @@ export default function Login() {
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                PROCESSING...
+                Processing...
               </span>
             ) : (
-              "LOGIN / SIGNUP"
+              "Login / Sign Up"
             )}
           </button>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600 leading-relaxed">
+              We'll send you a secure magic link to log in or create your account.
+              No passwords needed!
+            </p>
+          </div>
         </Form>
       )}
     </AuthCard>

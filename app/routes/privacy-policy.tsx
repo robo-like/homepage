@@ -1,5 +1,5 @@
-import type { Route } from "./+types/terms-and-conditions";
-import logoDark from "../home/heart.png";
+import type { Route } from "./+types/privacy-policy";
+import { Link } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -28,93 +28,64 @@ export function meta({}: Route.MetaArgs) {
 
 export default function PrivacyPolicy() {
   return (
-    <div className="font-set-1 min-h-screen text-white relative pb-16">
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 pt-16">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <div className="inline-block mb-4">
-            <a href="/">
-              <img
-                src={logoDark}
-                alt="RoboLike Logo"
-                className="w-20 h-20 animate-pulse mx-auto cursor-pointer"
-              />
-            </a>
-          </div>
-          <h1
-            className="text-4xl md:text-5xl lg:text-6xl mb-4 gradient-text"
-            style={{
-              fontFamily: 'var(--heading-font, "Press Start 2P", cursive)',
-            }}
-          >
-            PRIVACY POLICY
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <div className="bg-gray-50 py-16">
+        <div className="max-w-[800px] mx-auto px-6 text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-6 bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 bg-clip-text text-transparent pb-2">
+            Privacy Policy
           </h1>
-          <div className="w-full max-w-4xl mx-auto h-1 my-6 bg-gradient-to-r from-[#ed1e79] via-[#07b0ef] to-[#f7ee2a]"></div>
-          <p
-            className="text-xl md:text-2xl text-[#f7ee2a] max-w-3xl mx-auto"
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            YOUR DATA, YOUR CONTROL
+          <p className="text-xl text-gray-700 leading-relaxed">
+            How we protect and handle your data
           </p>
         </div>
+      </div>
 
-        {/* Privacy Policy Content */}
-        <div className="max-w-4xl mx-auto bg-black bg-opacity-70 p-8 rounded-lg border-2 border-[#07b0ef] mb-16">
-          <div
-            className="space-y-8 text-lg"
-            style={{
-              fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-            }}
-          >
+      {/* Privacy Policy Content */}
+      <div className="bg-white py-16">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="space-y-8 text-lg">
             <section>
-              <h2
-                className="text-2xl mb-4 text-[#ed1e79]"
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                }}
-              >
-                DATA CONTROLLERS & PROCESSORS
+              <h2 className="text-3xl font-bold mb-4 text-gray-900">
+                Data Controllers & Processors
               </h2>
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl text-[#07b0ef] mb-2">Data Controllers</h3>
-                  <p className="text-gray-100">
-                    <span className="text-[#f7ee2a] font-bold">RoboLike</span> - As the primary data controller, we determine the purposes and means of processing personal data collected through our application.
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Data Controllers</h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    <span className="text-orange-600 font-bold">RoboLike</span> - As the primary data controller, we determine the purposes and means of processing personal data collected through our application.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-xl text-[#07b0ef] mb-2">Data Processors</h3>
-                  <ul className="space-y-4">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Data Processors</h3>
+                  <ul className="space-y-3">
                     <li className="flex items-start">
-                      <span className="text-[#f7ee2a] mr-2">•</span>
-                      <span className="text-gray-100"><span className="text-[#07b0ef]">Vercel</span> - Hosts our application and processes user data through hosted components</span>
+                      <span className="text-orange-600 mr-2">•</span>
+                      <span className="text-gray-700"><span className="font-semibold">Vercel</span> - Hosts our application and processes user data through hosted components</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-[#f7ee2a] mr-2">•</span>
-                      <span className="text-gray-100"><span className="text-[#07b0ef]">Turso (AWS)</span> - Database service that stores user data on AWS infrastructure</span>
+                      <span className="text-orange-600 mr-2">•</span>
+                      <span className="text-gray-700"><span className="font-semibold">Turso (AWS)</span> - Database service that stores user data on AWS infrastructure</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-[#f7ee2a] mr-2">•</span>
-                      <span className="text-gray-100"><span className="text-[#07b0ef]">Cloudflare</span> - Provides DNS services and processes IP addresses and traffic information</span>
+                      <span className="text-orange-600 mr-2">•</span>
+                      <span className="text-gray-700"><span className="font-semibold">Cloudflare</span> - Provides DNS services and processes IP addresses and traffic information</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-[#f7ee2a] mr-2">•</span>
-                      <span className="text-gray-100"><span className="text-[#07b0ef]">Brevo</span> - Handles email communications with users</span>
+                      <span className="text-orange-600 mr-2">•</span>
+                      <span className="text-gray-700"><span className="font-semibold">Brevo</span> - Handles email communications with users</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-[#f7ee2a] mr-2">•</span>
-                      <span className="text-gray-100"><span className="text-[#07b0ef]">Facebook</span> - Processes user data when authorized through API keys</span>
+                      <span className="text-orange-600 mr-2">•</span>
+                      <span className="text-gray-700"><span className="font-semibold">Facebook</span> - Processes user data when authorized through API keys</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-[#f7ee2a] mr-2">•</span>
-                      <span className="text-gray-100"><span className="text-[#07b0ef]">GitHub</span> - Hosts our codebase and downloadable files</span>
+                      <span className="text-orange-600 mr-2">•</span>
+                      <span className="text-gray-700"><span className="font-semibold">GitHub</span> - Hosts our codebase and downloadable files</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-[#f7ee2a] mr-2">•</span>
-                      <span className="text-gray-100"><span className="text-[#07b0ef]">OpenAI</span> - Processes user data through their API for generating content and responses</span>
+                      <span className="text-orange-600 mr-2">•</span>
+                      <span className="text-gray-700"><span className="font-semibold">OpenAI</span> - Processes user data through their API for generating content and responses</span>
                     </li>
                   </ul>
                 </div>
@@ -122,80 +93,46 @@ export default function PrivacyPolicy() {
             </section>
 
             <section>
-              <h2
-                className="text-2xl mb-4 text-[#07b0ef]"
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                }}
-              >
-                DATA USE & STORAGE
+              <h2 className="text-3xl font-bold mb-4 text-gray-900">
+                Data Use & Storage
               </h2>
               <div className="space-y-4">
-                <p className="text-gray-100">
-                  <span className="text-[#f7ee2a] font-bold">User Data Storage:</span> Your data is primarily stored in Turso databases hosted on AWS infrastructure.
+                <p className="text-gray-700 leading-relaxed">
+                  <span className="text-orange-600 font-bold">User Data Storage:</span> Your data is primarily stored in Turso databases hosted on AWS infrastructure.
                 </p>
-                <p className="text-gray-100">
-                  <span className="text-[#f7ee2a] font-bold">AI Processing:</span> We use OpenAI's API to process certain user data for generating content and responses. OpenAI may temporarily store and process this data according to their privacy policy, but we do not share personally identifiable information with OpenAI.
+                <p className="text-gray-700 leading-relaxed">
+                  <span className="text-orange-600 font-bold">AI Processing:</span> We use OpenAI's API to process certain user data for generating content and responses. OpenAI may temporarily store and process this data according to their privacy policy, but we do not share personally identifiable information with OpenAI.
                 </p>
-                <p className="text-gray-100">
-                  <span className="text-[#f7ee2a] font-bold">Email Communications:</span> We use Brevo to handle all email communications with our users.
+                <p className="text-gray-700 leading-relaxed">
+                  <span className="text-orange-600 font-bold">Email Communications:</span> We use Brevo to handle all email communications with our users.
                 </p>
-                <p className="text-gray-100">
-                  <span className="text-[#f7ee2a] font-bold">Cookies:</span> We do not track users with cookies.
+                <p className="text-gray-700 leading-relaxed">
+                  <span className="text-orange-600 font-bold">Cookies:</span> We do not track users with cookies.
                 </p>
-                <p className="text-gray-100">
-                  <span className="text-[#f7ee2a] font-bold">Instagram Credentials:</span> While we request Instagram credentials, our implementation ensures these never leave your device or reach our servers.
+                <p className="text-gray-700 leading-relaxed">
+                  <span className="text-orange-600 font-bold">Instagram Credentials:</span> While we request Instagram credentials, our implementation ensures these never leave your device or reach our servers.
                 </p>
-                <p className="text-gray-100">
-                  <span className="text-[#f7ee2a] font-bold">API Integration:</span> We may use API keys for Facebook integration to make requests on users' behalf when authorized.
+                <p className="text-gray-700 leading-relaxed">
+                  <span className="text-orange-600 font-bold">API Integration:</span> We may use API keys for Facebook integration to make requests on users' behalf when authorized.
                 </p>
-                <p className="text-gray-100">
-                  <span className="text-[#f7ee2a] font-bold">Source Code:</span> Our source code is available upon request and is hosted on GitHub.
+                <p className="text-gray-700 leading-relaxed">
+                  <span className="text-orange-600 font-bold">Source Code:</span> Our source code is available upon request and is hosted on GitHub.
                 </p>
               </div>
             </section>
 
-            <div className="mt-12 p-6 bg-black bg-opacity-60 rounded-lg border border-[#f7ee2a]">
-              <p
-                className="text-md text-center text-[#f7ee2a]"
-                style={{
-                  fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                }}
-              >
+            <div className="mt-12 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-lg text-center text-gray-900 font-semibold mb-2">
                 We are committed to protecting your privacy and handling your data responsibly.
               </p>
-              <p className="text-center text-gray-300 mt-2">
-                Last updated: 17/03/2025
+              <p className="text-center text-gray-600 mt-4">
+                Last updated: July 16, 2025
               </p>
-              <p className="text-center text-gray-300 mt-4">
-                <a href="/terms-and-conditions" className="text-[#07b0ef] hover:underline">
+              <p className="text-center text-gray-600 mt-4">
+                <Link to="/terms-and-conditions" className="text-orange-600 hover:text-orange-700 transition-colors">
                   View our Terms and Conditions
-                </a>
+                </Link>
               </p>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="relative inline-block mx-auto w-full">
-              <div className="absolute inset-0 bg-[#07b0ef] blur-lg opacity-30 animate-pulse rounded-lg"></div>
-              <a
-                href="/how-it-works"
-                className="relative inline-block py-4 px-8 retro-button w-full"
-              >
-                HOW IT WORKS
-              </a>
-            </div>
-            <div className="relative inline-block mx-auto w-full">
-              <div className="absolute inset-0 bg-[#10B981] blur-lg opacity-30 animate-pulse rounded-lg"></div>
-              <a
-                href="/install-guide"
-                className="relative inline-block py-4 px-8 retro-button primary w-full"
-              >
-                DOWNLOAD NOW
-              </a>
             </div>
           </div>
         </div>

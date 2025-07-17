@@ -75,26 +75,27 @@ export default function CreatePost() {
   }, [actionData]);
 
   return (
-    <Container className="mt-10">
-      <div className="mb-4">
-        <Link
-          to="/admin"
-          className="text-sm text-gray-400 hover:text-white flex items-center gap-2"
-        >
-          <span>←</span>
-          <span>Back to Admin</span>
-        </Link>
+    <div className="space-y-6">
+      <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900">Create New Post</h2>
+            <p className="text-gray-600">
+              Create a new blog post with rich text editing and SEO optimization.
+            </p>
+          </div>
+          <Link
+            to="/admin/posts"
+            className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <span>←</span>
+            <span>Back to Posts</span>
+          </Link>
+        </div>
       </div>
 
-      <div className="mb-8">
-        <H1>Create New Post</H1>
-        <p className="text-gray-400">
-          Create a new blog post with rich text editing and SEO optimization.
-        </p>
-      </div>
-
-      <Card>
-        <Form method="post" className="space-y-6" onSubmit={handleSubmit}>
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+        <Form method="post" className="p-6 space-y-6" onSubmit={handleSubmit}>
           <TextInput
             label="Title"
             name="title"
@@ -125,10 +126,10 @@ export default function CreatePost() {
           />
 
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-300">Content</label>
+            <label className="text-sm font-medium text-gray-700">Content</label>
             <Tiptap
               name="body"
-              className="px-3 py-2 bg-white/5 border border-gray-700 rounded-lg min-h-[200px] focus:outline-none focus:ring-2 focus:ring-[#6A1E55] prose prose-invert max-w-none"
+              className="px-3 py-2 bg-white border border-gray-300 rounded-lg min-h-[200px] focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 prose max-w-none"
               required
             />
             {actionData?.errors?.body && (
@@ -138,8 +139,8 @@ export default function CreatePost() {
             )}
           </div>
 
-          <div className="border-t border-gray-700 pt-6">
-            <h3 className="text-lg font-bold mb-4">SEO Settings</h3>
+          <div className="border-t border-gray-200 pt-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">SEO Settings</h3>
             <div className="space-y-4">
               <TextInput
                 label="SEO Title"
@@ -159,17 +160,17 @@ export default function CreatePost() {
             </div>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-end pt-4 border-t border-gray-200">
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 bg-[#6A1E55] text-white rounded-lg hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
               {isSubmitting ? "Creating..." : "Create Post"}
             </button>
           </div>
         </Form>
-      </Card>
-    </Container>
+      </div>
+    </div>
   );
 }

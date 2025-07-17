@@ -37,6 +37,9 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
+  
+  // Generate canonical URL
+  const canonicalUrl = `https://robolike.com${location.pathname}`;
 
   useEffect(() => {
     fetch("/api/metrics", {
@@ -58,6 +61,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href={canonicalUrl} />
         <Meta />
         <Links />
       </head>

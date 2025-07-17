@@ -1,6 +1,6 @@
 import { redirect } from "react-router";
 import { requireAuth } from "~/lib/auth";
-import { Form, useLoaderData, useActionData } from "react-router";
+import { Form, useLoaderData, useActionData, Link } from "react-router";
 import { AuthCard } from "~/components/AuthCard";
 import type { Route } from "./+types/trial";
 import { getTrialExpiresAt, isUserOnTrial } from "~/lib/user/trial";
@@ -92,37 +92,42 @@ export default function Trial() {
 
   return (
     <>
-      <AuthCard title="TRIAL" className="max-w-xl mb-16">
+      <AuthCard title="Trial Access">
         <div className="mb-8">
-          <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-md">
-            <p
-              className="mb-4 text-center"
-              style={{
-                fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-              }}
-            >
-              {`Your trial will expire on ${new Date(trialExpiresAt).toLocaleString()}`}
+          <div className="bg-orange-50 p-6 rounded-lg border border-orange-200">
+            <p className="mb-4 text-center text-gray-700">
+              Your trial will expire on{" "}
+              <span className="font-semibold">
+                {new Date(trialExpiresAt).toLocaleString()}
+              </span>
             </p>
-            <p
-              className="mb-4 text-lg font-semibold text-center"
-              style={{
-                fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-              }}
-            >
+            <p className="mb-6 text-lg font-bold text-center text-orange-600">
               {timeLeft}
             </p>
 
             <Form method="post">
               <button
                 type="submit"
-                className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
-                style={{
-                  fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-                }}
+                className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-3 px-4 rounded-lg transition-colors"
               >
                 Start Liking
               </button>
             </Form>
+          </div>
+
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h3 className="text-lg font-semibold text-blue-800 mb-2">
+              Enjoying your trial?
+            </h3>
+            <p className="text-blue-700 text-sm mb-3">
+              Upgrade to a full subscription to continue using RoboLike after your trial expires.
+            </p>
+            <Link
+              to="/social-media-automation-pricing"
+              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+            >
+              View Pricing
+            </Link>
           </div>
         </div>
       </AuthCard>

@@ -32,11 +32,62 @@ export function meta({ data }: Route.MetaArgs) {
     ];
   }
 
+  const post = data.post;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.summary,
+    "author": {
+      "@type": "Person",
+      "name": post.author
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "RoboLike",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://robolike.com/robolike-orange-robot-heart.png"
+      }
+    },
+    "datePublished": new Date(post.createdAt).toISOString(),
+    "dateModified": new Date(post.createdAt).toISOString(),
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://robolike.com/blog/${post.slug}`
+    },
+    "image": post.seoImage || "https://robolike.com/robolike-orange-robot-heart.png",
+    "url": `https://robolike.com/blog/${post.slug}`
+  };
+
   return [
-    { title: data.post.seoTitle || data.post.title },
+    { title: post.seoTitle || post.title },
     {
       name: "description",
-      content: data.post.seoDescription || data.post.summary,
+      content: post.seoDescription || post.summary,
+    },
+    {
+      property: "og:title",
+      content: post.seoTitle || post.title,
+    },
+    {
+      property: "og:description",
+      content: post.seoDescription || post.summary,
+    },
+    {
+      property: "og:type",
+      content: "article",
+    },
+    {
+      property: "og:image",
+      content: post.seoImage || "https://robolike.com/robolike-orange-robot-heart.png",
+    },
+    {
+      name: "twitter:card",
+      content: "summary_large_image",
+    },
+    {
+      "script:ld+json": structuredData,
     },
   ];
 }

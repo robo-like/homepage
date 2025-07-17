@@ -195,17 +195,22 @@ export default function AdminActivity() {
     };
 
     return (
-        <Card>
-            <div className="flex flex-col space-y-4 mb-6">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-4">
-                        <H2 className="text-[#07b0ef]">User Activity</H2>
-                        <span className="text-sm text-[#10B981] bg-[rgba(16,185,129,0.1)] px-2 py-1 rounded">
-                            {totalCount} total events
-                        </span>
+        <div className="space-y-6">
+            {/* Header with Stats */}
+            <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm">
+                <div className="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 className="text-xl font-bold text-gray-900">User Activity</h2>
+                        <p className="text-gray-600">
+                            {totalCount.toLocaleString()} total events
+                        </p>
                     </div>
                     <button
-                        className={`flex items-center space-x-2 ${(currentEventType || currentStartDate || currentEndDate) ? 'text-[#10B981]' : 'text-[#07b0ef]'} hover:text-[#ed1e79] transition-colors`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                            (currentEventType || currentStartDate || currentEndDate) 
+                                ? 'bg-green-100 text-green-700 border border-green-200' 
+                                : 'bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200'
+                        }`}
                         onClick={() => {
                             const filterSection = document.getElementById('filterSection');
                             if (filterSection) {
@@ -213,29 +218,25 @@ export default function AdminActivity() {
                             }
                         }}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                             <path fillRule="evenodd" d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z" clipRule="evenodd" />
                         </svg>
-                        <span className="text-sm font-medium">
-                            {(currentEventType || currentStartDate || currentEndDate) ? 'Filters Applied' : 'Filter Events'}
-                        </span>
-                        {(currentEventType || currentStartDate || currentEndDate) && (
-                            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-                        )}
+                        {(currentEventType || currentStartDate || currentEndDate) ? 'Filters Applied' : 'Filter Events'}
                     </button>
                 </div>
 
-                <div id="filterSection" className="bg-[#0A0A0A]/50 border border-[#07b0ef]/20 rounded-lg p-4 hidden">
-                    <div className="grid grid-cols-3 gap-6">
-                        <div className="flex flex-col space-y-1">
-                            <label htmlFor="eventType" className="text-sm text-[#ed1e79] mb-1">
+                {/* Filter Section */}
+                <div id="filterSection" className="bg-gray-50 border border-gray-200 rounded-lg p-4 hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label htmlFor="eventType" className="block text-sm font-medium text-gray-700 mb-2">
                                 Event Type
                             </label>
                             <select
                                 id="eventType"
                                 value={currentEventType || ""}
                                 onChange={handleEventTypeChange}
-                                className="bg-[#0A0A0A] border border-[#07b0ef]/30 rounded px-3 py-2 text-sm text-[#FDB95C] focus:border-[#07b0ef] focus:outline-none"
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             >
                                 <option value="">All Events</option>
                                 {EVENT_TYPES.map((type) => (
@@ -246,8 +247,8 @@ export default function AdminActivity() {
                             </select>
                         </div>
 
-                        <div className="flex flex-col space-y-1">
-                            <label htmlFor="startDate" className="text-sm text-[#ed1e79] mb-1">
+                        <div>
+                            <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-2">
                                 After Date
                             </label>
                             <input
@@ -255,12 +256,12 @@ export default function AdminActivity() {
                                 id="startDate"
                                 value={formatDateForInput(currentStartDate)}
                                 onChange={(e) => handleDateChange('startDate', e.target.value)}
-                                className="bg-[#0A0A0A] border border-[#07b0ef]/30 rounded px-3 py-2 text-sm text-[#FDB95C] focus:border-[#07b0ef] focus:outline-none"
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             />
                         </div>
 
-                        <div className="flex flex-col space-y-1">
-                            <label htmlFor="endDate" className="text-sm text-[#ed1e79] mb-1">
+                        <div>
+                            <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-2">
                                 Before Date
                             </label>
                             <input
@@ -268,41 +269,56 @@ export default function AdminActivity() {
                                 id="endDate"
                                 value={formatDateForInput(currentEndDate)}
                                 onChange={(e) => handleDateChange('endDate', e.target.value)}
-                                className="bg-[#0A0A0A] border border-[#07b0ef]/30 rounded px-3 py-2 text-sm text-[#FDB95C] focus:border-[#07b0ef] focus:outline-none"
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             />
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="space-y-2">
-                {events.length === 0 ? (
-                    <p className="text-[#10B981] italic">No events found for the selected criteria</p>
-                ) : (
-                    events.map((event) => (
-                        <div
-                            key={event.id}
-                            className="flex justify-between items-center py-3 px-3 border-b border-[#07b0ef]/20 last:border-0 hover:bg-[rgba(7,176,239,0.05)] rounded-lg transition-colors"
-                        >
-                            <div>
-                                <p className="text-white font-semibold mb-1">{event.description}</p>
-                                <div className="grid grid-cols-3 gap-2">
-                                    <p className="text-sm text-[#9633ac]">
-                                        <span className="text-[#ed1e79]">Type:</span> {event.eventType}
-                                    </p>
-                                    <p className="text-sm text-[#9633ac]">
-                                        <span className="text-[#ed1e79]">Value:</span> {event.eventValue || "—"}
-                                    </p>
-                                    <p className="text-sm text-[#9633ac]">
-                                        <span className="text-[#ed1e79]">Path:</span> {event.path || "—"}
-                                    </p>
+
+            {/* Events List */}
+            <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+                <div className="px-6 py-4 border-b border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-900">Recent Events</h3>
+                </div>
+                
+                <div className="divide-y divide-gray-200">
+                    {events.length === 0 ? (
+                        <div className="p-12 text-center">
+                            <div className="text-gray-400 text-6xl mb-4">📊</div>
+                            <h3 className="text-lg font-medium text-gray-900 mb-2">No events found</h3>
+                            <p className="text-gray-600">
+                                No events match the selected criteria. Try adjusting your filters.
+                            </p>
+                        </div>
+                    ) : (
+                        events.map((event) => (
+                            <div key={event.id} className="p-6 hover:bg-gray-50 transition-colors">
+                                <div className="flex justify-between items-start">
+                                    <div className="flex-1">
+                                        <h4 className="font-medium text-gray-900 mb-2">{event.description}</h4>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
+                                            <div>
+                                                <span className="font-medium text-gray-700">Type:</span> {event.eventType}
+                                            </div>
+                                            <div>
+                                                <span className="font-medium text-gray-700">Value:</span> {event.eventValue || "—"}
+                                            </div>
+                                            <div>
+                                                <span className="font-medium text-gray-700">Path:</span> {event.path || "—"}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="ml-6 text-right">
+                                        <time className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full whitespace-nowrap">
+                                            {new Date(event.createdAt).toLocaleString()}
+                                        </time>
+                                    </div>
                                 </div>
                             </div>
-                            <time className="text-sm text-[#10B981] bg-[rgba(16,185,129,0.1)] px-2 py-1 rounded whitespace-nowrap">
-                                {new Date(event.createdAt).toLocaleString()}
-                            </time>
-                        </div>
-                    ))
-                )}
+                        ))
+                    )}
+                </div>
             </div>
             
             {/* Pagination */}
@@ -315,8 +331,8 @@ export default function AdminActivity() {
                             disabled={currentPage === 1}
                             className={`flex items-center justify-center w-9 h-9 rounded-md border ${
                                 currentPage === 1 
-                                    ? 'border-[#07b0ef]/20 text-[#07b0ef]/30 cursor-not-allowed' 
-                                    : 'border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                                    ? 'border-[var(--color-primaryOrange)]/20 text-[var(--color-primaryOrange)]/30 cursor-not-allowed' 
+                                    : 'border-[var(--color-primaryOrange)]/40 text-[var(--color-primaryOrange)] hover:bg-[var(--color-primaryOrange)]/10 hover:border-[var(--color-primaryOrange)]'
                             } transition-colors`}
                             aria-label="Go to first page"
                         >
@@ -331,8 +347,8 @@ export default function AdminActivity() {
                             disabled={!hasPrevPage}
                             className={`flex items-center justify-center w-9 h-9 rounded-md border ${
                                 !hasPrevPage
-                                    ? 'border-[#07b0ef]/20 text-[#07b0ef]/30 cursor-not-allowed' 
-                                    : 'border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                                    ? 'border-[var(--color-primaryOrange)]/20 text-[var(--color-primaryOrange)]/30 cursor-not-allowed' 
+                                    : 'border-[var(--color-primaryOrange)]/40 text-[var(--color-primaryOrange)] hover:bg-[var(--color-primaryOrange)]/10 hover:border-[var(--color-primaryOrange)]'
                             } transition-colors`}
                             aria-label="Previous page"
                         >
@@ -349,8 +365,8 @@ export default function AdminActivity() {
                                     onClick={() => handlePageChange(pageNum)}
                                     className={`flex items-center justify-center w-9 h-9 rounded-md ${
                                         currentPage === pageNum
-                                            ? 'bg-[#07b0ef] text-black font-bold'
-                                            : 'border border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                                            ? 'bg-[var(--color-primaryOrange)] text-black font-bold'
+                                            : 'border border-[var(--color-primaryOrange)]/40 text-[var(--color-primaryOrange)] hover:bg-[var(--color-primaryOrange)]/10 hover:border-[var(--color-primaryOrange)]'
                                     } transition-colors`}
                                     aria-label={`Page ${pageNum}`}
                                     aria-current={currentPage === pageNum ? 'page' : undefined}
@@ -358,7 +374,7 @@ export default function AdminActivity() {
                                     {pageNum}
                                 </button>
                             ) : (
-                                <span key={index} className="w-6 text-center text-[#07b0ef]">
+                                <span key={index} className="w-6 text-center text-[var(--color-primaryOrange)]">
                                     {pageNum}
                                 </span>
                             )
@@ -370,8 +386,8 @@ export default function AdminActivity() {
                             disabled={!hasNextPage}
                             className={`flex items-center justify-center w-9 h-9 rounded-md border ${
                                 !hasNextPage
-                                    ? 'border-[#07b0ef]/20 text-[#07b0ef]/30 cursor-not-allowed' 
-                                    : 'border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                                    ? 'border-[var(--color-primaryOrange)]/20 text-[var(--color-primaryOrange)]/30 cursor-not-allowed' 
+                                    : 'border-[var(--color-primaryOrange)]/40 text-[var(--color-primaryOrange)] hover:bg-[var(--color-primaryOrange)]/10 hover:border-[var(--color-primaryOrange)]'
                             } transition-colors`}
                             aria-label="Next page"
                         >
@@ -386,8 +402,8 @@ export default function AdminActivity() {
                             disabled={currentPage === totalPages}
                             className={`flex items-center justify-center w-9 h-9 rounded-md border ${
                                 currentPage === totalPages
-                                    ? 'border-[#07b0ef]/20 text-[#07b0ef]/30 cursor-not-allowed' 
-                                    : 'border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                                    ? 'border-[var(--color-primaryOrange)]/20 text-[var(--color-primaryOrange)]/30 cursor-not-allowed' 
+                                    : 'border-[var(--color-primaryOrange)]/40 text-[var(--color-primaryOrange)] hover:bg-[var(--color-primaryOrange)]/10 hover:border-[var(--color-primaryOrange)]'
                             } transition-colors`}
                             aria-label="Go to last page"
                         >
@@ -398,6 +414,6 @@ export default function AdminActivity() {
                     </div>
                 </div>
             )}
-        </Card>
+        </div>
     );
 } 

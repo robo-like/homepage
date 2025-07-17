@@ -27,10 +27,10 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
 
         return (
             <div className={cn(
-                "mt-2 p-3 rounded-md text-sm",
+                "mt-2 p-3 rounded-lg border text-sm",
                 isError
-                    ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-                    : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                    ? "bg-red-50 text-red-800 border-red-200"
+                    : "bg-green-50 text-green-800 border-green-200"
             )}>
                 {isError ? fetcher.data.error : fetcher.data.success}
             </div>
@@ -41,15 +41,15 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
     const renderStatusBadge = (status: string) => {
         const statusConfig = {
             active: {
-                className: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+                className: "bg-green-50 text-green-800 border-green-200",
                 text: "Active"
             },
             canceling: {
-                className: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+                className: "bg-yellow-50 text-yellow-800 border-yellow-200",
                 text: "Active (Cancelling at period end)"
             },
             inactive: {
-                className: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+                className: "bg-red-50 text-red-800 border-red-200",
                 text: "Inactive"
             }
         };
@@ -57,7 +57,7 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
         const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.inactive;
 
         return (
-            <span className={`px-2 py-1 rounded-full text-xs font-medium ${config.className}`}>
+            <span className={`px-3 py-1 rounded-lg text-xs font-medium border ${config.className}`}>
                 {config.text}
             </span>
         );
@@ -112,7 +112,7 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
             // No subscription - show start subscription button with context
             return (
                 <div className="space-y-4">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                    <div className="text-sm text-gray-700 leading-relaxed">
                         <p className="mb-2">To start using RoboLike, you'll need to create a subscription profile.</p>
                         <p>This is a one-time setup process that will:</p>
                         <ul className="list-disc pl-5 mt-2 space-y-1">
@@ -127,7 +127,7 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
                         <button
                             type="submit"
                             disabled={subscribeFetcher.state !== "idle"}
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {subscribeFetcher.state !== "idle" ? "Redirecting..." : "Create Subscription Profile"}
                         </button>
@@ -147,19 +147,19 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
                     {!showCancelConfirmation ? (
                         <button
                             onClick={() => setShowCancelConfirmation(true)}
-                            className="text-blue-600 hover:text-blue-700 text-sm font-medium border-b border-dashed border-blue-600 hover:border-blue-700"
+                            className="text-red-600 hover:text-red-700 text-sm font-medium border-b border-dashed border-red-600 hover:border-red-700"
                         >
                             Cancel Subscription
                         </button>
                     ) : (
                         <div className="space-y-4">
-                            <p className="text-sm text-gray-600 dark:text-gray-300">
+                            <p className="text-sm text-gray-700 leading-relaxed">
                                 Are you sure you want to cancel your subscription? You'll continue to have access until the end of your billing period.
                             </p>
-                            <div className="flex gap-2">
+                            <div className="flex gap-3">
                                 <button
                                     onClick={() => setShowCancelConfirmation(false)}
-                                    className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-md transition-colors"
+                                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors"
                                 >
                                     Keep Subscription
                                 </button>
@@ -169,7 +169,7 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
                                     <button
                                         type="submit"
                                         disabled={cancelFetcher.state !== "idle"}
-                                        className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {cancelFetcher.state !== "idle" ? "Processing..." : "Confirm Cancellation"}
                                     </button>
@@ -190,7 +190,7 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
                     <button
                         type="submit"
                         disabled={restartFetcher.state !== "idle"}
-                        className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {restartFetcher.state !== "idle" ? "Processing..." : "Restart Subscription"}
                     </button>
@@ -205,7 +205,7 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
                 <button
                     type="submit"
                     disabled={subscribeFetcher.state !== "idle"}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {subscribeFetcher.state !== "idle" ? "Redirecting..." : "Start Subscription"}
                 </button>
@@ -215,16 +215,11 @@ export function SubscriptionSection({ subscriptionDetails }: SubscriptionSection
 
     return (
         <div className="mb-8">
-            <h2
-                className="text-xl font-semibold mb-4"
-                style={{
-                    fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-                }}
-            >
-                SUBSCRIPTION
+            <h2 className="text-xl font-bold mb-4 text-gray-900">
+                Subscription
             </h2>
 
-            <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-md">
+            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
                 {renderFeedback(subscribeFetcher)}
                 {renderFeedback(cancelFetcher)}
                 {renderFeedback(restartFetcher)}
