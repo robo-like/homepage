@@ -63,6 +63,9 @@ export default [
     ...prefix("auth", [
       route("status", "routes/api/auth/status.tsx"),
     ]),
+    ...prefix("admin", [
+      route("activity-stream", "routes/api/admin/activity-stream.tsx"),
+    ]),
   ]),
   layout("./routes/landing/layout.tsx", [
     route("landing/:slug", "routes/landing.$slug.tsx"),
