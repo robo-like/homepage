@@ -13,6 +13,7 @@ export async function loader({ request }: Route.LoaderArgs) {
         Authorization: `token ${process.env.GITHUB_PAT}`,
       },
     });
+
     if (!response.ok) {
       throw new Error(`GitHub API responded with ${response.status}`);
     }
@@ -74,6 +75,9 @@ export default function InstallGuide() {
   const [macArchitecture, setMacArchitecture] = useState<
     "arm64" | "x64" | null
   >(null);
+  const [detectedMacArchitecture, setDetectedMacArchitecture] = useState<
+    "arm64" | "x64" | null
+  >(null);
   const [intelRequested, setIntelRequested] = useState(false);
 
   // Get the download URL for the selected platform
@@ -82,9 +86,9 @@ export default function InstallGuide() {
       return null;
     }
     const macExtensions = {
-      arm64: ["darwin-arm64", "arm64.dmg", "arm64.pkg"],
-      x64: ["darwin-x64", "x64.dmg", "x64.pkg"],
-      default: ["darwin", ".dmg", ".pkg"],
+      arm64: ["darwin-arm64", "arm64.dmg", "arm64.pkg", "mac.dmg"],
+      x64: ["darwin-x64", "x64.dmg", "x64.pkg", "mac.dmg"],
+      default: ["darwin", ".dmg", ".pkg", "mac.dmg"],
     };
     const otherExtensions = {
       windows: ["win", ".exe", ".msi"],
@@ -121,6 +125,7 @@ export default function InstallGuide() {
         );
         if (!macVersionMatch) {
           setMacArchitecture("arm64"); // Default to arm64 for newer Macs
+          setDetectedMacArchitecture("arm64");
           return "macos";
         }
         const majorVersion = parseInt(macVersionMatch[1]);
@@ -128,7 +133,9 @@ export default function InstallGuide() {
         // MacOS 10.15 or higher is likely Apple Silicon
         const isAppleSilicon =
           majorVersion > 10 || (majorVersion === 10 && minorVersion >= 15);
-        setMacArchitecture(isAppleSilicon ? "arm64" : "x64");
+        const detectedArch = isAppleSilicon ? "arm64" : "x64";
+        setMacArchitecture(detectedArch);
+        setDetectedMacArchitecture(detectedArch);
       } else if (platform.includes("win") || userAgent.includes("win")) {
         return "windows";
       } else if (platform.includes("linux") || userAgent.includes("linux")) {
@@ -164,7 +171,7 @@ export default function InstallGuide() {
           {detectedOS && (
             <div className="text-center mb-4">
               <span className="inline-block px-3 py-1 text-sm bg-green-100 text-green-800 rounded-lg font-medium border border-green-200">
-                🎯 Detected: {detectedOS.toUpperCase()}{macArchitecture && ` (${macArchitecture.toUpperCase()})`}
+                🎯 Detected: {detectedOS.toUpperCase()}{detectedMacArchitecture && ` (${detectedMacArchitecture.toUpperCase()})`}
               </span>
             </div>
           )}
@@ -223,7 +230,7 @@ export default function InstallGuide() {
                         <button
                           onClick={() => setMacArchitecture("arm64")}
                           className={cn(
-                            "px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                            "px-3 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer",
                             macArchitecture === "arm64"
                               ? "bg-white text-gray-900 shadow-sm"
                               : "text-gray-600 hover:text-gray-900"
@@ -234,7 +241,7 @@ export default function InstallGuide() {
                         <button
                           onClick={() => setMacArchitecture("x64")}
                           className={cn(
-                            "px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                            "px-3 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer",
                             macArchitecture === "x64"
                               ? "bg-white text-gray-900 shadow-sm"
                               : "text-gray-600 hover:text-gray-900"
