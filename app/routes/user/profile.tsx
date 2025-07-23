@@ -76,24 +76,14 @@ export default function Profile() {
 
   return (
     <>
-      <AuthCard title="YOUR PROFILE" className="max-w-xl mb-16">
+      <AuthCard title="Your Profile">
         <div className="mb-8">
-          <h2
-            className="text-xl font-semibold mb-4"
-            style={{
-              fontFamily: 'var(--subheading-font, "Orbitron", sans-serif)',
-            }}
-          >
-            ACCOUNT INFO
+          <h2 className="text-xl font-bold mb-4 text-gray-900">
+            Account Info
           </h2>
 
-          <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-md">
-            <p
-              className="mb-2"
-              style={{
-                fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-              }}
-            >
+          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <p className="text-gray-700">
               <span className="font-semibold">Email:</span> {user.email}
             </p>
           </div>
@@ -104,23 +94,17 @@ export default function Profile() {
         <Form method="post" className="mt-6">
           <button
             type="submit"
-            className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
-            style={{
-              fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-            }}
+            className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-3 px-4 rounded-lg transition-colors"
           >
             Start Liking
           </button>
         </Form>
 
         {user.role === "admin" && (
-          <div className="mt-6">
+          <div className="mt-4">
             <Link
               to="/admin"
-              className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-              style={{
-                fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-              }}
+              className="w-full inline-flex justify-center items-center bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-3 px-4 rounded-lg transition-colors"
             >
               Admin
             </Link>
@@ -130,10 +114,7 @@ export default function Profile() {
         <div className="mt-6 text-center">
           <Link
             to="/auth/logout"
-            className="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            style={{
-              fontFamily: 'var(--body-font, "Chakra Petch", sans-serif)',
-            }}
+            className="inline-flex justify-center items-center bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
           >
             Logout
           </Link>

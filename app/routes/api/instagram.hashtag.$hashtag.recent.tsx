@@ -1,39 +1,12 @@
-import { eq } from "drizzle-orm";
-import type { LoaderFunction } from "react-router";
+import type { Route } from "./+types/instagram.hashtag.$hashtag.recent";
 import { getUserSubscriptionDetails } from "~/lib/billing/stripe";
-import { db } from "~/lib/db";
-import { accessTokens, users } from "~/lib/db/schema";
+import { requireAuth } from "~/lib/auth";
 
 const hashtagToHashtagIdCache: { [key: string]: string } = {};
 
-export const loader: LoaderFunction = async ({ request, params }) => {
-  const authHeader = request.headers.get("Authorization");
-  if (!authHeader?.startsWith("Bearer ")) {
-    throw new Response("Missing Authorization header", { status: 401 });
-  }
-  const accessToken = authHeader.slice(7);
-
-  const token = await db
-    .select()
-    .from(accessTokens)
-    .where(eq(accessTokens.token, accessToken))
-    .get();
-
-  if (!token) {
-    throw new Response("Invalid access token", { status: 401 });
-  }
-
-  const user = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, token.userId))
-    .get();
-
-  if (!user) {
-    throw new Response("User not found", { status: 401 });
-  }
-
-  const subscriptionDetails = await getUserSubscriptionDetails(token.userId);
+export async function loader({ request, params }: Route.LoaderArgs) {
+  const { user } = await requireAuth(request, "/auth/login");
+  const subscriptionDetails = await getUserSubscriptionDetails(user.id);
 
   // If not subscribed, check if trial is active
   if (!subscriptionDetails.subscribed) {

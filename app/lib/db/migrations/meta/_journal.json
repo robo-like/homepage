@@ -57,6 +57,20 @@
       "when": 1747944056821,
       "tag": "0007_legal_surge",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1752773043679,
+      "tag": "0008_tidy_dark_phoenix",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1752778997515,
+      "tag": "0009_solid_starhawk",
+      "breakpoints": true
     }
   ]
 }

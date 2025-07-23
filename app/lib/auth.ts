@@ -135,10 +135,22 @@ export async function requireAuth(
 }
 
 /**
+ * Generate a 6-character hexadecimal code
+ */
+function generateHexCode(): string {
+  const characters = '0123456789abcdef';
+  let result = '';
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+
+/**
  * Create a magic link key for authentication
  */
 export async function createMagicLinkKey(userId: string): Promise<string> {
-  const key = crypto.randomUUID();
+  const key = generateHexCode();
   const now = new Date();
   const expiresAt = new Date(now.getTime() + 5 * 60 * 1000); // 5 minutes
 

@@ -3,9 +3,10 @@ import { H2 } from "~/components/H1";
 import { db } from "~/lib/db";
 import { useLoaderData, useSearchParams } from "react-router";
 import type { LoaderFunctionArgs } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { eq, desc, and, lte, gte, count } from "drizzle-orm";
 import { analytics } from "~/lib/db/schema";
+import { useRealTimeEvents } from "~/hooks/useRealTimeEvents";
 
 // Define available event types
 const EVENT_TYPES = [
@@ -76,7 +77,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function AdminActivity() {
     const { 
-        events, 
+        events: initialEvents, 
         totalCount, 
         currentPage,
         totalPages,
@@ -87,6 +88,12 @@ export default function AdminActivity() {
         currentEndDate 
     } = useLoaderData<typeof loader>();
     const [searchParams, setSearchParams] = useSearchParams();
+    const [realTimeEnabled, setRealTimeEnabled] = useState(false);
+    const [selectedDetail, setSelectedDetail] = useState<{type: string, content: string} | null>(null);
+    const { events: realTimeEvents, isConnected, connectionError } = useRealTimeEvents(realTimeEnabled);
+    
+    // Combine real-time events with initial events when real-time is enabled
+    const displayEvents = realTimeEnabled ? [...realTimeEvents, ...initialEvents] : initialEvents;
 
     const handleEventTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
@@ -195,47 +202,69 @@ export default function AdminActivity() {
     };
 
     return (
-        <Card>
-            <div className="flex flex-col space-y-4 mb-6">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-4">
-                        <H2 className="text-[#07b0ef]">User Activity</H2>
-                        <span className="text-sm text-[#10B981] bg-[rgba(16,185,129,0.1)] px-2 py-1 rounded">
-                            {totalCount} total events
-                        </span>
+        <div className="space-y-6">
+            {/* Header with Stats */}
+            <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm">
+                <div className="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 className="text-xl font-bold text-gray-900">User Activity</h2>
+                        <p className="text-gray-600">
+                            {totalCount.toLocaleString()} total events
+                            {realTimeEnabled && (
+                                <span className="ml-2">
+                                    <span className={`inline-block w-2 h-2 rounded-full mr-1 ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                                    {isConnected ? 'Live' : 'Disconnected'}
+                                </span>
+                            )}
+                        </p>
                     </div>
-                    <button
-                        className={`flex items-center space-x-2 ${(currentEventType || currentStartDate || currentEndDate) ? 'text-[#10B981]' : 'text-[#07b0ef]'} hover:text-[#ed1e79] transition-colors`}
-                        onClick={() => {
-                            const filterSection = document.getElementById('filterSection');
-                            if (filterSection) {
-                                filterSection.classList.toggle('hidden');
-                            }
-                        }}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                            <path fillRule="evenodd" d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-sm font-medium">
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => setRealTimeEnabled(!realTimeEnabled)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                                realTimeEnabled 
+                                    ? 'bg-green-100 text-green-700 border border-green-200' 
+                                    : 'bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200'
+                            }`}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                                <path fillRule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clipRule="evenodd" />
+                            </svg>
+                            {realTimeEnabled ? 'Stop Real-Time' : 'Start Real-Time'}
+                        </button>
+                        <button
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                                (currentEventType || currentStartDate || currentEndDate) 
+                                    ? 'bg-green-100 text-green-700 border border-green-200' 
+                                    : 'bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200'
+                            }`}
+                            onClick={() => {
+                                const filterSection = document.getElementById('filterSection');
+                                if (filterSection) {
+                                    filterSection.classList.toggle('hidden');
+                                }
+                            }}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                                <path fillRule="evenodd" d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z" clipRule="evenodd" />
+                            </svg>
                             {(currentEventType || currentStartDate || currentEndDate) ? 'Filters Applied' : 'Filter Events'}
-                        </span>
-                        {(currentEventType || currentStartDate || currentEndDate) && (
-                            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-                        )}
-                    </button>
+                        </button>
+                    </div>
                 </div>
 
-                <div id="filterSection" className="bg-[#0A0A0A]/50 border border-[#07b0ef]/20 rounded-lg p-4 hidden">
-                    <div className="grid grid-cols-3 gap-6">
-                        <div className="flex flex-col space-y-1">
-                            <label htmlFor="eventType" className="text-sm text-[#ed1e79] mb-1">
+                {/* Filter Section */}
+                <div id="filterSection" className="bg-gray-50 border border-gray-200 rounded-lg p-4 hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label htmlFor="eventType" className="block text-sm font-medium text-gray-700 mb-2">
                                 Event Type
                             </label>
                             <select
                                 id="eventType"
                                 value={currentEventType || ""}
                                 onChange={handleEventTypeChange}
-                                className="bg-[#0A0A0A] border border-[#07b0ef]/30 rounded px-3 py-2 text-sm text-[#FDB95C] focus:border-[#07b0ef] focus:outline-none"
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             >
                                 <option value="">All Events</option>
                                 {EVENT_TYPES.map((type) => (
@@ -246,8 +275,8 @@ export default function AdminActivity() {
                             </select>
                         </div>
 
-                        <div className="flex flex-col space-y-1">
-                            <label htmlFor="startDate" className="text-sm text-[#ed1e79] mb-1">
+                        <div>
+                            <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-2">
                                 After Date
                             </label>
                             <input
@@ -255,12 +284,12 @@ export default function AdminActivity() {
                                 id="startDate"
                                 value={formatDateForInput(currentStartDate)}
                                 onChange={(e) => handleDateChange('startDate', e.target.value)}
-                                className="bg-[#0A0A0A] border border-[#07b0ef]/30 rounded px-3 py-2 text-sm text-[#FDB95C] focus:border-[#07b0ef] focus:outline-none"
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             />
                         </div>
 
-                        <div className="flex flex-col space-y-1">
-                            <label htmlFor="endDate" className="text-sm text-[#ed1e79] mb-1">
+                        <div>
+                            <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-2">
                                 Before Date
                             </label>
                             <input
@@ -268,40 +297,142 @@ export default function AdminActivity() {
                                 id="endDate"
                                 value={formatDateForInput(currentEndDate)}
                                 onChange={(e) => handleDateChange('endDate', e.target.value)}
-                                className="bg-[#0A0A0A] border border-[#07b0ef]/30 rounded px-3 py-2 text-sm text-[#FDB95C] focus:border-[#07b0ef] focus:outline-none"
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             />
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="space-y-2">
-                {events.length === 0 ? (
-                    <p className="text-[#10B981] italic">No events found for the selected criteria</p>
+
+            {/* Events List */}
+            <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+                <div className="px-6 py-4 border-b border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-900">Recent Events</h3>
+                </div>
+                
+                {connectionError && (
+                    <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg mb-4">
+                        {connectionError}
+                    </div>
+                )}
+                {displayEvents.length === 0 ? (
+                    <div className="p-12 text-center">
+                        <div className="text-gray-400 text-6xl mb-4">📊</div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">No events found</h3>
+                        <p className="text-gray-600">
+                            No events match the selected criteria. Try adjusting your filters.
+                        </p>
+                    </div>
                 ) : (
-                    events.map((event) => (
-                        <div
-                            key={event.id}
-                            className="flex justify-between items-center py-3 px-3 border-b border-[#07b0ef]/20 last:border-0 hover:bg-[rgba(7,176,239,0.05)] rounded-lg transition-colors"
-                        >
-                            <div>
-                                <p className="text-white font-semibold mb-1">{event.description}</p>
-                                <div className="grid grid-cols-3 gap-2">
-                                    <p className="text-sm text-[#9633ac]">
-                                        <span className="text-[#ed1e79]">Type:</span> {event.eventType}
-                                    </p>
-                                    <p className="text-sm text-[#9633ac]">
-                                        <span className="text-[#ed1e79]">Value:</span> {event.eventValue || "—"}
-                                    </p>
-                                    <p className="text-sm text-[#9633ac]">
-                                        <span className="text-[#ed1e79]">Path:</span> {event.path || "—"}
-                                    </p>
-                                </div>
-                            </div>
-                            <time className="text-sm text-[#10B981] bg-[rgba(16,185,129,0.1)] px-2 py-1 rounded whitespace-nowrap">
-                                {new Date(event.createdAt).toLocaleString()}
-                            </time>
-                        </div>
-                    ))
+                    <div className="overflow-x-auto">
+                        <table className="w-full table-fixed">
+                            <thead>
+                                <tr className="bg-gray-50 border-b border-gray-200">
+                                    <th className="text-left px-4 py-4 text-sm font-semibold text-gray-900 w-24">Type</th>
+                                    <th className="text-left px-4 py-4 text-sm font-semibold text-gray-900 w-20">User</th>
+                                    <th className="text-left px-4 py-4 text-sm font-semibold text-gray-900 w-20">Browser</th>
+                                    <th className="text-left px-4 py-4 text-sm font-semibold text-gray-900 w-20">Location</th>
+                                    <th className="text-left px-4 py-4 text-sm font-semibold text-gray-900 w-32">Time</th>
+                                    <th className="text-left px-4 py-4 text-sm font-semibold text-gray-900 w-40">Value</th>
+                                    <th className="text-left px-4 py-4 text-sm font-semibold text-gray-900 w-48">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                                {displayEvents.map((event) => {
+                                    // Check if this is a new event (for real-time events)
+                                    const matchingRealTimeEvent = realTimeEvents.find(e => e.id === event.id);
+                                    const isNewEvent = matchingRealTimeEvent?.isNewEvent || false;
+                                    
+                                    // Extract more valuable data
+                                    const getBrowserInfo = (userAgent: string | null) => {
+                                        if (!userAgent) return "—";
+                                        if (userAgent.includes('Chrome')) return 'Chrome';
+                                        if (userAgent.includes('Firefox')) return 'Firefox';
+                                        if (userAgent.includes('Safari')) return 'Safari';
+                                        if (userAgent.includes('Edge')) return 'Edge';
+                                        return 'Unknown';
+                                    };
+                                    
+                                    const getLocationInfo = (ipAddress: string | null) => {
+                                        if (!ipAddress) return "—";
+                                        if (ipAddress === "localhost" || ipAddress === "127.0.0.1") return "Local";
+                                        // Could integrate with IP geolocation service here
+                                        return ipAddress.substring(0, 8) + "...";
+                                    };
+                                    
+                                    const getTimeAgo = (createdAt: Date) => {
+                                        const now = new Date();
+                                        const diffMs = now.getTime() - new Date(createdAt).getTime();
+                                        const diffMins = Math.floor(diffMs / 60000);
+                                        const diffHours = Math.floor(diffMs / 3600000);
+                                        const diffDays = Math.floor(diffMs / 86400000);
+                                        
+                                        if (diffMins < 1) return "Just now";
+                                        if (diffMins < 60) return `${diffMins}m ago`;
+                                        if (diffHours < 24) return `${diffHours}h ago`;
+                                        return `${diffDays}d ago`;
+                                    };
+                                    
+                                    return (
+                                        <tr key={event.id} className={`transition-all duration-300 ${
+                                            isNewEvent 
+                                                ? 'bg-green-50 border-l-4 border-green-400' 
+                                                : 'hover:bg-gray-50'
+                                        }`}>
+                                            <td className="px-4 py-4 text-sm text-gray-600 truncate">
+                                                {event.eventType}
+                                            </td>
+                                            <td className="px-4 py-4 text-sm text-gray-600">
+                                                {event.userId ? (
+                                                    <div 
+                                                        className="truncate cursor-pointer hover:text-blue-600" 
+                                                        title="Click to view full user ID"
+                                                        onClick={() => setSelectedDetail({type: 'User ID', content: event.userId})}
+                                                    >
+                                                        {event.userId.substring(0, 8) + "..."}
+                                                    </div>
+                                                ) : "Anonymous"}
+                                            </td>
+                                            <td className="px-4 py-4 text-sm text-gray-600 truncate">
+                                                {getBrowserInfo(event.userAgent)}
+                                            </td>
+                                            <td className="px-4 py-4 text-sm text-gray-600 truncate">
+                                                {getLocationInfo(event.ipAddress)}
+                                            </td>
+                                            <td className="px-4 py-4 text-sm text-gray-600">
+                                                <div className="space-y-1">
+                                                    <div className="font-medium text-gray-700 text-xs">
+                                                        {getTimeAgo(event.createdAt)}
+                                                    </div>
+                                                    <time className="text-xs text-gray-500 block">
+                                                        {new Date(event.createdAt).toLocaleString()}
+                                                    </time>
+                                                </div>
+                                            </td>
+                                            <td className="px-4 py-4 text-sm text-gray-600">
+                                                <div 
+                                                    className="truncate cursor-pointer hover:text-blue-600" 
+                                                    title="Click to view full value"
+                                                    onClick={() => setSelectedDetail({type: 'Event Value', content: event.eventValue || "—"})}
+                                                >
+                                                    {event.eventValue || "—"}
+                                                </div>
+                                            </td>
+                                            <td className="px-4 py-4 text-sm text-gray-900 font-medium">
+                                                <div 
+                                                    className="truncate cursor-pointer hover:text-blue-600" 
+                                                    title="Click to view full description"
+                                                    onClick={() => setSelectedDetail({type: 'Description', content: event.description || "—"})}
+                                                >
+                                                    {event.description || "—"}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
             </div>
             
@@ -315,8 +446,8 @@ export default function AdminActivity() {
                             disabled={currentPage === 1}
                             className={`flex items-center justify-center w-9 h-9 rounded-md border ${
                                 currentPage === 1 
-                                    ? 'border-[#07b0ef]/20 text-[#07b0ef]/30 cursor-not-allowed' 
-                                    : 'border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                                    ? 'border-[var(--color-primaryOrange)]/20 text-[var(--color-primaryOrange)]/30 cursor-not-allowed' 
+                                    : 'border-[var(--color-primaryOrange)]/40 text-[var(--color-primaryOrange)] hover:bg-[var(--color-primaryOrange)]/10 hover:border-[var(--color-primaryOrange)]'
                             } transition-colors`}
                             aria-label="Go to first page"
                         >
@@ -331,8 +462,8 @@ export default function AdminActivity() {
                             disabled={!hasPrevPage}
                             className={`flex items-center justify-center w-9 h-9 rounded-md border ${
                                 !hasPrevPage
-                                    ? 'border-[#07b0ef]/20 text-[#07b0ef]/30 cursor-not-allowed' 
-                                    : 'border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                                    ? 'border-[var(--color-primaryOrange)]/20 text-[var(--color-primaryOrange)]/30 cursor-not-allowed' 
+                                    : 'border-[var(--color-primaryOrange)]/40 text-[var(--color-primaryOrange)] hover:bg-[var(--color-primaryOrange)]/10 hover:border-[var(--color-primaryOrange)]'
                             } transition-colors`}
                             aria-label="Previous page"
                         >
@@ -349,8 +480,8 @@ export default function AdminActivity() {
                                     onClick={() => handlePageChange(pageNum)}
                                     className={`flex items-center justify-center w-9 h-9 rounded-md ${
                                         currentPage === pageNum
-                                            ? 'bg-[#07b0ef] text-black font-bold'
-                                            : 'border border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                                            ? 'bg-[var(--color-primaryOrange)] text-black font-bold'
+                                            : 'border border-[var(--color-primaryOrange)]/40 text-[var(--color-primaryOrange)] hover:bg-[var(--color-primaryOrange)]/10 hover:border-[var(--color-primaryOrange)]'
                                     } transition-colors`}
                                     aria-label={`Page ${pageNum}`}
                                     aria-current={currentPage === pageNum ? 'page' : undefined}
@@ -358,7 +489,7 @@ export default function AdminActivity() {
                                     {pageNum}
                                 </button>
                             ) : (
-                                <span key={index} className="w-6 text-center text-[#07b0ef]">
+                                <span key={index} className="w-6 text-center text-[var(--color-primaryOrange)]">
                                     {pageNum}
                                 </span>
                             )
@@ -370,8 +501,8 @@ export default function AdminActivity() {
                             disabled={!hasNextPage}
                             className={`flex items-center justify-center w-9 h-9 rounded-md border ${
                                 !hasNextPage
-                                    ? 'border-[#07b0ef]/20 text-[#07b0ef]/30 cursor-not-allowed' 
-                                    : 'border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                                    ? 'border-[var(--color-primaryOrange)]/20 text-[var(--color-primaryOrange)]/30 cursor-not-allowed' 
+                                    : 'border-[var(--color-primaryOrange)]/40 text-[var(--color-primaryOrange)] hover:bg-[var(--color-primaryOrange)]/10 hover:border-[var(--color-primaryOrange)]'
                             } transition-colors`}
                             aria-label="Next page"
                         >
@@ -386,8 +517,8 @@ export default function AdminActivity() {
                             disabled={currentPage === totalPages}
                             className={`flex items-center justify-center w-9 h-9 rounded-md border ${
                                 currentPage === totalPages
-                                    ? 'border-[#07b0ef]/20 text-[#07b0ef]/30 cursor-not-allowed' 
-                                    : 'border-[#07b0ef]/40 text-[#07b0ef] hover:bg-[#07b0ef]/10 hover:border-[#07b0ef]'
+                                    ? 'border-[var(--color-primaryOrange)]/20 text-[var(--color-primaryOrange)]/30 cursor-not-allowed' 
+                                    : 'border-[var(--color-primaryOrange)]/40 text-[var(--color-primaryOrange)] hover:bg-[var(--color-primaryOrange)]/10 hover:border-[var(--color-primaryOrange)]'
                             } transition-colors`}
                             aria-label="Go to last page"
                         >
@@ -398,6 +529,38 @@ export default function AdminActivity() {
                     </div>
                 </div>
             )}
-        </Card>
+
+            {/* Elegant Detail Modal */}
+            {selectedDetail && (
+                <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50" onClick={() => setSelectedDetail(null)}>
+                    <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-semibold text-gray-900">{selectedDetail.type}</h3>
+                            <button 
+                                onClick={() => setSelectedDetail(null)}
+                                className="text-gray-400 hover:text-gray-600 transition-colors"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg p-4 border">
+                            <pre className="text-sm text-gray-800 whitespace-pre-wrap break-words font-mono">
+                                {selectedDetail.content}
+                            </pre>
+                        </div>
+                        <div className="mt-4 flex justify-end">
+                            <button
+                                onClick={() => navigator.clipboard.writeText(selectedDetail.content)}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                            >
+                                Copy to Clipboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 } 

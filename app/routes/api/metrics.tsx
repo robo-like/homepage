@@ -14,15 +14,15 @@ interface PageViewData {
 export const action = async ({ request }: Route.ActionArgs) => {
   // Only allow POST requests
   if (request.method !== "POST") {
-    throw new Response("Method not allowed", { status: 405 });
+    return new Response("Method not allowed", { status: 405 });
   }
 
   try {
     const data = (await request.json()) as PageViewData;
 
     // Validate required fields
-    if (!data.path) {
-      throw new Response("Missing required fields", { status: 400 });
+    if (!data.path || !data.sessionId || !data.eventType) {
+      return new Response("Missing required fields: path, sessionId, eventType", { status: 400 });
     }
 
     // Get IP address from request headers or socket
@@ -41,11 +41,11 @@ export const action = async ({ request }: Route.ActionArgs) => {
     const sessionData = session ? await session.get("userId") : null;
 
     // Use the user ID from the session if available, otherwise use the one from the request
-    const userId = sessionData;
+    const userId = sessionData || data.userId;
 
     // Create page view in database
     await analyticsQueries.createPageView({
-      sessionId: session.id,
+      sessionId: data.sessionId,
       path: data.path,
       eventType: data.eventType,
       eventValue: data.eventValue,

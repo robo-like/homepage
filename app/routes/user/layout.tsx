@@ -6,6 +6,14 @@ import { cn } from "~/lib/utils";
 import type Stripe from "stripe";
 
 // ensure user is authenticated and refresh session
+export function meta({ }: Route.MetaArgs) {
+  return [
+    { title: "User Dashboard | RoboLike" },
+    { name: "description", content: "User account dashboard and settings." },
+    { name: "robots", content: "noindex, nofollow" },
+  ];
+}
+
 export async function loader({ request }: Route.LoaderArgs) {
   try {
     const authData = await requireAuth(request, "/auth/login");
@@ -66,20 +74,22 @@ export type ProfileLayoutContext = {
 export default function ProfileLayout() {
   const data = useLoaderData<typeof loader>();
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      {data.checkoutMessage && (
-        <div className={cn(
-          "mb-1 p-4 rounded-md",
-          data.checkoutMessage.type === "success"
-            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-            : data.checkoutMessage.type === "info"
-              ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-              : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-        )}>
-          <p className="text-sm font-medium">{data.checkoutMessage.message}</p>
-        </div>
-      )}
-      <Outlet context={{ user: data.user, sessionExpiresAt: data.sessionExpiresAt, subscriptionDetails: data.subscriptionDetails }} />
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto px-6 py-8">
+        {data.checkoutMessage && (
+          <div className={cn(
+            "mb-6 p-4 rounded-lg border",
+            data.checkoutMessage.type === "success"
+              ? "bg-green-50 text-green-800 border-green-200"
+              : data.checkoutMessage.type === "info"
+                ? "bg-blue-50 text-blue-800 border-blue-200"
+                : "bg-red-50 text-red-800 border-red-200"
+          )}>
+            <p className="text-sm font-medium">{data.checkoutMessage.message}</p>
+          </div>
+        )}
+        <Outlet context={{ user: data.user, sessionExpiresAt: data.sessionExpiresAt, subscriptionDetails: data.subscriptionDetails }} />
+      </div>
     </div>
   );
 }

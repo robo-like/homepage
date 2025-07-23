@@ -12,6 +12,7 @@ export default [
     route("install-guide", "routes/install-guide.tsx"),
     route("instagram-auto-liker-how-it-works", "routes/how-it-works.tsx"),
     route("social-media-automation-pricing", "routes/pricing.tsx"),
+    route("faq", "routes/faq.tsx"),
     route("terms-and-conditions", "routes/terms-and-conditions.tsx"),
     route("privacy-policy", "routes/privacy-policy.tsx"),
     ...prefix("blog", [
@@ -27,6 +28,7 @@ export default [
       route("login", "routes/auth/login.tsx"),
       route("confirm", "routes/auth/confirm.tsx"),
       route("logout", "routes/auth/logout.tsx"),
+      route("verify-code", "routes/auth/verify-code.tsx"),
     ]),
     ...prefix("u", [
       //special route to grab the current user as a payload
@@ -43,10 +45,8 @@ export default [
     ...prefix("admin", [
       index("routes/admin/index.tsx"),
       route("activity", "routes/admin/activity.tsx"),
-      route("contacts", "routes/admin/contacts.tsx"),
       route("posts", "routes/admin/posts.tsx"),
       route("analytics", "routes/admin/analytics.tsx"),
-      route("email", "routes/admin/email.tsx"),
       route("create-post", "routes/admin/create-post.tsx"),
       route("edit-post/:slug", "routes/admin/edit-post.$slug.tsx"),
     ]),
@@ -60,6 +60,12 @@ export default [
       "instagram/hashtag/:hashtag/recent",
       "routes/api/instagram.hashtag.$hashtag.recent.tsx"
     ),
+    ...prefix("auth", [
+      route("status", "routes/api/auth/status.tsx"),
+    ]),
+    ...prefix("admin", [
+      route("activity-stream", "routes/api/admin/activity-stream.tsx"),
+    ]),
   ]),
   layout("./routes/landing/layout.tsx", [
     route("landing/:slug", "routes/landing.$slug.tsx"),

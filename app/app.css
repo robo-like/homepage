@@ -6,13 +6,31 @@
     "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-  /* Custom Colors */
+  /* OLD Custom Colors (for reference) */
   --color-darkGrey: #1d1616;
   --color-darkRed: #8e1616;
   --color-darkPurple: #6a1e55;
   --color-lightPurple: #cf0798;
   --color-lightGrey: #eeeeee;
   --color-brandGreen: #10B981;
+
+  /* NEW Brand Colors (2025-07-30) */
+  --color-charcoal: #2a2a2a;        /* Deep charcoal background */
+  --color-slate: #3d4043;           /* Mid-tone slate */
+  --color-steel: #5a6169;           /* Steel blue-grey */
+  --color-platinum: #e8e9ea;        /* Clean platinum text */
+  --color-white: #ffffff;           /* Pure white accents */
+
+  /* Primary Brand Colors */
+  --color-primaryOrange: #e85a0d;    /* Deep burnt orange (logo match) */
+  --color-secondaryOrange: #ff7625;  /* Lighter orange for hovers */
+  --color-accent: #1a365d;          /* Deep navy blue for trust */
+
+  /* Strategic Accent Colors */
+  --color-successGreen: #2d7d32;    /* Forest green for growth/success */
+  --color-warningAmber: #f57c00;    /* Amber for alerts/highlights */
+  --color-infoBlue: #1565c0;        /* Professional blue for info */
+  --color-metallic: #8d9db6;        /* Metallic blue-grey for subtle accents */
 }
 
 html,

@@ -7,6 +7,8 @@ import {
   activeSessions,
   expiringEmailKeys,
   supportTickets,
+  emailRateLimits,
+  codeVerificationRateLimits,
 } from "./schema";
 import { eq, desc, asc, and, lte, gte, gt, isNull } from "drizzle-orm";
 import { createStripeCustomer } from "../billing/stripe";
@@ -327,9 +329,140 @@ export const authQueries = {
       .where(eq(expiringEmailKeys.id, id));
   },
 
+  // Email rate limiting operations
+  async checkEmailRateLimit(email: string, ipAddress: string): Promise<{
+    canSend: boolean;
+    timeUntilReset?: number;
+    attemptsRemaining?: number;
+  }> {
+    const record = await db
+      .select()
+      .from(emailRateLimits)
+      .where(and(
+        eq(emailRateLimits.email, email.toLowerCase()),
+        eq(emailRateLimits.ipAddress, ipAddress)
+      ))
+      .get();
 
+    if (!record) {
+      return { canSend: true };
+    }
 
+    const now = new Date();
+    const timeSinceLastSent = now.getTime() - record.lastSentAt.getTime();
+    const rateLimitWindow = 30 * 1000; // 30 seconds
 
+    if (timeSinceLastSent < rateLimitWindow) {
+      const timeUntilReset = Math.ceil((rateLimitWindow - timeSinceLastSent) / 1000);
+      return { 
+        canSend: false, 
+        timeUntilReset,
+        attemptsRemaining: 0
+      };
+    }
+
+    return { canSend: true };
+  },
+
+  async updateEmailRateLimit(email: string, ipAddress: string) {
+    const now = new Date();
+    
+    // Try to update existing record
+    const updated = await db
+      .update(emailRateLimits)
+      .set({ 
+        lastSentAt: now,
+        attemptCount: 1 // Reset count for new window
+      })
+      .where(and(
+        eq(emailRateLimits.email, email.toLowerCase()),
+        eq(emailRateLimits.ipAddress, ipAddress)
+      ))
+      .returning();
+
+    // If no record existed, create one
+    if (!updated || updated.length === 0) {
+      await db
+        .insert(emailRateLimits)
+        .values({
+          email: email.toLowerCase(),
+          ipAddress,
+          lastSentAt: now,
+          attemptCount: 1,
+        });
+    }
+  },
+
+  async cleanupOldRateLimits() {
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+    return db
+      .delete(emailRateLimits)
+      .where(lte(emailRateLimits.lastSentAt, oneHourAgo));
+  },
+
+  // Code verification rate limiting operations
+  async checkCodeVerificationRateLimit(ipAddress: string): Promise<{
+    canVerify: boolean;
+    timeUntilReset?: number;
+    attemptsRemaining?: number;
+  }> {
+    const record = await db
+      .select()
+      .from(codeVerificationRateLimits)
+      .where(eq(codeVerificationRateLimits.ipAddress, ipAddress))
+      .get();
+
+    if (!record) {
+      return { canVerify: true };
+    }
+
+    const now = new Date();
+    const timeSinceLastAttempt = now.getTime() - record.lastAttemptAt.getTime();
+    const rateLimitWindow = 15 * 1000; // 15 seconds
+
+    if (timeSinceLastAttempt < rateLimitWindow) {
+      const timeUntilReset = Math.ceil((rateLimitWindow - timeSinceLastAttempt) / 1000);
+      return { 
+        canVerify: false, 
+        timeUntilReset,
+        attemptsRemaining: 0
+      };
+    }
+
+    return { canVerify: true };
+  },
+
+  async updateCodeVerificationRateLimit(ipAddress: string) {
+    const now = new Date();
+    
+    // Try to update existing record
+    const updated = await db
+      .update(codeVerificationRateLimits)
+      .set({ 
+        lastAttemptAt: now,
+        attemptCount: 1 // Reset count for new window
+      })
+      .where(eq(codeVerificationRateLimits.ipAddress, ipAddress))
+      .returning();
+
+    // If no record existed, create one
+    if (!updated || updated.length === 0) {
+      await db
+        .insert(codeVerificationRateLimits)
+        .values({
+          ipAddress,
+          lastAttemptAt: now,
+          attemptCount: 1,
+        });
+    }
+  },
+
+  async cleanupOldCodeVerificationRateLimits() {
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+    return db
+      .delete(codeVerificationRateLimits)
+      .where(lte(codeVerificationRateLimits.lastAttemptAt, oneHourAgo));
+  },
 };
 
 // Support ticket queries
