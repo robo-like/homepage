@@ -87,7 +87,7 @@ export default function InstallGuide() {
     }
     const macExtensions = {
       arm64: ["darwin-arm64", "arm64.dmg", "arm64.pkg", "mac.dmg"],
-      x64: ["darwin-x64", "x64.dmg", "x64.pkg", "mac.dmg"],
+      x64: ["darwin-x64", "x64.dmg", "x64.pkg"],
       default: ["darwin", ".dmg", ".pkg", "mac.dmg"],
     };
     const otherExtensions = {
