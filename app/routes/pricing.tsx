@@ -155,8 +155,8 @@ export default function Pricing() {
                 "No rate limiting",
               ]}
               highlighted={true}
-              ctaText={!isLoggedIn ? "Login & Start" : hasSubscription ? "Download Now" : "Start Now"}
-              ctaLink={!isLoggedIn ? "/auth/login?returnTo=/u/profile" : hasSubscription ? "/install-guide" : "/u/profile"}
+              ctaText={!isLoggedIn ? "Download Now" : hasSubscription ? "Download Now" : "Start Now"}
+              ctaLink={!isLoggedIn ? "/install-guide" : hasSubscription ? "/install-guide" : "/u/profile"}
             />
 
             {/* Creator Plan */}
