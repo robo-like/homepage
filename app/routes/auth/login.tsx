@@ -1,4 +1,4 @@
-import { Form, useActionData, useLoaderData, useLocation } from "react-router";
+import { Form, useActionData, useLoaderData, useLocation, useNavigation } from "react-router";
 import { useState } from "react";
 import { AuthCard } from "~/components/AuthCard";
 
@@ -44,10 +44,10 @@ export { loader, action } from "./login.server";
 // Client component only - no server imports
 export default function Login() {
   const location = useLocation();
+  const navigation = useNavigation();
   const loaderData = useLoaderData() as LoaderData;
   const actionData = useActionData() as ActionData;
   const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [code, setCode] = useState("");
   const [isVerifyingCode, setIsVerifyingCode] = useState(false);
@@ -58,13 +58,15 @@ export default function Login() {
   const redirectTo =
     params.get("redirectTo") || params.get("returnTo") || undefined;
 
+  // Derive submitting state from navigation
+  const isSubmitting = navigation.state === "submitting";
+
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     if (!validateEmail(email)) {
       e.preventDefault();
       return;
     }
-    setIsSubmitting(true);
     setSubmitted(true);
   };
 
@@ -184,7 +186,6 @@ export default function Login() {
                 setSubmitted(false);
                 setCode("");
                 setEmail("");
-                setIsSubmitting(false);
                 setVerificationError("");
               }}
               className="text-sm text-orange-600 hover:text-orange-700 mt-2"
@@ -226,9 +227,36 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full py-3 px-4 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors"
+            disabled={isSubmitting || !validateEmail(email)}
+            className="w-full py-3 px-4 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            Login / Sign Up
+            {isSubmitting ? (
+              <span className="flex items-center justify-center">
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Sending magic link...
+              </span>
+            ) : (
+              "Login / Sign Up"
+            )}
           </button>
 
           <div className="mt-6 text-center">
