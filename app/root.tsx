@@ -62,6 +62,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="canonical" href={canonicalUrl} />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QE23FJW74Y"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-QE23FJW74Y');      // Google Analytics
+              gtag('config', 'AW-17396973459');    // Google Ads
+            `,
+          }}
+        />
         <Meta />
         <Links />
       </head>
