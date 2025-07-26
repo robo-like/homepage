@@ -40,7 +40,7 @@ export function useRealTimeEvents(enabled: boolean = true) {
       const now = Date.now();
       const updatedEvents = prevEvents.map(e => ({
         ...e,
-        isNewEvent: e.isNewEvent && e.newEventTimestamp && (now - e.newEventTimestamp) < 5000
+        isNewEvent: e.isNewEvent && e.newEventTimestamp ? (now - e.newEventTimestamp) < 5000 : false
       }));
       
       // Add new events to the beginning and limit to 100 total events
@@ -55,7 +55,7 @@ export function useRealTimeEvents(enabled: boolean = true) {
         const now = Date.now();
         return prevEvents.map(e => ({
           ...e,
-          isNewEvent: e.isNewEvent && e.newEventTimestamp && (now - e.newEventTimestamp) < 5000
+          isNewEvent: e.isNewEvent && e.newEventTimestamp ? (now - e.newEventTimestamp) < 5000 : false
         }));
       });
     }, 1000);

@@ -9,11 +9,16 @@ import { postQueries } from "~/lib/db";
 export async function loader() {
   try {
     // Fetch the latest 3 blog posts for the footer
-    const latestPosts = await postQueries.getPosts({
+    const posts = await postQueries.getPosts({
       limit: 3,
       offset: 0,
       orderBy: "desc",
     });
+    // Convert Date objects to timestamps for the Footer component
+    const latestPosts = posts.map(post => ({
+      ...post,
+      createdAt: post.createdAt.getTime()
+    }));
     return { latestPosts };
   } catch (error) {
     return { latestPosts: [] };

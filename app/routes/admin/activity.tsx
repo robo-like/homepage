@@ -387,7 +387,7 @@ export default function AdminActivity() {
                                                     <div 
                                                         className="truncate cursor-pointer hover:text-blue-600" 
                                                         title="Click to view full user ID"
-                                                        onClick={() => setSelectedDetail({type: 'User ID', content: event.userId})}
+                                                        onClick={() => setSelectedDetail({type: 'User ID', content: event.userId || 'No user ID'})}
                                                     >
                                                         {event.userId.substring(0, 8) + "..."}
                                                     </div>
