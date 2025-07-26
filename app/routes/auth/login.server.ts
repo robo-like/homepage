@@ -172,7 +172,7 @@ export async function action({ request }: Route.ActionArgs) {
     // Update rate limit after successful email send
     await authQueries.updateEmailRateLimit(email, ipAddress.split(",")[0].trim());
 
-    return { success: true };
+    return { success: true, isNewUser };
   } catch (error) {
     console.error("Error in authentication flow:", error);
     return {

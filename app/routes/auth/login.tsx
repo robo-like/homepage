@@ -1,5 +1,5 @@
 import { Form, useActionData, useLoaderData, useLocation, useNavigation } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AuthCard } from "~/components/AuthCard";
 
 // Client-side email validation (duplicated from server for safety)
@@ -37,6 +37,7 @@ interface LoaderData {
 interface ActionData {
   success?: boolean;
   error?: string;
+  isNewUser?: boolean;
 }
 
 export { loader, action } from "./login.server";
@@ -60,6 +61,15 @@ export default function Login() {
 
   // Derive submitting state from navigation
   const isSubmitting = navigation.state === "submitting";
+
+  // Track Google Ads conversion for new user signups
+  useEffect(() => {
+    if (actionData?.success && actionData?.isNewUser && typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'conversion', {
+        'send_to': 'AW-17396973459/trial_signup'
+      });
+    }
+  }, [actionData]);
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
@@ -126,7 +136,7 @@ export default function Login() {
                 id="code"
                 value={code}
                 onChange={(e) => setCode(e.target.value.toLowerCase())}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-center font-mono text-lg tracking-widest"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-center font-mono text-lg tracking-widest"
                 placeholder="abc123"
                 maxLength={6}
                 minLength={6}
@@ -213,7 +223,7 @@ export default function Login() {
               type="email"
               id="email"
               name="email"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 [&:not(:focus)]:bg-white [&:not(:focus)]:text-gray-900"
               placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

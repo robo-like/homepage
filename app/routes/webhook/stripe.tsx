@@ -35,6 +35,10 @@ async function handleCheckoutSessionCompletedEvent(session: Stripe.Checkout.Sess
         : session.subscription?.id || "unknown",
     sessionId: session.id,
   });
+
+  // For Google Ads conversion tracking, we'll need the client-side to handle this
+  // since webhooks run server-side. The conversion should be tracked when the user
+  // is redirected to a success page after checkout.
 }
 
 /**

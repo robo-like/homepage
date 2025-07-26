@@ -4,6 +4,7 @@ import {
   redirect,
   Form,
   useActionData,
+  useSearchParams,
 } from "react-router";
 import type { ProfileLayoutContext } from "./layout";
 import { AuthCard } from "~/components/AuthCard";
@@ -65,6 +66,25 @@ export default function Profile() {
   const { user, subscriptionDetails } =
     useOutletContext<ProfileLayoutContext>();
   const actionData = useActionData<typeof action>();
+  const [searchParams] = useSearchParams();
+
+  // Track Google Ads conversion for successful subscription
+  useEffect(() => {
+    const success = searchParams.get('success');
+    const sessionId = searchParams.get('session_id');
+    
+    if (success === 'true' && sessionId && typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'conversion', {
+        'send_to': 'AW-17396973459/subscription'
+      });
+      
+      // Clean up URL parameters after tracking
+      const url = new URL(window.location.href);
+      url.searchParams.delete('success');
+      url.searchParams.delete('session_id');
+      window.history.replaceState({}, '', url.toString());
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (actionData?.accessToken) {
