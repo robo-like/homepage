@@ -119,7 +119,7 @@ export default function InstallGuide() {
     // Trigger Google Ads conversion
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'conversion', {
-        'send_to': 'AW-17396973459/yKdhCJzH0fgZEJPX3-4-',
+        'send_to': 'AW-17396973459/tQj0CMDmrfsaEJP_wudA',
         'value': 1.0,
         'currency': 'USD'
       });
