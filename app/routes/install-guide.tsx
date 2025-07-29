@@ -112,6 +112,43 @@ export default function InstallGuide() {
     return asset ? asset.browser_download_url : null;
   };
 
+  // Function to track download conversion
+  const handleDownloadClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const url = e.currentTarget.href;
+    
+    // Trigger Google Ads conversion
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'conversion', {
+        'send_to': 'AW-17396973459/yKdhCJzH0fgZEJPX3-4-',
+        'value': 1.0,
+        'currency': 'USD'
+      });
+    }
+    
+    // Also track download event in Google Analytics
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'download', {
+        'event_category': 'engagement',
+        'event_label': selectedPlatform + (selectedPlatform === 'macos' ? '_' + macArchitecture : ''),
+        'value': url
+      });
+    }
+    
+    // Track download in internal analytics
+    fetch('/api/download-tracking', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        platform: selectedPlatform,
+        architecture: selectedPlatform === 'macos' ? macArchitecture : undefined,
+        version: releaseData.releaseVersion,
+        downloadUrl: url
+      })
+    }).catch(err => console.error('Failed to track download:', err));
+  };
+
   // Detect user's operating system on mount
   useEffect(() => {
     const detectOS = () => {
@@ -256,6 +293,7 @@ export default function InstallGuide() {
                         download
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={handleDownloadClick}
                       >
                         📥 Download for macOS
                       </a>
@@ -268,6 +306,7 @@ export default function InstallGuide() {
                     download
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={handleDownloadClick}
                   >
                     📥 Download for {selectedPlatform.charAt(0).toUpperCase() + selectedPlatform.slice(1)}
                   </a>
@@ -276,7 +315,7 @@ export default function InstallGuide() {
             </div>
 
             {/* Release Info */}
-            <div className="text-xs text-gray-500 text-center">
+            <div className="text-xs text-gray-500 text-center mt-6">
               {releaseData.releaseDate !== "Coming Soon" ? (
                 <div className="space-y-1">
                   <p>Version {releaseData.releaseVersion} • Released {releaseData.releaseDate}</p>
