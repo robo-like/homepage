@@ -22,6 +22,13 @@ export function FeatureRequestButton({
 
   const handleRequest = async () => {
     try {
+      // Get or create session ID
+      let sessionId = sessionStorage.getItem('analyticsSessionId');
+      if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        sessionStorage.setItem('analyticsSessionId', sessionId);
+      }
+
       await fetch("/api/metrics", {
         method: "POST",
         headers: {
@@ -32,6 +39,7 @@ export function FeatureRequestButton({
           path: "/feature-requests",
           eventValue: featureType,
           description: `User requested ${featureName}`,
+          sessionId: sessionId,
         }),
       });
       setRequested(true);

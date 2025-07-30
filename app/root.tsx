@@ -42,6 +42,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const canonicalUrl = `https://robolike.com${location.pathname}`;
 
   useEffect(() => {
+    // Get or create session ID
+    let sessionId = sessionStorage.getItem('analyticsSessionId');
+    if (!sessionId) {
+      sessionId = crypto.randomUUID();
+      sessionStorage.setItem('analyticsSessionId', sessionId);
+    }
+
     fetch("/api/metrics", {
       method: "POST",
       headers: {
@@ -50,6 +57,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       body: JSON.stringify({
         eventType: "pageView",
         path: location.pathname,
+        sessionId: sessionId,
       }),
     }).catch((error) => {
       console.error("Error tracking page view:", error);
