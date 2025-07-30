@@ -329,6 +329,7 @@ export default function AdminActivity() {
                             <thead>
                                 <tr className="bg-gray-50 border-b border-gray-200">
                                     <th className="text-left px-4 py-4 text-sm font-semibold text-gray-900 w-24">Type</th>
+                                    <th className="text-left px-4 py-4 text-sm font-semibold text-gray-900 w-32">Path</th>
                                     <th className="text-left px-4 py-4 text-sm font-semibold text-gray-900 w-20">User</th>
                                     <th className="text-left px-4 py-4 text-sm font-semibold text-gray-900 w-20">Browser</th>
                                     <th className="text-left px-4 py-4 text-sm font-semibold text-gray-900 w-20">Location</th>
@@ -381,6 +382,15 @@ export default function AdminActivity() {
                                         }`}>
                                             <td className="px-4 py-4 text-sm text-gray-600 truncate">
                                                 {event.eventType}
+                                            </td>
+                                            <td className="px-4 py-4 text-sm text-gray-600">
+                                                <div 
+                                                    className="truncate cursor-pointer hover:text-blue-600" 
+                                                    title="Click to view full path"
+                                                    onClick={() => setSelectedDetail({type: 'Path', content: event.path})}
+                                                >
+                                                    {event.path}
+                                                </div>
                                             </td>
                                             <td className="px-4 py-4 text-sm text-gray-600">
                                                 {event.userId ? (
