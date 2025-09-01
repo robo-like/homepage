@@ -76,6 +76,18 @@ export async function checkIpAddress(ipAddress: string) {
       message: "Non mobile, non proxy/hosting, and is in EU",
     };
   }
+  if (ipApiData.countryCode === "BR") {
+    return {
+      success: true,
+      message: "Non mobile, non proxy/hosting, and in Brazil",
+    };
+  }
+  if (ipApiData.countryCode === "AU") {
+    return {
+      success: true,
+      message: "Non mobile, non proxy/hosting, and in Australia",
+    };
+  }
   return {
     success: false,
     message: "IP address not allowed. Please contact support if you believe this is an error.",
