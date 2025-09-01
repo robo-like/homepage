@@ -70,4 +70,5 @@ export default [
   layout("./routes/landing/layout.tsx", [
     route("landing/:slug", "routes/landing.$slug.tsx"),
   ]),
+  route(".well-known/appspecific/com.chrome.devtools.json", "routes/well-known.appspecific.com.chrome.devtools.json.tsx"),
 ] satisfies RouteConfig;
