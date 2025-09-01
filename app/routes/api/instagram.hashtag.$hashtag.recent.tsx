@@ -24,7 +24,6 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   const pageAccessToken = process.env.PAGE_ACCESS_TOKEN;
 
   if (!igUserId || !hashtag || !pageAccessToken) {
-    console.log(igUserId, hashtag, pageAccessToken);
     throw new Response("Missing parameter", { status: 400 });
   }
 
